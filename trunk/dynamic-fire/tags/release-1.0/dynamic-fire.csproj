@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{62771E6E-2D49-4ADD-A860-FCAEB4D01549}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>dynamic_fire</RootNamespace>
+    <AssemblyName>Landis.Extension.DynamicFire</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(Landis-II)</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Edu.Wisc.Forest.Flel.Grids">
+      <HintPath>$(Landis-II)\Edu.Wisc.Forest.Flel.Grids.dll</HintPath>
+    </Reference>
+    <Reference Include="Edu.Wisc.Forest.Flel.Util">
+      <HintPath>$(Landis-II)\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.AgeCohort">
+      <HintPath>$(Landis-II)\Landis.AgeCohort.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Core">
+      <HintPath>$(Landis-II)\Landis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\LANDIS-II\5.1\bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Troschuetz.Random, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Troschuetz.Random.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CSVParser.cs" />
+    <Compile Include="DynamicFireRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DynamicWeather.cs" />
+    <Compile Include="Event.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EventRegion.cs" />
+    <Compile Include="FireDamages.cs" />
+    <Compile Include="FireRegion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FireRegionPixel.cs" />
+    <Compile Include="FireRegions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FireSeverity.cs" />
+    <Compile Include="FuelEffects.cs" />
+    <Compile Include="FuelType.cs" />
+    <Compile Include="InputParameterParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InputParameters.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MapNames.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PlugIn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RandomNumberGenerator.cs" />
+    <Compile Include="SeasonParameters.cs" />
+    <Compile Include="SeverityPixel.cs" />
+    <Compile Include="SiteVars.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Topography.cs" />
+    <Compile Include="TopoPixel.cs" />
+    <Compile Include="UShortPixel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Weather.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

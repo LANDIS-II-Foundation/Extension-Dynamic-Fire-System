@@ -1,0 +1,10 @@
+LandisData   Extension
+
+Name         "Fire 2006"
+Version      "1.0 (a1)"
+Type         disturbance:fire
+Assembly     Landis.Fire2006
+Class        Landis.Fire.PlugIn
+Description  "Fires using Canadian Fire Behavior Prediction System"
+>>UserGuide    "LANDIS-II Fire 2006 v1.0 User Guide.pdf"
+CoreVersion  5.1

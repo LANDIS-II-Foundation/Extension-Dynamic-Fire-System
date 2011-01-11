@@ -1,0 +1,9 @@
+LandisData   Extension
+
+Name         "Dynamic Fuel System"
+Version      "2.0"
+Type         disturbance:fuel
+Assembly     Landis.Extension.DynamicFuels
+Class        Landis.Extension.DynamicFuels.PlugIn
+Description  "Dynamic Fuel assignment extension"
+CoreVersion  6.0

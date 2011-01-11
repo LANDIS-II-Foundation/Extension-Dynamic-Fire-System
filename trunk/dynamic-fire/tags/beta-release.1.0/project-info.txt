@@ -1,0 +1,6 @@
+#  project information
+
+project-name	Landis.Fire2006
+project-type	library
+version		1.0
+release		alpha 1

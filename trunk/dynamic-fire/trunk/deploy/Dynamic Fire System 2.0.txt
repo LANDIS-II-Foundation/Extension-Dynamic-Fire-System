@@ -1,0 +1,9 @@
+LandisData   Extension
+
+Name         "Dynamic Fire System"
+Version      "2.0"
+Type         disturbance:fire
+Assembly     Landis.Extension.DynamicFire
+Class        Landis.Extension.DynamicFire.PlugIn
+Description  "Dynamic Fire System"
+CoreVersion  6.0
