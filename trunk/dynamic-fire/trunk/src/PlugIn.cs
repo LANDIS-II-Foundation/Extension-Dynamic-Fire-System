@@ -75,7 +75,6 @@ namespace Landis.Extension.DynamicFire
         {
             modelCore = mCore;
             SiteVars.Initialize();
-            SiteVars.InitializeFuelType();
             InputParameterParser parser = new InputParameterParser();
             parameters = modelCore.Load<IInputParameters>(dataFile, parser);
             WeatherDataTable = Weather.ReadWeatherFile(parameters.InitialWeatherPath, FireRegions.Dataset, parameters.SeasonParameters);
@@ -170,7 +169,8 @@ namespace Landis.Extension.DynamicFire
         ///</summary>
         public override void Run()
         {
-            
+
+            SiteVars.InitializeFuelType();
             modelCore.Log.WriteLine("   Processing landscape for Fire events ...");
 
             if (FireRegions.Dataset.Count == 0)
