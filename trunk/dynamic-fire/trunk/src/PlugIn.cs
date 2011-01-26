@@ -83,7 +83,7 @@ namespace Landis.Extension.DynamicFire
 
         //---------------------------------------------------------------------
 
-        public override void Initialize(string dataFile)
+        public override void Initialize()
         {
             Timestep            = parameters.Timestep;
             fireSizeType        = parameters.FireSizeType;
