@@ -2,7 +2,6 @@
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
 using Landis.Library.AgeOnlyCohorts;
-using Landis.Cohorts;
 using Landis.SpatialModeling;
 
 namespace Landis.Extension.DynamicFire
@@ -33,14 +32,14 @@ namespace Landis.Extension.DynamicFire
         private static ISiteVar<ushort> siteWindSpeed;
         private static ISiteVar<ushort> siteWindDirection;
 
-        private static ISiteVar<SiteCohorts> cohorts;
+        private static ISiteVar<ISiteCohorts> cohorts;
 
         //---------------------------------------------------------------------
 
         public static void Initialize()
         {
 
-            cohorts = PlugIn.ModelCore.GetSiteVar<SiteCohorts>("Succession.BaseCohorts");
+            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts");
             
             eventVar            = PlugIn.ModelCore.Landscape.NewSiteVar<Event>(InactiveSiteMode.DistinctValues);
             timeOfLastFire      = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -272,7 +271,7 @@ namespace Landis.Extension.DynamicFire
 
         //---------------------------------------------------------------------
 
-        public static ISiteVar<SiteCohorts> Cohorts
+        public static ISiteVar<ISiteCohorts> Cohorts
         {
             get
             {
