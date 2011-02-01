@@ -66,7 +66,7 @@ namespace Landis.Extension.DynamicFire
             //Initialize TimeSinceLastFire to the maximum cohort age:
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
-                ushort maxAge = Util.GetMaxAge(cohorts[site]);
+                ushort maxAge = GetMaxAge(site);
                 timeOfLastFire[site] = PlugIn.ModelCore.StartTime - maxAge;
             }
 
@@ -280,5 +280,24 @@ namespace Landis.Extension.DynamicFire
         }
 
         //---------------------------------------------------------------------
+        public static ushort GetMaxAge(ActiveSite site)
+        {
+            if (SiteVars.Cohorts[site] == null)
+            {
+                PlugIn.ModelCore.Log.WriteLine("Cohort are null.");
+                return 0;
+            }
+            ushort max = 0;
+
+            foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site])
+            {
+                foreach (ICohort cohort in speciesCohorts)
+                {
+                    if (cohort.Age > max)
+                        max = cohort.Age;
+                }
+            }
+            return max;
+        }
     }
 }

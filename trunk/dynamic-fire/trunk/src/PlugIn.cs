@@ -374,7 +374,7 @@ namespace Landis.Extension.DynamicFire
             }
 
             path = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.img", modelCore.CurrentTime);
-            modelCore.Log.WriteLine("   Writing Travel Time output (with ushort values) map to {0} ...", path);
+            modelCore.Log.WriteLine("   Writing Travel Time output map to {0} ...", path);
             using (IOutputRaster<UShortPixel> outputRaster = modelCore.CreateRaster<UShortPixel>(path, modelCore.Landscape.Dimensions))
             {
                 UShortPixel pixel = outputRaster.BufferPixel;
