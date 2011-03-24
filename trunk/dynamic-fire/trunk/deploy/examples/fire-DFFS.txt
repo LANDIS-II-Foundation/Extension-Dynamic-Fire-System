@@ -12,7 +12,7 @@ BuildUpIndex	Y	<< yes or no; Y or N
 >> Fire Region Data Table
 >> Fire region| Fire Size    | Seasonal Foliar Moisture Content (FMC) Data: Hi, Lo, and Proportion (Pr) | Other Ecorgion Data
 >>            |              | Spring (Sp)            Summer (Su)             Fall (Fa)                 |           
->> Code Name  | Mu Sigma Max | SpFMCLo SpFMCHi SpHiPr SuFMCLo SuFMCHi SuFMCPr FaFMCLo FaFMCHi FaHiPr    | OpenFuel NumFires 
+>> Code Name  | Mu Sigma Max | SpFMCLo SpFMCHi SpHiPr SuFMCLo SuFMCHi SuFMCPr FaFMCLo FaFMCHi FaHiPr    | OpenFuel NumIgns 
 >> -----------  ------------   ------------------------------------------------------------------------   ----------------
    1    fire1   4.0  0.1  50   85      100     0.50   92      120     0.50    120     120     0.50        2         0.5
    2    fire2   4.5  0.3  50   85      105     0.70   94      120     0.40    120     120     0.50        2         0.2
