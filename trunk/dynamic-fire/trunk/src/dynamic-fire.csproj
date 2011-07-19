@@ -101,7 +101,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Topography.cs" />
-    <Compile Include="UShortPixel.cs">
+    <Compile Include="ShortPixel.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Weather.cs" />

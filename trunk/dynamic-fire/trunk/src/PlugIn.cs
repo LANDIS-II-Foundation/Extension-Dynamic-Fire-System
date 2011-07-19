@@ -354,9 +354,9 @@ namespace Landis.Extension.DynamicFire
             //  Write Fire severity map
             string path = MapNames.ReplaceTemplateVars(mapNameTemplate, modelCore.CurrentTime);
             modelCore.Log.WriteLine("   Writing Fire severity map to {0} ...", path);
-            using (IOutputRaster<UShortPixel> outputRaster = modelCore.CreateRaster<UShortPixel>(path, modelCore.Landscape.Dimensions))
+            using (IOutputRaster<ShortPixel> outputRaster = modelCore.CreateRaster<ShortPixel>(path, modelCore.Landscape.Dimensions))
             {
-                UShortPixel pixel = outputRaster.BufferPixel;
+                ShortPixel pixel = outputRaster.BufferPixel;
                 foreach (Site site in modelCore.Landscape.AllSites)
                 {
                     if (site.IsActive) {
@@ -375,13 +375,13 @@ namespace Landis.Extension.DynamicFire
 
             path = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.img", modelCore.CurrentTime);
             modelCore.Log.WriteLine("   Writing Travel Time output map to {0} ...", path);
-            using (IOutputRaster<UShortPixel> outputRaster = modelCore.CreateRaster<UShortPixel>(path, modelCore.Landscape.Dimensions))
+            using (IOutputRaster<ShortPixel> outputRaster = modelCore.CreateRaster<ShortPixel>(path, modelCore.Landscape.Dimensions))
             {
-                UShortPixel pixel = outputRaster.BufferPixel;
+                ShortPixel pixel = outputRaster.BufferPixel;
                 foreach (Site site in modelCore.Landscape.AllSites)
                 {
                     if (site.IsActive)
-                        pixel.MapCode.Value = (ushort)(SiteVars.TimeOfLastFire[site]);
+                        pixel.MapCode.Value = (short)(SiteVars.TimeOfLastFire[site]);
                     else
                         pixel.MapCode.Value = 0;
                     outputRaster.WriteBufferPixel();

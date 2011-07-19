@@ -13,10 +13,10 @@ namespace Landis.Extension.DynamicFire
 
         internal static void ReadGroundSlopeMap(string path)
         {
-            IInputRaster<UShortPixel> map;
+            IInputRaster<ShortPixel> map;
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<UShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -32,11 +32,11 @@ namespace Landis.Extension.DynamicFire
 
             using (map)
             {
-                UShortPixel pixel = map.BufferPixel;
+                ShortPixel pixel = map.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    ushort mapCode = pixel.MapCode.Value;
+                    short mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
                         if (mapCode < 0)
@@ -44,7 +44,7 @@ namespace Landis.Extension.DynamicFire
                             string mesg = string.Format("Ground Slope invalid map code: {0}", mapCode);
                             throw new System.ApplicationException(mesg);
                         }
-                        SiteVars.GroundSlope[site] = mapCode;
+                        SiteVars.GroundSlope[site] = (ushort) mapCode;
                     }
                 }
             }
@@ -53,11 +53,11 @@ namespace Landis.Extension.DynamicFire
 
         internal static void ReadUphillSlopeAzimuthMap(string path)
         {
-            IInputRaster<UShortPixel> map;
+            IInputRaster<ShortPixel> map;
 
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<UShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -73,11 +73,11 @@ namespace Landis.Extension.DynamicFire
 
 
             using (map) {
-                UShortPixel pixel = map.BufferPixel;
+                ShortPixel pixel = map.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    ushort mapCode = pixel.MapCode.Value;
+                    short mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
                         if (mapCode < 0 || mapCode > 360)
@@ -85,7 +85,7 @@ namespace Landis.Extension.DynamicFire
                             string mesg = string.Format("Uphill slope azimuth invalid map code (<0 or >360): {0}", mapCode);
                             throw new System.ApplicationException(mesg);
                         }
-                        SiteVars.UphillSlopeAzimuth[site] = mapCode;
+                        SiteVars.UphillSlopeAzimuth[site] = (ushort) mapCode;
                     }
                 }
             }

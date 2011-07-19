@@ -16,11 +16,11 @@ namespace Landis.Extension.DynamicFire
 
         public static void ReadMap(string path)
         {
-            IInputRaster<UShortPixel> map;
+            IInputRaster<ShortPixel> map;
 
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<UShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -35,11 +35,11 @@ namespace Landis.Extension.DynamicFire
             }
 
             using (map) {
-                UShortPixel pixel = map.BufferPixel;
+                ShortPixel pixel = map.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    ushort mapCode = pixel.MapCode.Value;
+                    short mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
                         if (Dataset == null)
