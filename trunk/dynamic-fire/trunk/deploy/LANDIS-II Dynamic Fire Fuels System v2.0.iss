@@ -16,7 +16,7 @@
 Source: C:\Program Files\LANDIS-II\6.0\bin\Landis.Extension.DynamicFire.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: C:\Program Files\LANDIS-II\6.0\bin\Landis.Extension.DynamicFuels.dll; DestDir: {app}\bin; Flags: replacesameversion
 
-Source: docs\LANDIS-II Dynamic Fire System v2.0 User Guide.pdf; DestDir: {app}\docs
+Source: docs\LANDIS-II Dynamic Fire System v2.0.1 User Guide.pdf; DestDir: {app}\docs
 Source: docs\LANDIS-II Dynamic Fuel System v2.0 User Guide.pdf; DestDir: {app}\docs
 
 #define DynFireSys "Dynamic Fire System 2.0.txt"
