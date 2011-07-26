@@ -1,6 +1,6 @@
 #define PackageName      "Dynamic Fire Fuel System"
 #define PackageNameLong  "Dynamic Fire Fuel System"
-#define Version          "2.0"
+#define Version          "2.0.1"
 #define ReleaseType      "official"
 #define ReleaseNumber    "2"
 
