@@ -705,10 +705,12 @@ namespace Landis.Extension.DynamicFire
                     //IFireDamage damage = damages[i];
                     if (siteSeverity - cohort.Species.FireTolerance >= damage.SeverTolerDifference)
                     {
-                        if (damage.MaxAge >= ageAsPercent) {
+                        if (damage.MaxAge >= ageAsPercent)
+                        {
                             killCohort = true;
+
+                            break;  // No need to search further in the table
                         }
-                        break;  // No need to search further in the table
                     }
                 }
             }
