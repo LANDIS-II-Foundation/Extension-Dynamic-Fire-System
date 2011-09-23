@@ -354,9 +354,9 @@ namespace Landis.Extension.DynamicFire
             //  Write Fire severity map
             string path = MapNames.ReplaceTemplateVars(mapNameTemplate, modelCore.CurrentTime);
             modelCore.Log.WriteLine("   Writing Fire severity map to {0} ...", path);
-            using (IOutputRaster<ShortPixel> outputRaster = modelCore.CreateRaster<ShortPixel>(path, modelCore.Landscape.Dimensions))
+            using (IOutputRaster<BytePixel> outputRaster = modelCore.CreateRaster<BytePixel>(path, modelCore.Landscape.Dimensions))
             {
-                ShortPixel pixel = outputRaster.BufferPixel;
+                BytePixel pixel = outputRaster.BufferPixel;
                 foreach (Site site in modelCore.Landscape.AllSites)
                 {
                     if (site.IsActive) {
