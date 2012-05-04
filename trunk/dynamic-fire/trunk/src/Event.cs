@@ -606,6 +606,7 @@ namespace Landis.Extension.DynamicFire
                     this.numSitesChecked++;
 
                     this.siteSeverity = FireSeverity.CalcFireSeverity(currentSite, this, severityCalibrate, FMC);
+                    SiteVars.Severity[currentSite] = (byte)siteSeverity;
                     siteCohortsKilled = Damage(currentSite);
 
                     this.totalSitesDamaged++;
@@ -616,7 +617,7 @@ namespace Landis.Extension.DynamicFire
                     sitesInEvent[siteFireRegion.Index]++;
 
                     SiteVars.Disturbed[currentSite] = true;
-                    SiteVars.Severity[currentSite] = (byte) siteSeverity;
+                    
 
                     if(siteSeverity > 0)
                         SiteVars.LastSeverity[currentSite] = (byte)siteSeverity;
