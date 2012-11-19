@@ -117,10 +117,6 @@ namespace Landis.Extension.DynamicFire
                 return meanSize;
             }
             set {
-                //if (value != null) {
-                    if (value < 0)
-                        throw new InputValueException(value.ToString(), "Value must be = or > 0.");
-                //}
                 meanSize = value;
             }
         }
