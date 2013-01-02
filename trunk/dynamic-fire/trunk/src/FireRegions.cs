@@ -43,7 +43,7 @@ namespace Landis.Extension.DynamicFire
                     if (site.IsActive)
                     {
                         if (Dataset == null)
-                            PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
+                            PlugIn.ModelCore.UI.WriteLine("FireRegion.Dataset not set correctly.");
                         IFireRegion fire_region = Find(mapCode);
 
                         if (fire_region == null)
@@ -64,7 +64,7 @@ namespace Landis.Extension.DynamicFire
             {
                 if (fireregion.MapCode == mapCode)
                 {
-                    //PlugIn.ModelCore.Log.WriteLine("FireRegion mapCode {0}.  Find {1}", fireregion.MapCode, mapCode);
+                    //PlugIn.ModelCore.UI.WriteLine("FireRegion mapCode {0}.  Find {1}", fireregion.MapCode, mapCode);
                     return fireregion;
                 }
             }

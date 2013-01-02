@@ -39,7 +39,7 @@ namespace Landis.Extension.DynamicFire
             {
 
                 windSpeed = (int) Math.Round((double)myDataRow["WSV"]);
-                //PlugIn.ModelCore.Log.WriteLine("   New Event WSV:  {0}", windSpeed.ToString());
+                //PlugIn.ModelCore.UI.WriteLine("   New Event WSV:  {0}", windSpeed.ToString());
             }
 
             return windSpeed;
@@ -70,7 +70,7 @@ namespace Landis.Extension.DynamicFire
             foreach (DataRow myDataRow in weatherDS.Tables["Table"].Rows)
             {
                 FFMC = (int) Math.Round((double)myDataRow["FFMC"]);
-                //PlugIn.ModelCore.Log.WriteLine("   New Event FFMC:  {0}", FFMC.ToString());
+                //PlugIn.ModelCore.UI.WriteLine("   New Event FFMC:  {0}", FFMC.ToString());
             }
 
             return FFMC;
@@ -92,7 +92,7 @@ namespace Landis.Extension.DynamicFire
             foreach (DataRow myDataRow in weatherDS.Tables["Table"].Rows)
             {
                 BUI = (int)Math.Round((double)myDataRow["BUI"]);
-                //PlugIn.ModelCore.Log.WriteLine("   New Event BUI:  {0}", BPlugIn.ModelCore.Log.ToString());
+                //PlugIn.ModelCore.UI.WriteLine("   New Event BUI:  {0}", BPlugIn.ModelCore.Log.ToString());
             }
 
             return  BUI;
@@ -263,7 +263,7 @@ namespace Landis.Extension.DynamicFire
 
                 if (rowCount == 0)
                 {
-                    //PlugIn.ModelCore.Log.WriteLine("   weatherBin "+weatherBin+" Not Found.  Using alternate weatherBin.");
+                    //PlugIn.ModelCore.UI.WriteLine("   weatherBin "+weatherBin+" Not Found.  Using alternate weatherBin.");
                     if (sizeBin == 5)
                         weatherBin = weatherBin - 1;
                     else if (sizeBin == 1)
@@ -291,7 +291,7 @@ namespace Landis.Extension.DynamicFire
                     if (loopCount > 100)
                     {
 
-                        PlugIn.ModelCore.Log.WriteLine("   No Weather Rows Selected");
+                        PlugIn.ModelCore.UI.WriteLine("   No Weather Rows Selected");
                         throw new System.ApplicationException("No Weather Row could be selected. Ecoregion = "+ecoName+", Season = "+seasonName+", sizeBin = "+sizeBin);
 
                     }
@@ -336,7 +336,7 @@ namespace Landis.Extension.DynamicFire
 
         public static DataTable ReadWeatherFile(string path, List<IFireRegion> ecoDataSet, ISeasonParameters[] seasonParms)
         {
-            PlugIn.ModelCore.Log.WriteLine("   Loading Weather Data...");
+            PlugIn.ModelCore.UI.WriteLine("   Loading Weather Data...");
 
             CSVParser weatherParser = new CSVParser();
 
@@ -351,10 +351,10 @@ namespace Landis.Extension.DynamicFire
                 foreach (IFireRegion fire_region in ecoDataSet)
                 {
                     string ecoName = fire_region.Name;
-                    //PlugIn.ModelCore.Log.WriteLine("Read Weather File:  Season={0}, FireRegion={1}.", seasName, ecoName);
+                    //PlugIn.ModelCore.UI.WriteLine("Read Weather File:  Season={0}, FireRegion={1}.", seasName, ecoName);
 
                     string selectText = ("Ecoregion = '" + ecoName + "' AND Season = '" + seasName + "'");
-                    //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                    //PlugIn.ModelCore.UI.WriteLine("Read Weather File SelectText = {0}.", selectText);
 
                     DataRow[] foundRows = weatherTable.Select(selectText);
 

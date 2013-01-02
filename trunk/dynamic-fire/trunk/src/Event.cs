@@ -271,7 +271,7 @@ namespace Landis.Extension.DynamicFire
         ExtensionType IDisturbance.Type
         {
             get {
-                return PlugIn.Type;
+                return PlugIn.type;
             }
         }
 
@@ -290,7 +290,7 @@ namespace Landis.Extension.DynamicFire
         {
             this.initiationSite = initiationSite;
             this.sitesInEvent = new int[FireRegions.Dataset.Count];
-            //PlugIn.ModelCore.Log.WriteLine("   initialzing siteInEvent ...");
+            //PlugIn.ModelCore.UI.WriteLine("   initialzing siteInEvent ...");
 
             foreach(IFireRegion fire_region in FireRegions.Dataset)
                 this.sitesInEvent[fire_region.Index] = 0;
@@ -314,8 +314,8 @@ namespace Landis.Extension.DynamicFire
             this.foliarMC = Weather.GenerateFMC(this.fireSeason, eco);
 
 
-            //PlugIn.ModelCore.Log.WriteLine();
-            /*PlugIn.ModelCore.Log.WriteLine("   New Fire Event Data:  WSV={0}, FFMC={1}, BUI={2}, foliarMC={3}, windDirection={4}, Season={5}, FireRegion={6}, SizeBin = {7}.",
+            //PlugIn.ModelCore.UI.WriteLine();
+            /*PlugIn.ModelCore.UI.WriteLine("   New Fire Event Data:  WSV={0}, FFMC={1}, BUI={2}, foliarMC={3}, windDirection={4}, Season={5}, FireRegion={6}, SizeBin = {7}.",
                             this.windSpeed,
                             this.fineFuelMoistureCode,
                             this.buildUpIndex,
@@ -334,16 +334,16 @@ namespace Landis.Extension.DynamicFire
                                       List<IFireDamage>    damages)
         {
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("Initializing event parameters ...");
+                PlugIn.ModelCore.UI.WriteLine("Initializing event parameters ...");
 
             if(seasons == null || fuelTypeParameters == null || damages == null)
             {
                 if(seasons == null)
-                    PlugIn.ModelCore.Log.WriteLine("Error:  Seasons table empty.");
+                    PlugIn.ModelCore.UI.WriteLine("Error:  Seasons table empty.");
                 if(fuelTypeParameters == null)
-                    PlugIn.ModelCore.Log.WriteLine("Error:  FuelTypeParameters table empty.");
+                    PlugIn.ModelCore.UI.WriteLine("Error:  FuelTypeParameters table empty.");
                 if(damages == null)
-                    PlugIn.ModelCore.Log.WriteLine("Error:  Damages table empty.");
+                    PlugIn.ModelCore.UI.WriteLine("Error:  Damages table empty.");
                 throw new System.ApplicationException("Error: Event class could not be initialized.");
             }
 
@@ -439,7 +439,7 @@ namespace Landis.Extension.DynamicFire
             if (randomNum <= initProb)
             {
                 if (isDebugEnabled)
-                    PlugIn.ModelCore.Log.WriteLine("   Generating a new fire event...");
+                    PlugIn.ModelCore.UI.WriteLine("   Generating a new fire event...");
 
                 Event fireEvent = new Event(site, fireSeason, fireSizeType); //Must create event to determine season
 
@@ -447,7 +447,7 @@ namespace Landis.Extension.DynamicFire
                 // Test that adequate weather data was retrieved:
                 if (fireEvent.windSpeed == 0 && fireEvent.fineFuelMoistureCode == 0 && fireEvent.buildUpIndex == 0)
                 {
-                    PlugIn.ModelCore.Log.WriteLine("   No weather data available:  {0}; fire_region = {1}.", fireEvent.fireSeason.NameOfSeason, fireEvent.initiationFireRegion.Name);
+                    PlugIn.ModelCore.UI.WriteLine("   No weather data available:  {0}; fire_region = {1}.", fireEvent.fireSeason.NameOfSeason, fireEvent.initiationFireRegion.Name);
                     return null;
                 }
 
@@ -462,7 +462,7 @@ namespace Landis.Extension.DynamicFire
             else
             {
                 if (isDebugEnabled)
-                    PlugIn.ModelCore.Log.WriteLine("   Fire Event failed to initiate due to fuel type initiation probability");
+                    PlugIn.ModelCore.UI.WriteLine("   Fire Event failed to initiate due to fuel type initiation probability");
                 //return null;
             }
             return null;
@@ -476,7 +476,7 @@ namespace Landis.Extension.DynamicFire
                 return false;
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("   Spreading fire event started at {0} ...", initiationSite.Location);
+                PlugIn.ModelCore.UI.WriteLine("   Spreading fire event started at {0} ...", initiationSite.Location);
 
             IFireRegion fire_region = SiteVars.FireRegion[initiationSite];
 
@@ -488,23 +488,23 @@ namespace Landis.Extension.DynamicFire
             this.initiationFuel   = SiteVars.CFSFuelType[initiationSite];
             this.initiationPercentConifer = SiteVars.PercentConifer[initiationSite];
 
-            //PlugIn.ModelCore.Log.WriteLine("      Calculated max fire size or duration = {0:0.0}", maxFireParameter);
-            //PlugIn.ModelCore.Log.WriteLine("      Fuel Type = {0}", activeFT.ToString());
+            //PlugIn.ModelCore.UI.WriteLine("      Calculated max fire size or duration = {0:0.0}", maxFireParameter);
+            //PlugIn.ModelCore.UI.WriteLine("      Fuel Type = {0}", activeFT.ToString());
 
             //Next, calculate the fire area:
             List<Site> FireLocations = new List<Site>();
 
-            if (isDebugEnabled) PlugIn.ModelCore.Log.WriteLine("  Calling SizeFireCostSurface ...");
+            if (isDebugEnabled) PlugIn.ModelCore.UI.WriteLine("  Calling SizeFireCostSurface ...");
 
             FireLocations = EventRegion.SizeFireCostSurface(this, fireSizeType, BUI);
 
-            if (isDebugEnabled) PlugIn.ModelCore.Log.WriteLine("    FireLocations.Count = {0}", FireLocations.Count);
+            if (isDebugEnabled) PlugIn.ModelCore.UI.WriteLine("    FireLocations.Count = {0}", FireLocations.Count);
 
             if (FireLocations.Count == 0) return false;
 
             //Attach travel time weights here
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Computing SizeFireCostSurface ...");
+                PlugIn.ModelCore.UI.WriteLine("  Computing SizeFireCostSurface ...");
             List<WeightedSite> FireCostSurface = new List<WeightedSite>(0);
             foreach(Site site in FireLocations)
             {
@@ -525,7 +525,7 @@ namespace Landis.Extension.DynamicFire
             double durMax = 0;
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Determining cells burned ...");
+                PlugIn.ModelCore.UI.WriteLine("  Determining cells burned ...");
             if (fireSizeType == SizeType.size_based)
             {
 
@@ -546,9 +546,9 @@ namespace Landis.Extension.DynamicFire
                     }
                 }
                 this.maxDuration = durMax;
-                //PlugIn.ModelCore.Log.WriteLine("   Fire Summary:  Cells Checked={0}, BurnedArea={1:0.0} (ha), Target Area={2:0.0} (ha).", cellCnt, totalArea, this.maxFireParameter);
+                //PlugIn.ModelCore.UI.WriteLine("   Fire Summary:  Cells Checked={0}, BurnedArea={1:0.0} (ha), Target Area={2:0.0} (ha).", cellCnt, totalArea, this.maxFireParameter);
                 //if(totalArea < this.maxFireParameter)
-                //    PlugIn.ModelCore.Log.WriteLine("      NOTE:  Partial fire burn; fire may have spread to the edge of the active area.");
+                //    PlugIn.ModelCore.UI.WriteLine("      NOTE:  Partial fire burn; fire may have spread to the edge of the active area.");
             }
             else if (fireSizeType == SizeType.duration_based)
             {
@@ -586,18 +586,18 @@ namespace Landis.Extension.DynamicFire
                 }
                 this.maxDuration = durMax;
 
-                //PlugIn.ModelCore.Log.WriteLine("   Fire Summary:  Cells Checked={0}, BurnedArea={1:0.0} (ha), Target Duration={2:0.0}, Adjusted Duration = {3:0.0}.", cellCnt, totalArea, this.maxFireParameter, durationAdj);
+                //PlugIn.ModelCore.UI.WriteLine("   Fire Summary:  Cells Checked={0}, BurnedArea={1:0.0} (ha), Target Duration={2:0.0}, Adjusted Duration = {3:0.0}.", cellCnt, totalArea, this.maxFireParameter, durationAdj);
                 //if(durationAdj - durMax > 5.0)
-                //    PlugIn.ModelCore.Log.WriteLine("      NOTE:  Partial fire burn; fire may have spread to the edge of the active area.");
+                //    PlugIn.ModelCore.UI.WriteLine("      NOTE:  Partial fire burn; fire may have spread to the edge of the active area.");
             }
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  FireLocations.Count = {0}", FireLocations.Count);
+                PlugIn.ModelCore.UI.WriteLine("  FireLocations.Count = {0}", FireLocations.Count);
             int FMC = this.FMC;  //Foliar Moisture Content
 
             if (FireLocations.Count == 0) return false;
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Damaging cohorts at burned sites ...");
+                PlugIn.ModelCore.UI.WriteLine("  Damaging cohorts at burned sites ...");
             foreach(Site site in FireLocations)
             {
                 currentSite = (ActiveSite) site;
@@ -632,7 +632,7 @@ namespace Landis.Extension.DynamicFire
             this.isi = (int) ((double) totalISI / (double) this.totalSitesDamaged);
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Done spreading");
+                PlugIn.ModelCore.UI.WriteLine("  Done spreading");
             return true;
         }
         //---------------------------------------------------------------------

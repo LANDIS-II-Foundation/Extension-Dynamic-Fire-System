@@ -19,11 +19,18 @@ namespace Landis.Extension.DynamicFire
 
         //---------------------------------------------------------------------
 
-        public InputParameterParser()
+        public override string LandisDataValue
         {
-            Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
-            RegisterForInputValues();
+            get
+            {
+                return "Dynamic Fire System";
+            }
         }
+        //public InputParameterParser()
+        //{
+        //    Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
+        //    RegisterForInputValues();
+        //}
 
         //---------------------------------------------------------------------
 
@@ -64,7 +71,7 @@ namespace Landis.Extension.DynamicFire
 
             //----------------------------------------------------------
             // First, read table of additional parameters for ecoregions
-            PlugIn.ModelCore.Log.WriteLine("   Loading FireRegion data...");
+            PlugIn.ModelCore.UI.WriteLine("   Loading FireRegion data...");
             //IEditableFireRegionDataset dataset = new EditableFireRegionDataset();
             List<IFireRegion> dataset = new List<IFireRegion>(0);
             
@@ -225,7 +232,7 @@ namespace Landis.Extension.DynamicFire
             InputVar<string> groundSlopeFile = new InputVar<string>("GroundSlopeFile");
             if (ReadOptionalVar(groundSlopeFile)) {
             
-                PlugIn.ModelCore.Log.WriteLine("   Loading Slope data...");
+                PlugIn.ModelCore.UI.WriteLine("   Loading Slope data...");
                 
                 Topography.ReadGroundSlopeMap(groundSlopeFile.Value);
                 //ValidatePath(groundSlopeFile.Value);
@@ -234,7 +241,7 @@ namespace Landis.Extension.DynamicFire
                 InputVar<string> uphillSlopeMap = new InputVar<string>("UphillSlopeAzimuthMap");
                 ReadVar(uphillSlopeMap);
 
-                PlugIn.ModelCore.Log.WriteLine("   Loading Azimuth data...");
+                PlugIn.ModelCore.UI.WriteLine("   Loading Azimuth data...");
 
                 Topography.ReadUphillSlopeAzimuthMap(uphillSlopeMap.Value);
             }
@@ -242,7 +249,7 @@ namespace Landis.Extension.DynamicFire
             //-------------------------------------------------------------------
             //  Read table of Seasons.
             //  Arranged in any order.
-            PlugIn.ModelCore.Log.WriteLine("   Loading Seasons data...");
+            PlugIn.ModelCore.UI.WriteLine("   Loading Seasons data...");
 
             ReadName(Season);
 
@@ -264,7 +271,7 @@ namespace Landis.Extension.DynamicFire
                 ReadValue(seasonName, currentLine);
                 sn = (int) seasonName.Value.Actual;
                 
-                //PlugIn.ModelCore.Log.WriteLine("      Season index = {0}.", sn);
+                //PlugIn.ModelCore.UI.WriteLine("      Season index = {0}.", sn);
 
                 ISeasonParameters seasonParms = new SeasonParameters();
                 parameters.SeasonParameters[sn] = seasonParms;
@@ -337,7 +344,7 @@ namespace Landis.Extension.DynamicFire
             //-------------------------------------------------------------------
             //  Read table of Fuel Types.
             //  Arranged in any order.
-             PlugIn.ModelCore.Log.WriteLine("   Loading Fuels data...");
+             PlugIn.ModelCore.UI.WriteLine("   Loading Fuels data...");
 
             ReadName(FuelTypes);
 
@@ -411,7 +418,7 @@ namespace Landis.Extension.DynamicFire
             //-------------------------------------------------------------------
             //  Read table of Fire Damage classes.
             //  Damages are in increasing order.
-             PlugIn.ModelCore.Log.WriteLine("   Loading Fire Damage data...");
+             PlugIn.ModelCore.UI.WriteLine("   Loading Fire Damage data...");
             
             ReadName(FireDamage);
 

@@ -81,7 +81,7 @@ namespace Landis.Extension.DynamicFire
 
         public static void InitializeFuelType()
         {
-            PlugIn.ModelCore.Log.WriteLine("   Initializing Fuel Type.");
+            PlugIn.ModelCore.UI.WriteLine("   Initializing Fuel Type.");
 
             cfsFuelType     = PlugIn.ModelCore.GetSiteVar<int>("Fuels.CFSFuelType");
             decidFuelType   = PlugIn.ModelCore.GetSiteVar<int>("Fuels.DecidFuelType");
@@ -284,7 +284,7 @@ namespace Landis.Extension.DynamicFire
         {
             if (SiteVars.Cohorts[site] == null)
             {
-                PlugIn.ModelCore.Log.WriteLine("Cohort are null.");
+                PlugIn.ModelCore.UI.WriteLine("Cohort are null.");
                 return 0;
             }
             ushort max = 0;

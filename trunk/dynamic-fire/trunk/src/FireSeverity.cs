@@ -92,7 +92,7 @@ namespace Landis.Extension.DynamicFire
             if (CFB < 0.1 && ROS >= lowThreshold) severity = 2;
             if (CFB < 0.1 && ROS < lowThreshold) severity = 1;
 
-            //PlugIn.ModelCore.Log.WriteLine("      Severity = {0}.  CSI={1}, RSO={2}, ROS={3}, CFB={4}.", severity, CSI, RSO, ROS, CFB);
+            //PlugIn.ModelCore.UI.WriteLine("      Severity = {0}.  CSI={1}, RSO={2}, ROS={3}, CFB={4}.", severity, CSI, RSO, ROS, CFB);
 
             return severity;
         }

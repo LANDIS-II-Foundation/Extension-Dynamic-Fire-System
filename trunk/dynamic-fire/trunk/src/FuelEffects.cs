@@ -25,7 +25,7 @@ namespace Landis.Extension.DynamicFire
             int PH = SiteVars.PercentHardwood[site];
             int PDF = SiteVars.PercentDeadFir[site];
             
-            //PlugIn.ModelCore.Log.WriteLine("Fuel Type Code = {0}.", siteFuelType.ToString());
+            //PlugIn.ModelCore.UI.WriteLine("Fuel Type Code = {0}.", siteFuelType.ToString());
             
             double RSI = 0.0;  
             
@@ -77,8 +77,8 @@ namespace Landis.Extension.DynamicFire
                         RSI = ((1 - percentHard) * RSIconifer) + (percentHard * RSIdecid);
                     }
 
-                    //PlugIn.ModelCore.Log.WriteLine("Calculating ROSi for a MIXED type. PH={0}, PC={1}, LeafStatus={2}.", PH, PC, season.LeafStatus);
-                    //PlugIn.ModelCore.Log.WriteLine("  RSIcon={0:0.0}, RSIdecid={1:0.0}, RSImix={2:0.000}.", RSIconifer, RSIdecid, RSI);
+                    //PlugIn.ModelCore.UI.WriteLine("Calculating ROSi for a MIXED type. PH={0}, PC={1}, LeafStatus={2}.", PH, PC, season.LeafStatus);
+                    //PlugIn.ModelCore.UI.WriteLine("  RSIcon={0:0.0}, RSIdecid={1:0.0}, RSImix={2:0.000}.", RSIconifer, RSIdecid, RSI);
 
                 }
             }
@@ -159,7 +159,7 @@ namespace Landis.Extension.DynamicFire
             if( Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Slash || 
                 Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous)
             {
-                //PlugIn.ModelCore.Log.WriteLine("Calculating ROSi for a DECIDUOUS or SLASH type.");
+                //PlugIn.ModelCore.UI.WriteLine("Calculating ROSi for a DECIDUOUS or SLASH type.");
 
                 double a = Event.FuelTypeParms[fuelIndex].A;
                 double b = Event.FuelTypeParms[fuelIndex].B;

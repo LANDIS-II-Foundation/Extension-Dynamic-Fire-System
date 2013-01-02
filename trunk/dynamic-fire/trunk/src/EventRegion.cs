@@ -148,7 +148,7 @@ namespace Landis.Extension.DynamicFire
             while (!finished)
             {
                 count++;
-                //PlugIn.ModelCore.Log.WriteLine("      Re-Calculating optimal travel time:  {0} times.", count);
+                //PlugIn.ModelCore.UI.WriteLine("      Re-Calculating optimal travel time:  {0} times.", count);
                 finished = true;
 
                 // Loop through list and check each for a new, shorter travel time.
@@ -165,7 +165,7 @@ namespace Landis.Extension.DynamicFire
                         {
                             SiteVars.CostTime[destSite] = newCostTime;
                             SiteVars.TravelTime[destSite] = newTravelTime;
-                            //PlugIn.ModelCore.Log.WriteLine("      OldTT = {0:0.00}, NewTT = {1:0.00}, OldMinNeighborTT = {2:0.00}, MinNeighborTT = {3:0.00}.",
+                            //PlugIn.ModelCore.UI.WriteLine("      OldTT = {0:0.00}, NewTT = {1:0.00}, OldMinNeighborTT = {2:0.00}, MinNeighborTT = {3:0.00}.",
                             //oldTravelTime, SiteVars.TravelTime[destSite],
                             SiteVars.MinNeighborTravelTime[destSite] = SiteVars.TravelTime[srcSite];
                             if ((oldTravelTime - newTravelTime) > 0.5)
@@ -210,7 +210,7 @@ namespace Landis.Extension.DynamicFire
                 {
                     travelTime = CalculateTravelTime(neighbor, srcSite, fireEvent, buildUp);
                     //if (travelTime < 1)
-                    //    PlugIn.ModelCore.Log.WriteLine("Travel time < 1");
+                    //    PlugIn.ModelCore.UI.WriteLine("Travel time < 1");
                     temp.Add(new WeightedSite(neighbor, travelTime));
                 }
             }
@@ -236,7 +236,7 @@ namespace Landis.Extension.DynamicFire
                 {
                     lowestNeighbor = relneighbor;
                     SiteVars.MinNeighborTravelTime[site] = SiteVars.TravelTime[relneighbor];
-                    //PlugIn.ModelCore.Log.WriteLine("Location = {0},{1}.  MinTravelTime = {2}.", lowestNeighbor.Row, lowestNeighbor.Column, SiteVars.TravelTime[relneighbor]);
+                    //PlugIn.ModelCore.UI.WriteLine("Location = {0},{1}.  MinTravelTime = {2}.", lowestNeighbor.Row, lowestNeighbor.Column, SiteVars.TravelTime[relneighbor]);
                 }
             }
 
@@ -264,7 +264,7 @@ namespace Landis.Extension.DynamicFire
             List<int> siteWindList = new List<int>();
             int siteWindSpeed, siteWindDirection;
 
-            //PlugIn.ModelCore.Log.WriteLine("         Fuel Type Code = {0}.", temp.ToString());
+            //PlugIn.ModelCore.UI.WriteLine("         Fuel Type Code = {0}.", temp.ToString());
 
             ISeasonParameters season = fireEvent.FireSeason;
 
@@ -431,9 +431,9 @@ namespace Landis.Extension.DynamicFire
                 SiteVars.AdjROS[site] = r;
                 //----------
 
-                //PlugIn.ModelCore.Log.WriteLine("      FROSi = {0}, BROSi = {1}.", FROSi, BROSi);
-                //PlugIn.ModelCore.Log.WriteLine("      beta = {0:0.00}, theta = {1:0.00}, alpha = {2:0.00}, Travel time = {3:0.000000}.", beta, theta, alpha, 1/r);
-                //PlugIn.ModelCore.Log.WriteLine("      Travel time = {0:0.000000}.  R = {1}.", 1/r, r);
+                //PlugIn.ModelCore.UI.WriteLine("      FROSi = {0}, BROSi = {1}.", FROSi, BROSi);
+                //PlugIn.ModelCore.UI.WriteLine("      beta = {0:0.00}, theta = {1:0.00}, alpha = {2:0.00}, Travel time = {3:0.000000}.", beta, theta, alpha, 1/r);
+                //PlugIn.ModelCore.UI.WriteLine("      Travel time = {0:0.000000}.  R = {1}.", 1/r, r);
                 if (site == firesource)
                 {
                     double rate = 1.0 / r;  //units = minutes / meter
@@ -445,7 +445,7 @@ namespace Landis.Extension.DynamicFire
                     double rate = 1.0 / r;  //units = minutes / meter
                     double cost = rate * PlugIn.ModelCore.CellLength;     //units = minutes
                     //if (cost < 1)
-                     //   PlugIn.ModelCore.Log.WriteLine("Travel time < 1 min");
+                     //   PlugIn.ModelCore.UI.WriteLine("Travel time < 1 min");
                     return cost;
                 }
             }
@@ -575,8 +575,8 @@ namespace Landis.Extension.DynamicFire
             //    lessThan = false;
             if ((LengthA + LengthB <= sumDist) || (LengthA <= radius))
                 lessThan = true;
-            //PlugIn.ModelCore.Log.WriteLine("LengthA={0:0.0}, LengthB={1:0.0}, C={2:0.0}, D={3:0.0}.", LengthA, LengthB, C,D);
-            //PlugIn.ModelCore.Log.WriteLine("dXf1={0:0.0}, dYf1={1:0.0}, dXburn={2:0.0}, dYburn={3:0.0}.", dXf1, dYf1,dXburn,dYburn);
+            //PlugIn.ModelCore.UI.WriteLine("LengthA={0:0.0}, LengthB={1:0.0}, C={2:0.0}, D={3:0.0}.", LengthA, LengthB, C,D);
+            //PlugIn.ModelCore.UI.WriteLine("dXf1={0:0.0}, dYf1={1:0.0}, dXburn={2:0.0}, dYburn={3:0.0}.", dXf1, dYf1,dXburn,dYburn);
             //return true;
             return lessThan;
         }
