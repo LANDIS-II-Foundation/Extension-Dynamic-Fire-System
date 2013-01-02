@@ -8,16 +8,17 @@
 #define CoreReleaseAbbr  ""
 
 #include AddBackslash(GetEnv("LANDIS_DEPLOY")) + "package (Setup section) v6.0.iss"
-
+#define SourceDir "C:\Program Files\LANDIS-II\v6\bin\extensions"
+#define app "C:\Program Files\LANDIS-II\v6\"
 
 [Files]
 
 ; Dynamic Fire Fuel System v1.0 plug-in
-Source: C:\Program Files\LANDIS-II\6.0\bin\Landis.Extension.DynamicFire.dll; DestDir: {app}\bin; Flags: replacesameversion
-Source: C:\Program Files\LANDIS-II\6.0\bin\Landis.Extension.DynamicFuels.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: {#SourceDir}\Landis.Extension.DynamicFire.dll; DestDir: {#app}\bin\extensions; Flags: replacesameversion
+Source: {#SourceDir}\Landis.Extension.DynamicFuels.dll; DestDir: {#app}\bin\extensions; Flags: replacesameversion
 
-Source: docs\LANDIS-II Dynamic Fire System v2.0.1 User Guide.pdf; DestDir: {app}\docs
-Source: docs\LANDIS-II Dynamic Fuel System v2.0 User Guide.pdf; DestDir: {app}\docs
+Source: docs\LANDIS-II Dynamic Fire System v2.0.1 User Guide.pdf; DestDir: {#app}\docs
+Source: docs\LANDIS-II Dynamic Fuel System v2.0 User Guide.pdf; DestDir: {#app}\docs
 
 #define DynFireSys "Dynamic Fire System 2.0.txt"
 Source: {#DynFireSys}; DestDir: {#LandisPlugInDir}
@@ -26,7 +27,7 @@ Source: {#DynFireSys}; DestDir: {#LandisPlugInDir}
 Source: {#DynFuelSys}; DestDir: {#LandisPlugInDir}
 
 ; All the example input-files for the in examples\dynamic-fire-fuel-system
-Source: examples\*; DestDir: {app}\examples\dynamic-fire-fuel-system; Flags: recursesubdirs
+Source: examples\*; DestDir: {#app}\examples\dynamic-fire-fuel-system; Flags: recursesubdirs
 
 [Run]
 ;; Run plug-in admin tool to add entries for each plug-in

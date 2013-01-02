@@ -26,11 +26,11 @@ namespace Landis.Extension.DynamicFire
                 return "Dynamic Fire System";
             }
         }
-        //public InputParameterParser()
-        //{
-        //    Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
-        //    RegisterForInputValues();
-        //}
+        static InputParameterParser()
+        {
+            Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
+            RegisterForInputValues();
+        }
 
         //---------------------------------------------------------------------
 
