@@ -91,6 +91,7 @@
     <Compile Include="InputParameters.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IntPixel.cs" />
     <Compile Include="MapNames.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -109,8 +110,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

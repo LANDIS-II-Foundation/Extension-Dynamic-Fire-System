@@ -33,15 +33,22 @@ namespace Landis.Extension.DynamicFire
         }
 
         //---------------------------------------------------------------------
-
+        public override string LandisDataValue
+        {
+            get
+            {
+                return PlugIn.ExtensionName;  // expected value for LandisData variable
+            }
+        }
+        //---------------------------------------------------------------------
         protected override IInputParameters Parse()
         {
-            // ReadLandisDataVar();
+            ReadLandisDataVar();
 
-            InputVar<string> landisData = new InputVar<string>("LandisData");
-            ReadVar(landisData);
-            if (landisData.Value.Actual != PlugIn.ExtensionName)
-                throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
+            //InputVar<string> landisData = new InputVar<string>("LandisData");
+            //ReadVar(landisData);
+            //if (landisData.Value.Actual != PlugIn.ExtensionName)
+            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
 
             InputParameters parameters = new InputParameters();
 
