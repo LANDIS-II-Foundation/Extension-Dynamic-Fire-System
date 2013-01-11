@@ -33,14 +33,7 @@ namespace Landis.Extension.DynamicFire
         }
 
         //---------------------------------------------------------------------
-        public override string LandisDataValue
-        {
-            get
-            {
-                return PlugIn.ExtensionName;  // expected value for LandisData variable
-            }
-        }
-        //---------------------------------------------------------------------
+
         protected override IInputParameters Parse()
         {
             ReadLandisDataVar();

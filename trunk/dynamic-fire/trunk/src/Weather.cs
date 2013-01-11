@@ -48,8 +48,7 @@ namespace Landis.Extension.DynamicFire
 
         public static int GenerateWindSpeed(System.Data.DataRow weatherRow)
         {
-            int windSpeed = (int) Math.Round((double)weatherRow["WSV"]);;
-
+            int windSpeed = System.Convert.ToInt32(Math.Round(System.Convert.ToDouble(weatherRow["WSV"])));
             return windSpeed;
         }
 
@@ -57,7 +56,7 @@ namespace Landis.Extension.DynamicFire
 
         public static int GenerateWindDirection(System.Data.DataRow weatherRow)
         {
-            int windDir = (int) weatherRow["WindDir"];
+            int windDir = System.Convert.ToInt32(weatherRow["WindDir"]);
 
             return windDir;
         }
@@ -69,7 +68,7 @@ namespace Landis.Extension.DynamicFire
 
             foreach (DataRow myDataRow in weatherDS.Tables["Table"].Rows)
             {
-                FFMC = (int) Math.Round((double)myDataRow["FFMC"]);
+                FFMC = System.Convert.ToInt32(Math.Round(System.Convert.ToDouble(myDataRow["FFMC"])));
                 //PlugIn.ModelCore.UI.WriteLine("   New Event FFMC:  {0}", FFMC.ToString());
             }
 
@@ -79,7 +78,7 @@ namespace Landis.Extension.DynamicFire
 
         public static int GenerateFineFuelMoistureCode(System.Data.DataRow weatherRow)
         {
-            int FFMC = (int) Math.Round((double)weatherRow["FFMC"]);
+            int FFMC = System.Convert.ToInt32(Math.Round(System.Convert.ToDouble(weatherRow["FFMC"])));
 
             return FFMC;
         }
@@ -91,7 +90,7 @@ namespace Landis.Extension.DynamicFire
 
             foreach (DataRow myDataRow in weatherDS.Tables["Table"].Rows)
             {
-                BUI = (int)Math.Round((double)myDataRow["BUI"]);
+                BUI = System.Convert.ToInt32(Math.Round(System.Convert.ToDouble(myDataRow["BUI"])));
                 //PlugIn.ModelCore.UI.WriteLine("   New Event BUI:  {0}", BPlugIn.ModelCore.Log.ToString());
             }
 
@@ -101,7 +100,7 @@ namespace Landis.Extension.DynamicFire
 
         public static int GenerateBuildUpIndex(System.Data.DataRow weatherRow)
         {
-            int BUI = (int) Math.Round((double)weatherRow["BUI"]);
+            int BUI = System.Convert.ToInt32(Math.Round(System.Convert.ToDouble(weatherRow["BUI"])));
 
             return  BUI;
         }
@@ -373,13 +372,13 @@ namespace Landis.Extension.DynamicFire
                         {
                             DataRow myDataRow = foundRows[j];
 
-                            WSV = (double) myDataRow["WSV"];
+                            WSV = System.Convert.ToDouble(myDataRow["WSV"]);
                             //Console.WriteLine("WSV:  {0}", WSV);
                             if (WSV < 0.0)
                             {
                                 throw new System.ApplicationException("Error: Wind Speed < 0:  FireRegion = " + ecoName + "; Season = " + seasName);
                             }
-                            FFMC = (double) myDataRow["FFMC"];
+                            FFMC = System.Convert.ToDouble(myDataRow["FFMC"]);
                             //Console.WriteLine("FFMC:  {0}", FFMC);
                             if (FFMC < 0.0)
                             {
@@ -389,13 +388,13 @@ namespace Landis.Extension.DynamicFire
                             {
                                 throw new System.ApplicationException("Error: FFMC > 100:  FireRegion = " + ecoName + "; Season = " + seasName);
                             }
-                            BUI = (double) myDataRow["BUI"];
+                            BUI = System.Convert.ToDouble(myDataRow["BUI"]);
                             //Console.WriteLine("BUI:  {0}", BUI);
                             if (BUI < 0.0)
                             {
                                 throw new System.ApplicationException("Error: BUI < 0:  FireRegion = " + ecoName + "; Season = " + seasName);
                             }
-                            WINDDIR = (int) myDataRow["WindDir"];
+                            WINDDIR = System.Convert.ToInt32(myDataRow["WindDir"]);
                             //Console.WriteLine("WindDir:  {0}", WINDDIR);
                             if (WINDDIR < 0)
                             {
@@ -405,7 +404,7 @@ namespace Landis.Extension.DynamicFire
                             {
                                 throw new System.ApplicationException("Error: WINDDIR > 360:  FireRegion = " + ecoName + "; Season = " + seasName);
                             }
-                            FWIBIN = (int) myDataRow["FWIBin"];
+                            FWIBIN = System.Convert.ToInt32(myDataRow["FWIBin"]);
                             //Console.WriteLine("FWIBIN:  {0}", FWIBIN);
                             if (FWIBIN < 1)
                             {
