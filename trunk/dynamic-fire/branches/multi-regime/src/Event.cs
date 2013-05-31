@@ -26,7 +26,8 @@ namespace Landis.Extension.DynamicFire
         private double maxFireParameter;
         private int sizeBin;
         private double maxDuration;
-        private IFireRegion initiationFireRegion;
+        private IDynamicInputRecord initiationFireRegion;
+        private bool secondRegionMap;
         private int initiationPercentConifer;
         private int initiationFuel;
         private int totalSitesDamaged;
@@ -91,7 +92,7 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
 
-        public IFireRegion InitiationFireRegion
+        public IDynamicInputRecord InitiationFireRegion
         {
             get {
                 return initiationFireRegion;
@@ -99,6 +100,14 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
 
+        public bool SecondRegionMap
+        {
+            get
+            {
+                return secondRegionMap;
+            }
+        }
+        //---------------------------------------------------------------------
         public int InitiationPercentConifer
         {
             get {
@@ -286,13 +295,13 @@ namespace Landis.Extension.DynamicFire
 
         //---------------------------------------------------------------------
 
-        private Event(ActiveSite initiationSite, ISeasonParameters fireSeason, SizeType fireSizeType, IFireRegion eco)
+        private Event(ActiveSite initiationSite, ISeasonParameters fireSeason, SizeType fireSizeType, IDynamicInputRecord eco)
         {
             this.initiationSite = initiationSite;
-            this.sitesInEvent = new int[FireRegions.Dataset.Count];
+            this.sitesInEvent = new int[FireRegions.Dataset.Length];
             //PlugIn.ModelCore.Log.WriteLine("   initialzing siteInEvent ...");
 
-            foreach(IFireRegion fire_region in FireRegions.Dataset)
+            foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
                 this.sitesInEvent[fire_region.Index] = 0;
             this.cohortsKilled = 0;
             this.eventSeverity = 0;
@@ -302,6 +311,10 @@ namespace Landis.Extension.DynamicFire
             this.lengthD = 0.0;
             //IFireRegion eco = SiteVars.FireRegion[initiationSite];
             this.initiationFireRegion = eco;
+            if (eco.MapCode > FireRegions.MaxMapCode)
+                this.secondRegionMap = true;
+            else
+                this.secondRegionMap = false;
             this.maxFireParameter = ComputeSize(eco.MeanSize, eco.StandardDeviation, eco.MinSize, eco.MaxSize); //fireSizeType);
             this.sizeBin = ComputeSizeBin(eco.MeanSize, eco.StandardDeviation, this.maxFireParameter);
             this.fireSeason         = fireSeason; //Weather.GenerateSeason(seasons);
@@ -384,13 +397,15 @@ namespace Landis.Extension.DynamicFire
                                      bool       bui,
                                      ISeasonParameters[] seasons,
                                      double severityCalibrate,
-                                     IFireRegion eco)
+                                     IDynamicInputRecord eco)
         {
 
 
             //Adjust ignition probability (measured on an annual basis) for the
             //user determined fire time step.
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (eco.MapCode > FireRegions.MaxMapCode)
+                fuelIndex = SiteVars.CFSFuelType2[site];
 
             double initProb = FuelTypeParms[fuelIndex].InitiationProbability;
 
@@ -455,7 +470,7 @@ namespace Landis.Extension.DynamicFire
                 if (fireEvent.FireSeason.PercentCuring == 0 && FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
                     return null;
 
-                if (!fireEvent.Spread(site, fireSizeType, bui, severityCalibrate))
+                if (!fireEvent.Spread(site,eco, fireSizeType, bui, severityCalibrate))
                     return null;
                 else
                     return fireEvent;
@@ -470,7 +485,7 @@ namespace Landis.Extension.DynamicFire
         }
 
         //---------------------------------------------------------------------
-        private bool Spread(ActiveSite initiationSite, SizeType fireSizeType, bool BUI, double severityCalibrate)
+        private bool Spread(ActiveSite initiationSite, IDynamicInputRecord fire_region, SizeType fireSizeType, bool BUI, double severityCalibrate)
         {
             //First, check for fire overlap:
             if(SiteVars.Event[initiationSite] != null)
@@ -479,7 +494,7 @@ namespace Landis.Extension.DynamicFire
             if (isDebugEnabled)
                 PlugIn.ModelCore.Log.WriteLine("   Spreading fire event started at {0} ...", initiationSite.Location);
 
-            IFireRegion fire_region = SiteVars.FireRegion[initiationSite];
+            //IDynamicInputRecord fire_region = SiteVars.FireRegion[initiationSite];
 
             int totalSiteSeverities = 0;
             int siteCohortsKilled    = 0;
@@ -487,6 +502,8 @@ namespace Landis.Extension.DynamicFire
             totalSitesDamaged = 1;
 
             this.initiationFuel   = SiteVars.CFSFuelType[initiationSite];
+            if (this.secondRegionMap)
+                this.initiationFuel = SiteVars.CFSFuelType2[initiationSite];
             this.initiationPercentConifer = SiteVars.PercentConifer[initiationSite];
 
             //PlugIn.ModelCore.Log.WriteLine("      Calculated max fire size or duration = {0:0.0}", maxFireParameter);
@@ -614,8 +631,8 @@ namespace Landis.Extension.DynamicFire
                     totalISI += (int) SiteVars.ISI[site];
                     
                     
-                    IFireRegion siteFireRegion = SiteVars.FireRegion[site];
-                    if (this.initiationFireRegion.MapCode > FireRegions.MaxMapCode)
+                    IDynamicInputRecord siteFireRegion = SiteVars.FireRegion[site];
+                    if (this.secondRegionMap)
                         siteFireRegion = SiteVars.FireRegion2[site];
 
                     sitesInEvent[siteFireRegion.Index]++;
@@ -653,6 +670,7 @@ namespace Landis.Extension.DynamicFire
                 PlugIn.ModelCore.LognormalDistribution.Mu = meanSize;      //randVar.Mu for Lognormal //randVar.Alpha for Gamma
                 PlugIn.ModelCore.LognormalDistribution.Sigma = sd;   //randVar.Sigma for Lognormal //randVar.Theta for Gamma
                 sizeGenerated = PlugIn.ModelCore.LognormalDistribution.NextDouble();
+                //PlugIn.ModelCore.Log.WriteLine(sizeGenerated.ToString());
             }
             return sizeGenerated;
         }

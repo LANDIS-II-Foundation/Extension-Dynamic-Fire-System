@@ -16,11 +16,13 @@ namespace Landis.Extension.DynamicFire
         // This method calculates the initial rate of spread for a specific site.
         // See below for the method that estimates the initial rate of spread for a broad area.
         
-        public static double InitialRateOfSpread(double ISI, ISeasonParameters season, Site site)
+        public static double InitialRateOfSpread(double ISI, ISeasonParameters season, Site site, bool secondRegionMap)
         {   
 
             
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (secondRegionMap)
+                fuelIndex = SiteVars.CFSFuelType2[site];
             int PC = SiteVars.PercentConifer[site];
             int PH = SiteVars.PercentHardwood[site];
             int PDF = SiteVars.PercentDeadFir[site];

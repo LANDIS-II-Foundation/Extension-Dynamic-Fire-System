@@ -95,6 +95,8 @@ namespace Landis.Extension.DynamicFire
                         Site destSite = weighted.Site;
 
                         int fuelIndex = (int)SiteVars.CFSFuelType[destSite];
+                        if (fireEvent.InitiationFireRegion.MapCode > FireRegions.MaxMapCode)
+                            fuelIndex = (int)SiteVars.CFSFuelType2[destSite];
 
                         if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open
                             && fireEvent.FireSeason.PercentCuring == 0)
@@ -249,15 +251,24 @@ namespace Landis.Extension.DynamicFire
             if (!site.IsActive || !firesource.IsActive)
                 throw new ApplicationException("Either site or fire source are not active.");
 
-            //Calculate Fire regime size adjustment:
-            IFireRegion fire_region = SiteVars.FireRegion[site];
+            //Calculate Fire regime size adjustment (FRUA):
+            //Get local fire_region
+            IDynamicInputRecord fire_region = SiteVars.FireRegion[site];
+            if (fireEvent.SecondRegionMap)
+                fire_region = SiteVars.FireRegion2[site];
+            
             double FRUA = fire_region.MeanSize;
 
+            //Get source fire region
             fire_region = SiteVars.FireRegion[firesource];
+            if (fireEvent.SecondRegionMap)
+                fire_region = SiteVars.FireRegion2[site];
+
             FRUA = FRUA / fire_region.MeanSize;
 
-
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (fireEvent.SecondRegionMap)
+                fuelIndex = SiteVars.CFSFuelType2[site];
             int percentConifer = SiteVars.PercentConifer[site];
             int percentHardwood = SiteVars.PercentHardwood[site];
             int percentDeadFir = SiteVars.PercentDeadFir[site];
@@ -270,7 +281,7 @@ namespace Landis.Extension.DynamicFire
 
             double f_F = Weather.CalculateFuelMoistureEffect(fireEvent.FFMC);
             double ISZ = 0.208 * f_F;  //No wind
-            double RSZ = FuelEffects.InitialRateOfSpread(ISZ, season, site);
+            double RSZ = FuelEffects.InitialRateOfSpread(ISZ, season, site, fireEvent.SecondRegionMap);
 
             if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.ConiferPlantation)//SurfaceFuel == SurfaceFuelType.C6)
             {
@@ -286,7 +297,7 @@ namespace Landis.Extension.DynamicFire
             }
             double BE = 0;
 
-            siteWindList = CalculateSlopeEffect(fireEvent.WindSpeed, fireEvent.WindDirection, site, RSZ, f_F, season);
+            siteWindList = CalculateSlopeEffect(fireEvent.WindSpeed, fireEvent.WindDirection, site, RSZ, f_F, season, fireEvent.SecondRegionMap);
             if (siteWindList.Count > 0)
             {
                 siteWindSpeed = siteWindList[0];
@@ -307,8 +318,8 @@ namespace Landis.Extension.DynamicFire
 
             double BISI = 0.208 * f_F * f_backW;
 
-            double BROSi = FuelEffects.InitialRateOfSpread(BISI, season, site);
-            double ROSi = FuelEffects.InitialRateOfSpread(ISI, season, site);
+            double BROSi = FuelEffects.InitialRateOfSpread(BISI, season, site, fireEvent.SecondRegionMap);
+            double ROSi = FuelEffects.InitialRateOfSpread(ISI, season, site,fireEvent.SecondRegionMap);
 
             if (ROSi == 0)
             {
@@ -632,7 +643,7 @@ namespace Landis.Extension.DynamicFire
         }
         private static List<int> CalculateSlopeEffect(int windSpeed, int windDirection,
                                                 Site site, double RSZ, double f_F,
-                                                ISeasonParameters season)
+                                                ISeasonParameters season, bool secondRegionMap)
         {
             List<int> siteWindList = new List<int>();
             if ((SiteVars.GroundSlope[site] == 0) || (RSZ == 0))
@@ -661,6 +672,9 @@ namespace Landis.Extension.DynamicFire
                 double ISF = 0.0;
                 double a, b, c;
                 int fuelIndex = SiteVars.CFSFuelType[site];
+                if (secondRegionMap)
+                    fuelIndex = SiteVars.CFSFuelType2[site];
+                
 
                 if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
                 //(siteFuelType == FuelTypeCode.O1a)

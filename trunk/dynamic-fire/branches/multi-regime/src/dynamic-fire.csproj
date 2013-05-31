@@ -70,15 +70,15 @@
     <Compile Include="DynamicFireRegion.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DynamicInputParser.cs" />
+    <Compile Include="DynamicInputRecord.cs" />
+    <Compile Include="DynamicInputs.cs" />
     <Compile Include="DynamicWeather.cs" />
     <Compile Include="Event.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventRegion.cs" />
     <Compile Include="FireDamages.cs" />
-    <Compile Include="FireRegion.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="FireRegions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -91,6 +91,7 @@
     <Compile Include="InputParameters.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IntPixel.cs" />
     <Compile Include="MapNames.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -109,7 +110,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\6.0\bin"</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -19,6 +19,8 @@ namespace Landis.Extension.DynamicFire
             int PC = SiteVars.PercentConifer[site];
 
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (fireEvent.InitiationFireRegion.MapCode > FireRegions.MaxMapCode)
+                fuelIndex = SiteVars.CFSFuelType2[site];
             int CBH = Event.FuelTypeParms[fuelIndex].CBH;
             //If M3 or M4 type (PDF >0) assign appropriate fuel index
             if (PDF > 0)

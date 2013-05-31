@@ -13,10 +13,10 @@ namespace Landis.Extension.DynamicFire
 
         internal static void ReadGroundSlopeMap(string path)
         {
-            IInputRaster<ShortPixel> map;
+            IInputRaster<IntPixel> map;
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<IntPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -32,11 +32,11 @@ namespace Landis.Extension.DynamicFire
 
             using (map)
             {
-                ShortPixel pixel = map.BufferPixel;
+                IntPixel pixel = map.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    short mapCode = pixel.MapCode.Value;
+                    int mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
                         if (mapCode < 0)
@@ -53,11 +53,11 @@ namespace Landis.Extension.DynamicFire
 
         internal static void ReadUphillSlopeAzimuthMap(string path)
         {
-            IInputRaster<ShortPixel> map;
+            IInputRaster<IntPixel> map;
 
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<IntPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -73,11 +73,11 @@ namespace Landis.Extension.DynamicFire
 
 
             using (map) {
-                ShortPixel pixel = map.BufferPixel;
+                IntPixel pixel = map.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    short mapCode = pixel.MapCode.Value;
+                    int mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
                         if (mapCode < 0 || mapCode > 360)

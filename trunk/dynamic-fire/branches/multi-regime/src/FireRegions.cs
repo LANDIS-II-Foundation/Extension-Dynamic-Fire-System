@@ -10,18 +10,19 @@ namespace Landis.Extension.DynamicFire
 {
     public class FireRegions
     {
-        public static List<IFireRegion> Dataset;
+        public static IDynamicInputRecord[] Dataset;
         public static int MaxMapCode;
+        public static Dictionary<int, IDynamicInputRecord[]> AllData;
 
         //---------------------------------------------------------------------
 
         public static void ReadMap(string path)
         {
-            IInputRaster<ShortPixel> map;
+            IInputRaster<IntPixel> map;
 
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<IntPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -36,17 +37,17 @@ namespace Landis.Extension.DynamicFire
             }
 
             using (map) {
-                ShortPixel pixel = map.BufferPixel;
+                IntPixel pixel = map.BufferPixel;
                 MaxMapCode = 0;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    short mapCode = pixel.MapCode.Value;
+                    int mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (Dataset == null)
-                            PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
-                        IFireRegion fire_region = Find(mapCode);
+                        //if (Dataset == null)
+                         //   PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
+                        IDynamicInputRecord fire_region = Find(mapCode);
 
                         if (fire_region == null)
                         {
@@ -64,11 +65,11 @@ namespace Landis.Extension.DynamicFire
 
         public static void ReadMap2(string path)
         {
-            IInputRaster<ShortPixel> map;
+            IInputRaster<IntPixel> map;
 
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<ShortPixel>(path);
+                map = PlugIn.ModelCore.OpenRaster<IntPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -84,16 +85,16 @@ namespace Landis.Extension.DynamicFire
 
             using (map)
             {
-                ShortPixel pixel = map.BufferPixel;
+                IntPixel pixel = map.BufferPixel;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    short mapCode = pixel.MapCode.Value;
+                    int mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (Dataset == null)
-                            PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
-                        IFireRegion fire_region = Find(mapCode);
+                        //if (Dataset == null)
+                        //    PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
+                        IDynamicInputRecord fire_region = Find(mapCode);
 
                         if (fire_region == null)
                         {
@@ -107,24 +108,24 @@ namespace Landis.Extension.DynamicFire
             }
         }
 
-        public static IFireRegion Find(int mapCode)
-        {
-            foreach (IFireRegion fireregion in Dataset)
+        public static IDynamicInputRecord Find(int mapCode)
+        {            
+            foreach (IDynamicInputRecord regionRecord in FireRegions.AllData[0])
             {
-                if (fireregion.MapCode == mapCode)
+                if (regionRecord.MapCode == mapCode)
                 {
                     //PlugIn.ModelCore.Log.WriteLine("FireRegion mapCode {0}.  Find {1}", fireregion.MapCode, mapCode);
-                    return fireregion;
+                    return regionRecord;
                 }
             }
             return null;
         }
 
-        public static IFireRegion FindName(string name)
+        public static IDynamicInputRecord FindName(string name)
         {
-            foreach(IFireRegion fireregion in Dataset)
-                if(fireregion.Name == name)
-                    return fireregion;
+            foreach(IDynamicInputRecord regionRecord in FireRegions.AllData[0])
+                if(regionRecord.Name == name)
+                    return regionRecord;
 
             return null;
         }

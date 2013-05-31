@@ -172,7 +172,7 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
 
-        public static DataRow GenerateDataRow(ISeasonParameters season, IFireRegion fire_region, int sizeBin)
+        public static DataRow GenerateDataRow(ISeasonParameters season, IDynamicInputRecord fire_region, int sizeBin)
         {
 
             int weatherRandomizer = PlugIn.WeatherRandomizer;
@@ -197,11 +197,11 @@ namespace Landis.Extension.DynamicFire
 
                 for(int bin = minBin; bin <= maxBin; bin++)
                 {
-                    string selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND Ecoregion = '" + ecoName + "'";
+                    string selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND FireRegion = '" + ecoName + "'";
                     DataRow[] rows = PlugIn.WeatherDataTable.Select(selectString);
                     if (rows.Length == 0)
                     {
-                        selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND Ecoregion = 'All'";
+                        selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND FireRegion = 'All'";
                         rows = PlugIn.WeatherDataTable.Select(selectString);
                     }
 
@@ -250,13 +250,13 @@ namespace Landis.Extension.DynamicFire
                 firstDir = -1;
             while (rowCount == 0)
             {
-                string selectString = "FWIBin = '" + weatherBin + "' AND Season = '" + seasonName + "' AND Ecoregion = '" + ecoName + "'";
+                string selectString = "FWIBin = '" + weatherBin + "' AND Season = '" + seasonName + "' AND FireRegion = '" + ecoName + "'";
                 foundRows = PlugIn.WeatherDataTable.Select(selectString);
                 rowCount = foundRows.Length;
 
                 if (rowCount == 0)
                 {
-                    selectString = "FWIBin = '" + weatherBin + "' AND Season = '" + seasonName + "' AND Ecoregion = 'All'";
+                    selectString = "FWIBin = '" + weatherBin + "' AND Season = '" + seasonName + "' AND FireRegion = 'All'";
                     foundRows = PlugIn.WeatherDataTable.Select(selectString);
                     rowCount = foundRows.Length;
                 }
@@ -292,7 +292,7 @@ namespace Landis.Extension.DynamicFire
                     {
 
                         PlugIn.ModelCore.Log.WriteLine("   No Weather Rows Selected");
-                        throw new System.ApplicationException("No Weather Row could be selected. Ecoregion = "+ecoName+", Season = "+seasonName+", sizeBin = "+sizeBin);
+                        throw new System.ApplicationException("No Weather Row could be selected. FireRegion = "+ecoName+", Season = "+seasonName+", sizeBin = "+sizeBin);
 
                     }
 
@@ -305,7 +305,7 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
 
-        public static int GenerateFMC(ISeasonParameters season, IFireRegion fire_region)
+        public static int GenerateFMC(ISeasonParameters season, IDynamicInputRecord fire_region)
         {
 
             int FMC = 0;
@@ -334,7 +334,7 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
 
-        public static DataTable ReadWeatherFile(string path, List<IFireRegion> ecoDataSet, ISeasonParameters[] seasonParms)
+        public static DataTable ReadWeatherFile(string path, IDynamicInputRecord[] regionRecords, ISeasonParameters[] seasonParms)
         {
             PlugIn.ModelCore.Log.WriteLine("   Loading Weather Data...");
 
@@ -348,19 +348,19 @@ namespace Landis.Extension.DynamicFire
                 string seasName = seasonParms[i].NameOfSeason.ToString();
 
 
-                foreach (IFireRegion fire_region in ecoDataSet)
+                foreach (IDynamicInputRecord fire_region in regionRecords)
                 {
                     string ecoName = fire_region.Name;
                     //PlugIn.ModelCore.Log.WriteLine("Read Weather File:  Season={0}, FireRegion={1}.", seasName, ecoName);
 
-                    string selectText = ("Ecoregion = '" + ecoName + "' AND Season = '" + seasName + "'");
+                    string selectText = ("FireRegion = '" + ecoName + "' AND Season = '" + seasName + "'");
                     //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
 
                     DataRow[] foundRows = weatherTable.Select(selectText);
 
                     if (foundRows.Length == 0)
                     {
-                        selectText = ("Ecoregion = 'All' AND Season = '" + seasName + "'");
+                        selectText = ("FireRegion = 'All' AND Season = '" + seasName + "'");
                         foundRows = weatherTable.Select(selectText);
                     }
 
@@ -422,7 +422,7 @@ namespace Landis.Extension.DynamicFire
 
                     if ((foundRows.Length == 0) && (seasonParms[i].FireProbability > 0) && (fire_region.EcoIgnitionNum > 0))
                     {
-                        throw new System.ApplicationException("Error: Ecoregion " + ecoName + ", Season " + seasName + " has fire probability > 0, but 0 weather records");
+                        throw new System.ApplicationException("Error: FireRegion " + ecoName + ", Season " + seasName + " has fire probability > 0, but 0 weather records");
                     }
 
                     if(seasName == "Fall")
