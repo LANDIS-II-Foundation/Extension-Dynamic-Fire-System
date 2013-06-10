@@ -319,12 +319,14 @@ namespace Landis.Extension.DynamicFire
             this.sizeBin = ComputeSizeBin(eco.MeanSize, eco.StandardDeviation, this.maxFireParameter);
             this.fireSeason         = fireSeason; //Weather.GenerateSeason(seasons);
             System.Data.DataRow weatherRow = Weather.GenerateDataRow(this.fireSeason, eco, this.sizeBin);
-            
-            this.windSpeed            = Weather.GenerateWindSpeed(weatherRow);
-            this.fineFuelMoistureCode = Weather.GenerateFineFuelMoistureCode(weatherRow);
-            this.buildUpIndex         = Weather.GenerateBuildUpIndex(weatherRow);
-            this.windDirection        = Weather.GenerateWindDirection(weatherRow);
-            this.foliarMC = Weather.GenerateFMC(this.fireSeason, eco);
+            if (weatherRow != null)
+            {
+                this.windSpeed = Weather.GenerateWindSpeed(weatherRow);
+                this.fineFuelMoistureCode = Weather.GenerateFineFuelMoistureCode(weatherRow);
+                this.buildUpIndex = Weather.GenerateBuildUpIndex(weatherRow);
+                this.windDirection = Weather.GenerateWindDirection(weatherRow);
+                this.foliarMC = Weather.GenerateFMC(this.fireSeason, eco);
+            }
 
 
             //PlugIn.ModelCore.Log.WriteLine();

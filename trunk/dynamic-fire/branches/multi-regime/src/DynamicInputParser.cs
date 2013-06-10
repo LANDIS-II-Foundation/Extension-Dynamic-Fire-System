@@ -82,7 +82,19 @@ namespace Landis.Extension.DynamicFire
                 {
                     IDynamicInputRecord[] inputTable = new IDynamicInputRecord[1];
                     if (yr > 0)
-                        inputTable = new IDynamicInputRecord[allData[0].Length];
+                    {
+                        inputTable = new IDynamicInputRecord[allData[lastYear].Length];
+                        int newIndex = 0;
+                        foreach (IDynamicInputRecord record in inputTable)
+                        {
+                            IDynamicInputRecord oldInputRecord = new DynamicInputRecord();
+                            IDynamicInputRecord newInputRecord = new DynamicInputRecord();
+                            oldInputRecord = allData[lastYear][newIndex];
+                            newInputRecord = DynamicInputRecord.Clone(oldInputRecord);
+                            inputTable[newIndex] = newInputRecord;
+                            newIndex += 1;
+                        }
+                    }
 
                     //IDynamicInputRecord[,] inputTable = new IDynamicInputRecord[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
                     allData.Add(yr, inputTable);

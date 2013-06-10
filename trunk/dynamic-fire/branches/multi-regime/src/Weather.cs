@@ -184,56 +184,62 @@ namespace Landis.Extension.DynamicFire
                 weatherBin = sizeBin;
             else
             {
-                // First, tally the available bins and assign a probability based on their size
-                // (number of records).
-                // Bins can only be 1 - 5.
-
-                int minBin = (int) System.Math.Max(1, sizeBin - weatherRandomizer);
-                int maxBin = (int) System.Math.Min(5, sizeBin + weatherRandomizer);
-
-                double[] binProbability = new double[maxBin - minBin + 1];
-                int[] binCount = new int[maxBin - minBin + 1];
-                int binSum = 0;
-
-                for(int bin = minBin; bin <= maxBin; bin++)
+                if (weatherRandomizer == 4)
                 {
-                    string selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND FireRegion = '" + ecoName + "'";
-                    DataRow[] rows = PlugIn.WeatherDataTable.Select(selectString);
-                    if (rows.Length == 0)
-                    {
-                        selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND FireRegion = 'All'";
-                        rows = PlugIn.WeatherDataTable.Select(selectString);
-                    }
-
-                    int numRecs = rows.Length;
-
-                    binCount[bin - minBin] = numRecs;
-                    binSum += numRecs;
+                    weatherBin = -1;
                 }
-
-                for(int bin = minBin; bin <= maxBin; bin++)
-                    binProbability[bin-minBin] = (double) binCount[bin-minBin] / (double) binSum;
-
-                // Now randomly select from the available bins:
-                double randomBinNum = PlugIn.ModelCore.GenerateUniform();
-
-                double minProb = 0.0;
-                double maxProb = 0.0;
-
-                for(int bin = minBin; bin <= maxBin; bin++)
+                else
                 {
-                    maxProb += binProbability[bin-minBin];
-                    if(randomBinNum >= minProb && randomBinNum < maxProb)
+                    // First, tally the available bins and assign a probability based on their size
+                    // (number of records).
+                    // Bins can only be 1 - 5.
+
+                    int minBin = (int)System.Math.Max(1, sizeBin - weatherRandomizer);
+                    int maxBin = (int)System.Math.Min(5, sizeBin + weatherRandomizer);
+
+                    double[] binProbability = new double[maxBin - minBin + 1];
+                    int[] binCount = new int[maxBin - minBin + 1];
+                    int binSum = 0;
+
+                    for (int bin = minBin; bin <= maxBin; bin++)
                     {
-                        weatherBin = bin;
-                        break;
+                        string selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND FireRegion = '" + ecoName + "'";
+                        DataRow[] rows = PlugIn.WeatherDataTable.Select(selectString);
+                        if (rows.Length == 0)
+                        {
+                            selectString = "FWIBin = '" + bin + "' AND Season = '" + seasonName + "' AND FireRegion = 'All'";
+                            rows = PlugIn.WeatherDataTable.Select(selectString);
+                        }
+
+                        int numRecs = rows.Length;
+
+                        binCount[bin - minBin] = numRecs;
+                        binSum += numRecs;
                     }
-                    else
+
+                    for (int bin = minBin; bin <= maxBin; bin++)
+                        binProbability[bin - minBin] = (double)binCount[bin - minBin] / (double)binSum;
+
+                    // Now randomly select from the available bins:
+                    double randomBinNum = PlugIn.ModelCore.GenerateUniform();
+
+                    double minProb = 0.0;
+                    double maxProb = 0.0;
+
+                    for (int bin = minBin; bin <= maxBin; bin++)
                     {
-                        minProb = binProbability[bin-minBin];
+                        maxProb += binProbability[bin - minBin];
+                        if (randomBinNum >= minProb && randomBinNum < maxProb)
+                        {
+                            weatherBin = bin;
+                            break;
+                        }
+                        else
+                        {
+                            minProb = binProbability[bin - minBin];
+                        }
                     }
                 }
-
             }
             if(weatherBin == 0)
                 weatherBin = sizeBin;
@@ -244,6 +250,8 @@ namespace Landis.Extension.DynamicFire
             int firstDir = 0;
             DataRow[] foundRows = null;
 
+            string seasonOrig = seasonName;
+
             if (PlugIn.ModelCore.GenerateUniform() >= 0.5)
                 firstDir = 1;  // Direction (+ or -) to check first if target bin is not available (+1 or -1)
             else
@@ -251,12 +259,20 @@ namespace Landis.Extension.DynamicFire
             while (rowCount == 0)
             {
                 string selectString = "FWIBin = '" + weatherBin + "' AND Season = '" + seasonName + "' AND FireRegion = '" + ecoName + "'";
+                if (weatherBin == -1)
+                {
+                    selectString = "Season = '" + seasonName + "' AND FireRegion = '" + ecoName + "'";
+                }
+               
                 foundRows = PlugIn.WeatherDataTable.Select(selectString);
                 rowCount = foundRows.Length;
 
                 if (rowCount == 0)
                 {
                     selectString = "FWIBin = '" + weatherBin + "' AND Season = '" + seasonName + "' AND FireRegion = 'All'";
+                    {
+                        selectString = "Season = '" + seasonName + "' AND FireRegion = 'All'";
+                    }
                     foundRows = PlugIn.WeatherDataTable.Select(selectString);
                     rowCount = foundRows.Length;
                 }
@@ -291,17 +307,63 @@ namespace Landis.Extension.DynamicFire
                     if (loopCount > 100)
                     {
 
-                        PlugIn.ModelCore.Log.WriteLine("   No Weather Rows Selected");
-                        throw new System.ApplicationException("No Weather Row could be selected. FireRegion = "+ecoName+", Season = "+seasonName+", sizeBin = "+sizeBin);
+                        PlugIn.ModelCore.Log.WriteLine("   No Weather Rows Selected.  Using alternate season.");
+                        if (seasonOrig == "Spring" || seasonOrig == "Fall")
+                            seasonName = "Summer";
+                        else // Summer
+                        {
+                            if (firstDir == 1)
+                            {
+                                seasonName = "Spring";
+                            }
+                            else
+                            {
+                                seasonName = "Fall";
+                            }
+                        }
+                        
+                    }
+                    if (loopCount > 200)
+                    {
 
+                        PlugIn.ModelCore.Log.WriteLine("   No Weather Rows Selected.  Using alternate season 2.");
+                        if (seasonOrig == "Spring")
+                            seasonName = "Fall";
+                        else
+                            if (seasonOrig == "Fall")
+                                seasonName = "Spring";
+                            else // Summer
+                            {
+                                if (firstDir == 1)
+                                {
+                                    seasonName = "Fall";
+                                }
+                                else
+                                {
+                                    seasonName = "Spring";
+                                }
+                            }
+
+                    }
+                    if (loopCount > 300)
+                    {
+                        PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 350): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+                        break;
                     }
 
                 }
             }
-            int newRandNum = (int)(Math.Round(PlugIn.ModelCore.GenerateUniform() * (rowCount - 1)));
-            DataRow weatherRow = foundRows[newRandNum];
+            if (rowCount > 0)
+            {
+                int newRandNum = (int)(Math.Round(PlugIn.ModelCore.GenerateUniform() * (rowCount - 1)));
+                DataRow weatherRow = foundRows[newRandNum];
 
-            return weatherRow;
+                return weatherRow;
+            }
+            else
+            {
+                return null;
+            }
         }
         //---------------------------------------------------------------------
 
@@ -363,7 +425,90 @@ namespace Landis.Extension.DynamicFire
                         selectText = ("FireRegion = 'All' AND Season = '" + seasName + "'");
                         foundRows = weatherTable.Select(selectText);
                     }
+                    if ((foundRows.Length == 0) && (seasonParms[i].FireProbability > 0) && (fire_region.EcoIgnitionNum > 0))
+                    {
+                        PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 430): FireRegion " + ecoName + ", Season " + seasName + " has fire probability > 0, but 0 weather records.  Using alternate season.");
+                        if (seasName == "Spring")
+                        {
+                            selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Summer'");
+                            //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                            foundRows = weatherTable.Select(selectText);
 
+                            if (foundRows.Length == 0)
+                            {
+                                selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Fall'");
+                                //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                                foundRows = weatherTable.Select(selectText);
+                            }
+                            if (foundRows.Length == 0)
+                            {
+                                PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 445): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+                        
+                            }
+
+                        }
+                        if (seasName == "Fall")
+                        {
+                            selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Summer'");
+                            //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                            foundRows = weatherTable.Select(selectText);
+
+                            if (foundRows.Length == 0)
+                            {
+                                selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Spring'");
+                                //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                                foundRows = weatherTable.Select(selectText);
+                            }
+                            if (foundRows.Length == 0)
+                            {
+                                PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 464): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+
+                            }
+
+                        }
+                        if (seasName == "Summer")
+                        {
+                            if (PlugIn.ModelCore.GenerateUniform() >= 0.5)
+                            {
+                                selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Spring'");
+                                //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                                foundRows = weatherTable.Select(selectText);
+
+                                if (foundRows.Length == 0)
+                                {
+                                    selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Fall'");
+                                    //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                                    foundRows = weatherTable.Select(selectText);
+                                }
+                                if (foundRows.Length == 0)
+                                {
+                                    PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 485): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+
+                                }
+                            }
+                            else
+                            {
+                                selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Fall'");
+                                //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                                foundRows = weatherTable.Select(selectText);
+
+                                if (foundRows.Length == 0)
+                                {
+                                    selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Spring'");
+                                    //PlugIn.ModelCore.Log.WriteLine("Read Weather File SelectText = {0}.", selectText);
+                                    foundRows = weatherTable.Select(selectText);
+                                }
+                                if (foundRows.Length == 0)
+                                {
+                                    PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 503): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+
+                                }
+                            }
+
+                        }
+
+                        
+                    }
                     if(foundRows.Length > 0)
                     {
                         //Input validation
@@ -420,10 +565,7 @@ namespace Landis.Extension.DynamicFire
 
                     }
 
-                    if ((foundRows.Length == 0) && (seasonParms[i].FireProbability > 0) && (fire_region.EcoIgnitionNum > 0))
-                    {
-                        throw new System.ApplicationException("Error: FireRegion " + ecoName + ", Season " + seasName + " has fire probability > 0, but 0 weather records");
-                    }
+                   
 
                     if(seasName == "Fall")
                     {
