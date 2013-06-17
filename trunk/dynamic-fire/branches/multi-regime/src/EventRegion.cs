@@ -529,7 +529,8 @@ namespace Landis.Extension.DynamicFire
 
             double lengthBreadthRatio = 0.0;
 
-            if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            //if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
             {
                 if (WSV < 1.0)
                     lengthBreadthRatio = 1.0; //(FBP; 81)
@@ -770,7 +771,9 @@ namespace Landis.Extension.DynamicFire
             double a = Event.FuelTypeParms[fuelIndex].A;
             double b = Event.FuelTypeParms[fuelIndex].B;
             double c = Event.FuelTypeParms[fuelIndex].C;
-            if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+
+            //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
             //siteFuelType == FuelTypeCode.O1a)
             {
                 double CF = (0.02 * season.PercentCuring) - 1;

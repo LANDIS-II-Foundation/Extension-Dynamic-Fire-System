@@ -349,16 +349,16 @@ namespace Landis.Extension.DynamicFire
                                       List<IFireDamage>    damages)
         {
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("Initializing event parameters ...");
+                PlugIn.ModelCore.UI.WriteLine("Initializing event parameters ...");
 
             if(seasons == null || fuelTypeParameters == null || damages == null)
             {
                 if(seasons == null)
-                    PlugIn.ModelCore.Log.WriteLine("Error:  Seasons table empty.");
+                    PlugIn.ModelCore.UI.WriteLine("Error:  Seasons table empty.");
                 if(fuelTypeParameters == null)
-                    PlugIn.ModelCore.Log.WriteLine("Error:  FuelTypeParameters table empty.");
+                    PlugIn.ModelCore.UI.WriteLine("Error:  FuelTypeParameters table empty.");
                 if(damages == null)
-                    PlugIn.ModelCore.Log.WriteLine("Error:  Damages table empty.");
+                    PlugIn.ModelCore.UI.WriteLine("Error:  Damages table empty.");
                 throw new System.ApplicationException("Error: Event class could not be initialized.");
             }
 
@@ -457,7 +457,7 @@ namespace Landis.Extension.DynamicFire
             if (randomNum <= initProb)
             {
                 if (isDebugEnabled)
-                    PlugIn.ModelCore.Log.WriteLine("   Generating a new fire event...");
+                    PlugIn.ModelCore.UI.WriteLine("   Generating a new fire event...");
 
                 Event fireEvent = new Event(site, fireSeason, fireSizeType,eco); //Must create event to determine season
 
@@ -465,7 +465,7 @@ namespace Landis.Extension.DynamicFire
                 // Test that adequate weather data was retrieved:
                 if (fireEvent.windSpeed == 0 && fireEvent.fineFuelMoistureCode == 0 && fireEvent.buildUpIndex == 0)
                 {
-                    PlugIn.ModelCore.Log.WriteLine("   No weather data available:  {0}; fire_region = {1}.", fireEvent.fireSeason.NameOfSeason, fireEvent.initiationFireRegion.Name);
+                    PlugIn.ModelCore.UI.WriteLine("   No weather data available:  {0}; fire_region = {1}.", fireEvent.fireSeason.NameOfSeason, fireEvent.initiationFireRegion.Name);
                     return null;
                 }
 
@@ -514,17 +514,17 @@ namespace Landis.Extension.DynamicFire
             //Next, calculate the fire area:
             List<Site> FireLocations = new List<Site>();
 
-            if (isDebugEnabled) PlugIn.ModelCore.Log.WriteLine("  Calling SizeFireCostSurface ...");
+            if (isDebugEnabled) PlugIn.ModelCore.UI.WriteLine("  Calling SizeFireCostSurface ...");
 
             FireLocations = EventRegion.SizeFireCostSurface(this, fireSizeType, BUI);
 
-            if (isDebugEnabled) PlugIn.ModelCore.Log.WriteLine("    FireLocations.Count = {0}", FireLocations.Count);
+            if (isDebugEnabled) PlugIn.ModelCore.UI.WriteLine("    FireLocations.Count = {0}", FireLocations.Count);
 
             if (FireLocations.Count == 0) return false;
 
             //Attach travel time weights here
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Computing SizeFireCostSurface ...");
+                PlugIn.ModelCore.UI.WriteLine("  Computing SizeFireCostSurface ...");
             List<WeightedSite> FireCostSurface = new List<WeightedSite>(0);
             foreach(Site site in FireLocations)
             {
@@ -545,7 +545,7 @@ namespace Landis.Extension.DynamicFire
             double durMax = 0;
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Determining cells burned ...");
+                PlugIn.ModelCore.UI.WriteLine("  Determining cells burned ...");
             if (fireSizeType == SizeType.size_based)
             {
 

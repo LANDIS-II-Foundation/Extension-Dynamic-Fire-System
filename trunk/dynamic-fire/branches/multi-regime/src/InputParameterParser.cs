@@ -16,7 +16,14 @@ namespace Landis.Extension.DynamicFire
     public class InputParameterParser
         : TextParser<IInputParameters>
     {
-
+        //---------------------------------------------------------------------
+        public override string LandisDataValue
+        {
+            get
+            {
+                return PlugIn.ExtensionName;
+            }
+        }
         //---------------------------------------------------------------------
 
         public InputParameterParser()
@@ -65,7 +72,7 @@ namespace Landis.Extension.DynamicFire
 
             //----------------------------------------------------------
             // First, read table of additional parameters for ecoregions
-            PlugIn.ModelCore.Log.WriteLine("   Loading FireRegion data...");
+            PlugIn.ModelCore.UI.WriteLine("   Loading FireRegion data...");
 
             const string DynamicFireRegionTable = "DynamicFireRegionTable";
             //const string DynamicFireRegionTable2 = "DynamicFireRegionTable2";
@@ -154,7 +161,7 @@ namespace Landis.Extension.DynamicFire
                 InputVar<string> uphillSlopeMap = new InputVar<string>("UphillSlopeAzimuthMap");
                 ReadVar(uphillSlopeMap);
 
-                PlugIn.ModelCore.Log.WriteLine("   Loading Azimuth data...");
+                PlugIn.ModelCore.UI.WriteLine("   Loading Azimuth data...");
 
                 Topography.ReadUphillSlopeAzimuthMap(uphillSlopeMap.Value);
             }
@@ -162,7 +169,7 @@ namespace Landis.Extension.DynamicFire
             //-------------------------------------------------------------------
             //  Read table of Seasons.
             //  Arranged in any order.
-            PlugIn.ModelCore.Log.WriteLine("   Loading Seasons data...");
+            PlugIn.ModelCore.UI.WriteLine("   Loading Seasons data...");
 
             ReadName(Season);
 

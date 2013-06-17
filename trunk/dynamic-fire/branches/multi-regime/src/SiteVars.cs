@@ -85,7 +85,7 @@ namespace Landis.Extension.DynamicFire
 
         public static void InitializeFuelType()
         {
-            PlugIn.ModelCore.Log.WriteLine("   Initializing Fuel Type.");
+            PlugIn.ModelCore.UI.WriteLine("   Initializing Fuel Type.");
 
             cfsFuelType     = PlugIn.ModelCore.GetSiteVar<int>("Fuels.CFSFuelType");
             cfsFuelType2    = PlugIn.ModelCore.GetSiteVar<int>("Fuels.CFSFuelType");

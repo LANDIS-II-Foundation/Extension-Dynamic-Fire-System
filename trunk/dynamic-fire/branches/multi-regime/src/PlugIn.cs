@@ -95,7 +95,7 @@ namespace Landis.Extension.DynamicFire
             //DynamicInputs.Initialize(parameters.DynamicFireRegionInputFile, false);
 
             
-            modelCore.Log.WriteLine("   Initializing Fire Events...");
+            modelCore.UI.WriteLine("   Initializing Fire Events...");
             Event.Initialize(parameters.SeasonParameters, parameters.FuelTypeParameters, parameters.FireDamages);
 
 
@@ -122,7 +122,7 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            modelCore.Log.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
+            modelCore.UI.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
             try {
                 log = modelCore.CreateTextFile(parameters.LogFileName);
             }
@@ -176,7 +176,7 @@ namespace Landis.Extension.DynamicFire
         {
 
             SiteVars.InitializeFuelType();
-            modelCore.Log.WriteLine("   Processing landscape for Fire events ...");
+            modelCore.UI.WriteLine("   Processing landscape for Fire events ...");
 
            
             SiteVars.Event.SiteValues = null;
@@ -242,13 +242,13 @@ namespace Landis.Extension.DynamicFire
             {
                 if (dynweather.Year == modelCore.CurrentTime)
                 {
-                    modelCore.Log.WriteLine("  Reading in new Weather Table {0}", dynweather.FileName);
+                    modelCore.UI.WriteLine("  Reading in new Weather Table {0}", dynweather.FileName);
                     WeatherDataTable = Weather.ReadWeatherFile(dynweather.FileName, FireRegions.AllData[modelCore.CurrentTime], seasonParameters);
                 }
             }
 
             // Fill in open types as needed:
-            modelCore.Log.WriteLine("   Dynamic Fire:  Filling open types as needed ...");
+            modelCore.UI.WriteLine("   Dynamic Fire:  Filling open types as needed ...");
             foreach (ActiveSite site in modelCore.Landscape)
             {
                 

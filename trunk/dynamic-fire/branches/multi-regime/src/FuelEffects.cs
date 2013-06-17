@@ -31,8 +31,15 @@ namespace Landis.Extension.DynamicFire
             
             double RSI = 0.0;  
             
-            if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Conifer ||
-                Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.ConiferPlantation)
+            //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Conifer ||
+                //Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.ConiferPlantation)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C1 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C2 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C3 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C4 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C5 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C6 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C7)
             {
                 double a = Event.FuelTypeParms[fuelIndex].A;
                 double b = Event.FuelTypeParms[fuelIndex].B;
@@ -86,7 +93,8 @@ namespace Landis.Extension.DynamicFire
             }
                 
 
-            if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
             //siteFuelType == FuelTypeCode.O1a)
             {
                 double a, b, c;
@@ -131,7 +139,8 @@ namespace Landis.Extension.DynamicFire
                 }
             }
             
-            if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.NoFuel || fuelIndex == 0)
+            //if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.NoFuel || fuelIndex == 0)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.NoFuel || fuelIndex == 0)
             //siteFuelType == FuelTypeCode.NoFuel)
             {
                 if (PDF > 0)
@@ -158,8 +167,12 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            if( Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Slash || 
-                Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous)
+            //if( Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Slash || 
+                //Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.S1 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.S2 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.S3 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.D1)
             {
                 //PlugIn.ModelCore.Log.WriteLine("Calculating ROSi for a DECIDUOUS or SLASH type.");
 
@@ -169,14 +182,16 @@ namespace Landis.Extension.DynamicFire
                     
                 RSI = CalculateRSI(a, b, c, ISI);
 
-                if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous 
+                //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous 
+                if(Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.D1 
                     && season.LeafStatus == LeafOnOff.LeafOn)
                 //if(siteFuelType == FuelTypeCode.D1 && season.LeafStatus == LeafOnOff.LeafOn)
                     RSI *= 0.2;
                 
                 if (PDF > 0)
                 {
-                    if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous
+                    //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous
+                    if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.D1 
                         && season.LeafStatus == LeafOnOff.LeafOn)  //M-4
                     //siteFuelType == FuelTypeCode.D1) 
                     {
