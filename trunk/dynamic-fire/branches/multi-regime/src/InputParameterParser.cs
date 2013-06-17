@@ -152,7 +152,7 @@ namespace Landis.Extension.DynamicFire
             InputVar<string> groundSlopeFile = new InputVar<string>("GroundSlopeFile");
             if (ReadOptionalVar(groundSlopeFile)) {
             
-                PlugIn.ModelCore.Log.WriteLine("   Loading Slope data...");
+                PlugIn.ModelCore.UI.WriteLine("   Loading Slope data...");
                 
                 Topography.ReadGroundSlopeMap(groundSlopeFile.Value);
                 //ValidatePath(groundSlopeFile.Value);
@@ -264,7 +264,7 @@ namespace Landis.Extension.DynamicFire
             //-------------------------------------------------------------------
             //  Read table of Fuel Types.
             //  Arranged in any order.
-             PlugIn.ModelCore.Log.WriteLine("   Loading Fuels data...");
+             PlugIn.ModelCore.UI.WriteLine("   Loading Fuels data...");
 
             ReadName(FuelTypes);
 
@@ -338,7 +338,7 @@ namespace Landis.Extension.DynamicFire
             //-------------------------------------------------------------------
             //  Read table of Fire Damage classes.
             //  Damages are in increasing order.
-             PlugIn.ModelCore.Log.WriteLine("   Loading Fire Damage data...");
+             PlugIn.ModelCore.UI.WriteLine("   Loading Fire Damage data...");
             
             ReadName(FireDamage);
 

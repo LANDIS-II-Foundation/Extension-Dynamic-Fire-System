@@ -480,7 +480,7 @@ namespace Landis.Extension.DynamicFire
             else
             {
                 if (isDebugEnabled)
-                    PlugIn.ModelCore.Log.WriteLine("   Fire Event failed to initiate due to fuel type initiation probability");
+                    PlugIn.ModelCore.UI.WriteLine("   Fire Event failed to initiate due to fuel type initiation probability");
                 //return null;
             }
             return null;
@@ -494,7 +494,7 @@ namespace Landis.Extension.DynamicFire
                 return false;
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("   Spreading fire event started at {0} ...", initiationSite.Location);
+                PlugIn.ModelCore.UI.WriteLine("   Spreading fire event started at {0} ...", initiationSite.Location);
 
             //IDynamicInputRecord fire_region = SiteVars.FireRegion[initiationSite];
 
@@ -611,13 +611,13 @@ namespace Landis.Extension.DynamicFire
                 //    PlugIn.ModelCore.Log.WriteLine("      NOTE:  Partial fire burn; fire may have spread to the edge of the active area.");
             }
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  FireLocations.Count = {0}", FireLocations.Count);
+                PlugIn.ModelCore.UI.WriteLine("  FireLocations.Count = {0}", FireLocations.Count);
             int FMC = this.FMC;  //Foliar Moisture Content
 
             if (FireLocations.Count == 0) return false;
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Damaging cohorts at burned sites ...");
+                PlugIn.ModelCore.UI.WriteLine("  Damaging cohorts at burned sites ...");
             foreach(Site site in FireLocations)
             {
                 currentSite = (ActiveSite) site;
@@ -655,7 +655,7 @@ namespace Landis.Extension.DynamicFire
             this.isi = (int) ((double) totalISI / (double) this.totalSitesDamaged);
 
             if (isDebugEnabled)
-                PlugIn.ModelCore.Log.WriteLine("  Done spreading");
+                PlugIn.ModelCore.UI.WriteLine("  Done spreading");
             return true;
         }
         //---------------------------------------------------------------------

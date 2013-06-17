@@ -677,7 +677,8 @@ namespace Landis.Extension.DynamicFire
                     fuelIndex = SiteVars.CFSFuelType2[site];
                 
 
-                if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+                //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+                if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
                 //(siteFuelType == FuelTypeCode.O1a)
                 {
                     int percentCuring = season.PercentCuring;

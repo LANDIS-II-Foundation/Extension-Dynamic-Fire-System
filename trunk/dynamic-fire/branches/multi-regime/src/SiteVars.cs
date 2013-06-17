@@ -305,7 +305,7 @@ namespace Landis.Extension.DynamicFire
         {
             if (SiteVars.Cohorts[site] == null)
             {
-                PlugIn.ModelCore.Log.WriteLine("Cohort are null.");
+                PlugIn.ModelCore.UI.WriteLine("Cohort are null.");
                 return 0;
             }
             ushort max = 0;

@@ -326,7 +326,7 @@ namespace Landis.Extension.DynamicFire
                     if (loopCount > 200)
                     {
 
-                        PlugIn.ModelCore.Log.WriteLine("   No Weather Rows Selected.  Using alternate season 2.");
+                        PlugIn.ModelCore.UI.WriteLine("   No Weather Rows Selected.  Using alternate season 2.");
                         if (seasonOrig == "Spring")
                             seasonName = "Fall";
                         else
@@ -347,7 +347,7 @@ namespace Landis.Extension.DynamicFire
                     }
                     if (loopCount > 300)
                     {
-                        PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 350): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+                        PlugIn.ModelCore.UI.WriteLine("WARNING (Ln 350): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
                         break;
                     }
 
@@ -398,7 +398,7 @@ namespace Landis.Extension.DynamicFire
 
         public static DataTable ReadWeatherFile(string path, IDynamicInputRecord[] regionRecords, ISeasonParameters[] seasonParms)
         {
-            PlugIn.ModelCore.Log.WriteLine("   Loading Weather Data...");
+            PlugIn.ModelCore.UI.WriteLine("   Loading Weather Data...");
 
             CSVParser weatherParser = new CSVParser();
 
@@ -427,7 +427,7 @@ namespace Landis.Extension.DynamicFire
                     }
                     if ((foundRows.Length == 0) && (seasonParms[i].FireProbability > 0) && (fire_region.EcoIgnitionNum > 0))
                     {
-                        PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 430): FireRegion " + ecoName + ", Season " + seasName + " has fire probability > 0, but 0 weather records.  Using alternate season.");
+                        PlugIn.ModelCore.UI.WriteLine("WARNING (Ln 430): FireRegion " + ecoName + ", Season " + seasName + " has fire probability > 0, but 0 weather records.  Using alternate season.");
                         if (seasName == "Spring")
                         {
                             selectText = ("FireRegion = '" + ecoName + "' AND Season = 'Summer'");
@@ -461,7 +461,7 @@ namespace Landis.Extension.DynamicFire
                             }
                             if (foundRows.Length == 0)
                             {
-                                PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 464): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+                                PlugIn.ModelCore.UI.WriteLine("WARNING (Ln 464): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
 
                             }
 
@@ -500,7 +500,7 @@ namespace Landis.Extension.DynamicFire
                                 }
                                 if (foundRows.Length == 0)
                                 {
-                                    PlugIn.ModelCore.Log.WriteLine("WARNING (Ln 503): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
+                                    PlugIn.ModelCore.UI.WriteLine("WARNING (Ln 503): FireRegion " + ecoName + " has fire probability > 0, but 0 weather records.  No fires will occur in this fire region.");
 
                                 }
                             }

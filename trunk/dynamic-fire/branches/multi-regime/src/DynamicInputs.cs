@@ -71,7 +71,8 @@ namespace Landis.Extension.DynamicFire
             DynamicInputsParser parser = new DynamicInputsParser();
             try
             {
-                allData = PlugIn.ModelCore.Load<Dictionary<int, IDynamicInputRecord[]>>(filename, parser);
+                //allData = PlugIn.ModelCore.Load<Dictionary<int, IDynamicInputRecord[]>>(filename, parser);
+                allData = Landis.Data.Load<Dictionary<int, IDynamicInputRecord[]>>(filename, parser);
             }
             catch (FileNotFoundException)
             {

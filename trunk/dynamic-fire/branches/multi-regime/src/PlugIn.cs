@@ -76,7 +76,7 @@ namespace Landis.Extension.DynamicFire
             modelCore = mCore;
             SiteVars.Initialize();
             InputParameterParser parser = new InputParameterParser();
-            parameters = modelCore.Load<IInputParameters>(dataFile, parser);
+            parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
             //int currentYear = modelCore.CurrentTime;
             WeatherDataTable = Weather.ReadWeatherFile(parameters.InitialWeatherPath, FireRegions.AllData[0], parameters.SeasonParameters);
             
@@ -124,7 +124,7 @@ namespace Landis.Extension.DynamicFire
 
             modelCore.UI.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
             try {
-                log = modelCore.CreateTextFile(parameters.LogFileName);
+                log = Landis.Data.CreateTextFile(parameters.LogFileName);
             }
             catch (Exception err) {
                 string mesg = string.Format("{0}", err.Message);
@@ -141,7 +141,7 @@ namespace Landis.Extension.DynamicFire
             log.WriteLine("");
 
             try {
-                summaryLog = modelCore.CreateTextFile(parameters.SummaryLogFileName);
+                summaryLog = Landis.Data.CreateTextFile(parameters.SummaryLogFileName);
             }
             catch (Exception err) {
                 string mesg = string.Format("{0}", err.Message);
@@ -163,7 +163,7 @@ namespace Landis.Extension.DynamicFire
             summaryLog.WriteLine("");
 
             if (isDebugEnabled)
-                modelCore.Log.WriteLine("Initialization done");
+                modelCore.UI.WriteLine("Initialization done");
         }
 
         
@@ -195,7 +195,7 @@ namespace Landis.Extension.DynamicFire
             {
                 if (pair.Key == modelCore.CurrentTime)
                 {
-                    modelCore.Log.WriteLine("  Reading in new Fire Region Data {0}", modelCore.CurrentTime);
+                    modelCore.UI.WriteLine("  Reading in new Fire Region Data {0}", modelCore.CurrentTime);
                     foreach (IDynamicInputRecord record in pair.Value)
                     {
                         if(!(record == null))
@@ -226,7 +226,7 @@ namespace Landis.Extension.DynamicFire
                      }
                      else
                      {
-                         modelCore.Log.WriteLine("   Reading in new Fire FireRegions Map {0}.", dyneco.MapName);
+                         modelCore.UI.WriteLine("   Reading in new Fire FireRegions Map {0}.", dyneco.MapName);
                          foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
                          {
                              fire_region.FireRegionSites.Clear(); // = new List<Location>();
@@ -263,7 +263,7 @@ namespace Landis.Extension.DynamicFire
 
                 if(Event.FuelTypeParms[SiteVars.CFSFuelType[site]] == null)
                 {
-                    modelCore.Log.WriteLine("Error:  SiteVars.CFSFuelType[site]={0}.", SiteVars.CFSFuelType[site]);
+                    modelCore.UI.WriteLine("Error:  SiteVars.CFSFuelType[site]={0}.", SiteVars.CFSFuelType[site]);
                     throw new System.ApplicationException("Error: Event BaseFuel Empty.");
                 }
 
@@ -283,7 +283,7 @@ namespace Landis.Extension.DynamicFire
 
                     if (Event.FuelTypeParms[SiteVars.CFSFuelType2[site]] == null)
                     {
-                        modelCore.Log.WriteLine("Error:  SiteVars.CFSFuelType2[site]={0}.", SiteVars.CFSFuelType2[site]);
+                        modelCore.UI.WriteLine("Error:  SiteVars.CFSFuelType2[site]={0}.", SiteVars.CFSFuelType2[site]);
                         throw new System.ApplicationException("Error: Event BaseFuel Empty.");
                     }
 
@@ -297,13 +297,13 @@ namespace Landis.Extension.DynamicFire
                     break;
             }
             if (isDebugEnabled)
-                modelCore.Log.WriteLine("Done filling open types");
+                modelCore.UI.WriteLine("Done filling open types");
 
-            modelCore.Log.WriteLine("   Dynamic Fire:  Igniting Fires ...");
+            modelCore.UI.WriteLine("   Dynamic Fire:  Igniting Fires ...");
             foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
             {
                 if (isDebugEnabled)
-                    modelCore.Log.WriteLine("   There are {0} site locations in fire region {1}", fire_region.FireRegionSites.Count, fire_region.Name);
+                    modelCore.UI.WriteLine("   There are {0} site locations in fire region {1}", fire_region.FireRegionSites.Count, fire_region.Name);
                 if (fire_region.EcoIgnitionNum > 0)
                 {
                     //PoissonDistribution randVar = new PoissonDistribution(RandomNumberGenerator.Singleton);
@@ -311,7 +311,7 @@ namespace Landis.Extension.DynamicFire
                     int ignGenerated = 0;
 
                     if (isDebugEnabled)
-                        modelCore.Log.WriteLine("{0}: EcoIgnitionNum = {1}, computing ignGenerated ...", fire_region.Name, fire_region.EcoIgnitionNum);
+                        modelCore.UI.WriteLine("{0}: EcoIgnitionNum = {1}, computing ignGenerated ...", fire_region.Name, fire_region.EcoIgnitionNum);
                     if (fire_region.EcoIgnitionNum < 1)
                     {
                         // Adjust ignition probability for multiple years
@@ -353,7 +353,7 @@ namespace Landis.Extension.DynamicFire
                         }
                     }
                     if (isDebugEnabled)
-                        modelCore.Log.WriteLine("  Ignitions generated = {0}; Shuffling {0} cells ...", ignGenerated, fire_region.FireRegionSites.Count);
+                        modelCore.UI.WriteLine("  Ignitions generated = {0}; Shuffling {0} cells ...", ignGenerated, fire_region.FireRegionSites.Count);
                     if (ignGenerated > 0)
                     {
                         List<Location> cellsPerFireRegion = new List<Location>(0);
@@ -380,10 +380,10 @@ namespace Landis.Extension.DynamicFire
                             {
                                 fireCount++;
                                 if (isDebugEnabled)
-                                    modelCore.Log.WriteLine("    fireCount = {0}", fireCount);
+                                    modelCore.UI.WriteLine("    fireCount = {0}", fireCount);
                                 Event FireEvent = Event.Initiate(asite, Timestep, fireSizeType, bui, seasonParameters, severityCalibrate, fire_region);
                                 if (isDebugEnabled)
-                                    modelCore.Log.WriteLine("    fire event {0} started at {1}",
+                                    modelCore.UI.WriteLine("    fire event {0} started at {1}",
                                                          FireEvent == null ? "not " : "",
                                                          asite.Location);
                                 if (FireEvent != null)
@@ -402,7 +402,7 @@ namespace Landis.Extension.DynamicFire
 
             // Track the time of last fire; registered in SiteVars.cs for other extensions to access.
             if (isDebugEnabled)
-                modelCore.Log.WriteLine("Assigning TimeOfLastFire site var ...");
+                modelCore.UI.WriteLine("Assigning TimeOfLastFire site var ...");
             foreach (Site site in modelCore.Landscape.AllSites)
                 if(SiteVars.Disturbed[site])
                     SiteVars.TimeOfLastFire[site] = modelCore.CurrentTime;
@@ -410,7 +410,7 @@ namespace Landis.Extension.DynamicFire
 
             //  Write Fire severity map
             string path = MapNames.ReplaceTemplateVars(mapNameTemplate, modelCore.CurrentTime);
-            modelCore.Log.WriteLine("   Writing Fire severity map to {0} ...", path);
+            modelCore.UI.WriteLine("   Writing Fire severity map to {0} ...", path);
             using (IOutputRaster<BytePixel> outputRaster = modelCore.CreateRaster<BytePixel>(path, modelCore.Landscape.Dimensions))
             {
                 BytePixel pixel = outputRaster.BufferPixel;
@@ -431,7 +431,7 @@ namespace Landis.Extension.DynamicFire
             }
 
             path = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.img", modelCore.CurrentTime);
-            modelCore.Log.WriteLine("   Writing TimeOfLstFire output map to {0} ...", path);
+            modelCore.UI.WriteLine("   Writing TimeOfLstFire output map to {0} ...", path);
             using (IOutputRaster<IntPixel> outputRaster = modelCore.CreateRaster<IntPixel>(path, modelCore.Landscape.Dimensions))
             {
                 IntPixel pixel = outputRaster.BufferPixel;
@@ -448,7 +448,7 @@ namespace Landis.Extension.DynamicFire
             WriteSummaryLog(modelCore.CurrentTime);
 
             if (isDebugEnabled)
-                modelCore.Log.WriteLine("Done running extension");
+                modelCore.UI.WriteLine("Done running extension");
 
         
         }
