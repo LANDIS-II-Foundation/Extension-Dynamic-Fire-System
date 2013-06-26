@@ -351,6 +351,11 @@ namespace Landis.Extension.DynamicFire
                 ROSi *= BE;
                 BROSi *= BE;
                 SiteVars.RateOfSpread[site] = ROSi;
+                if (ROSi > 1000)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("ROSi > 1000");
+                }
+
 
                 double LB = CalculateLengthBreadthRatio(siteWindSpeed, fuelIndex);
 

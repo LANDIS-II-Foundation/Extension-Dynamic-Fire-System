@@ -566,6 +566,9 @@ namespace Landis.Extension.DynamicFire
                     }
                 }
                 this.maxDuration = durMax;
+                //Debug
+                if ((durMax < 0.01)&& (FireLocations.Count > 0))
+                    PlugIn.ModelCore.UI.WriteLine("Duration = 0");
                 //PlugIn.ModelCore.Log.WriteLine("   Fire Summary:  Cells Checked={0}, BurnedArea={1:0.0} (ha), Target Area={2:0.0} (ha).", cellCnt, totalArea, this.maxFireParameter);
                 //if(totalArea < this.maxFireParameter)
                 //    PlugIn.ModelCore.Log.WriteLine("      NOTE:  Partial fire burn; fire may have spread to the edge of the active area.");
@@ -605,6 +608,9 @@ namespace Landis.Extension.DynamicFire
                     }
                 }
                 this.maxDuration = durMax;
+                //Debug
+                if ((durMax < 0.01) && (FireLocations.Count > 0))
+                    PlugIn.ModelCore.UI.WriteLine("Duration = 0");
 
                 //PlugIn.ModelCore.Log.WriteLine("   Fire Summary:  Cells Checked={0}, BurnedArea={1:0.0} (ha), Target Duration={2:0.0}, Adjusted Duration = {3:0.0}.", cellCnt, totalArea, this.maxFireParameter, durationAdj);
                 //if(durationAdj - durMax > 5.0)
