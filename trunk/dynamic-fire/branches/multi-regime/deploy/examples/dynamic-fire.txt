@@ -9,34 +9,18 @@ EventSizeType	size_based  <<'size-based' or 'duration_based'
 
 BuildUpIndex	Y	<< yes or no; Y or N
 
->> Fire Region Data Table
->> Fire region| Fire Size    | Seasonal Foliar Moisture Content (FMC) Data: Hi, Lo, and Proportion (Pr) | Other Ecorgion Data
->>            |              | Spring (Sp)            Summer (Su)             Fall (Fa)                 |           
->> Code Name  | Mu Sigma Max | SpFMCLo SpFMCHi SpHiPr SuFMCLo SuFMCHi SuFMCPr FaFMCLo FaFMCHi FaHiPr    | OpenFuel NumIgns 
->> -----------  ------------   ------------------------------------------------------------------------   ----------------
-   1    fire1   4.0  0.1  50   85      100     0.50   92      120     0.50    120     120     0.50        2         0.5
-   2    fire2   4.5  0.3  50   85      105     0.70   94      120     0.40    120     120     0.50        2         0.2
-   3    fire3   5.0  0.5  50   85      110     0.60   90      120     0.70    120     120     0.50        16        0.1
+DynamicFireRegionTable  dynamic-fire-region-table-double.txt
 
+InitialFireRegionsMap  fire-region.gis
+InitialFireRegionsMap2  fire-region2.img  << Values in Map2 must all be > max value in Map1
 
-FireRegime2
->> Fire Region Data Table
->> Fire region| Fire Size    | Seasonal Foliar Moisture Content (FMC) Data: Hi, Lo, and Proportion (Pr) | Other Ecorgion Data
->>            |              | Spring (Sp)            Summer (Su)             Fall (Fa)                 |           
->> Code Name  | Mu Sigma Max | SpFMCLo SpFMCHi SpHiPr SuFMCLo SuFMCHi SuFMCPr FaFMCLo FaFMCHi FaHiPr    | OpenFuel NumIgns 
->> -----------  ------------   ------------------------------------------------------------------------   ----------------
-   11   fire1L   1.0  0.1  20   85      100     0.50   92      120     0.50    120     120     0.50        2         0.5
-   12   fire2L   1.5  0.3  20   85      105     0.70   94      120     0.40    120     120     0.50        2         0.2
-   13   fire3L   1.0  0.5  20   85      110     0.60   90      120     0.70    120     120     0.50        16        0.1
-
-InitialFireEcoregionsMap  fire-ecoregion.gis
-InitialFireEcoregionsMap2  fire-ecoregion2.gis
-
-
-DynamicEcoregionTable
+>>DynamicEcoregionTable
 >>Year	FileName
+30  fire-region1a.gis
+30  fire-region2a.img
 
-GroundSlopeFile        slope.gis
+
+GroundSlopeFile        slope_32signed.img
 UphillSlopeAzimuthMap  upslope_azi.gis
 
 SeasonTable
@@ -47,7 +31,7 @@ SeasonTable
    Summer  LeafOn   0.50     51		1.0
    Fall    LeafOff  0.30     100	1.0
 
-InitialWeatherDatabase  Fire_Weather_Data.csv  << Example weather from Labrador
+InitialWeatherDatabase  Fire_Weather.csv  << Example weather from Wisconsin
 
 DynamicWeatherTable
 >>Year  FileName
@@ -90,5 +74,5 @@ FireDamageTable
 
 
 MapNames  fire/severity-{timestep}.img
-LogFile   fire/dynamic-fire-test-log.csv
-SummaryLogFile fire/summary-log.csv
+LogFile   fire/fire-event-log.csv
+SummaryLogFile fire/fire-summary-log.csv

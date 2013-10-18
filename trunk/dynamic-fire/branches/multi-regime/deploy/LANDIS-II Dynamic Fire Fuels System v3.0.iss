@@ -1,8 +1,8 @@
 #define PackageName      "Dynamic Fire Fuel System"
 #define PackageNameLong  "Dynamic Fire Fuel System"
-#define Version          "2.0.2"
-#define ReleaseType      "official"
-#define ReleaseNumber    "2"
+#define Version          "3.0"
+#define ReleaseType      "beta"
+#define ReleaseNumber    "1"
 
 #define CoreVersion      "6.0"
 #define CoreReleaseAbbr  ""
@@ -12,14 +12,14 @@
 
 [Files]
 
-; Dynamic Fire Fuel System v1.0 plug-in
-Source: C:\Program Files\LANDIS-II\6.0\bin\Landis.Extension.DynamicFire.dll; DestDir: {app}\bin; Flags: replacesameversion
-Source: C:\Program Files\LANDIS-II\6.0\bin\Landis.Extension.DynamicFuels.dll; DestDir: {app}\bin; Flags: replacesameversion
+; Dynamic Fire Fuel System v3.0 plug-in
+Source: C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Extension.DynamicFire.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Extension.DynamicFuels.dll; DestDir: {app}\bin; Flags: replacesameversion
 
 Source: docs\LANDIS-II Dynamic Fire System v2.0.1 User Guide.pdf; DestDir: {app}\docs
 Source: docs\LANDIS-II Dynamic Fuel System v2.0 User Guide.pdf; DestDir: {app}\docs
 
-#define DynFireSys "Dynamic Fire System 2.0.txt"
+#define DynFireSys "Dynamic Fire System 3.0.txt"
 Source: {#DynFireSys}; DestDir: {#LandisPlugInDir}
 
 #define DynFuelSys "Dynamic Fuel System 2.0.txt"
