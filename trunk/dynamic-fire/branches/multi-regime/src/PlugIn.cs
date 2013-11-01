@@ -4,7 +4,7 @@
 using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
 using Landis.Core;
-using log4net;
+//using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
