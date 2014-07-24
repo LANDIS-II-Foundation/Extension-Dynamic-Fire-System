@@ -29,8 +29,12 @@ Source: {#DynFuelSys}; DestDir: {#LandisPlugInDir}
 ; All the example input-files for the in examples\dynamic-fire-fuel-system
 Source: examples\*.txt; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
 Source: examples\ecoregions.gis; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
+Source: examples\slope.gis; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
+Source: examples\upslope_azi.gis; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
+Source: examples\fire-ecoregion.gis; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
 Source: examples\initial-communities.gis; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
 Source: examples\*.bat; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
+Source: examples\Fire_Weather_Data.csv; DestDir: {#AppDir}\examples\dynamic-fire-fuel-system
 
 [Run]
 ;; Run plug-in admin tool to add entries for each plug-in
