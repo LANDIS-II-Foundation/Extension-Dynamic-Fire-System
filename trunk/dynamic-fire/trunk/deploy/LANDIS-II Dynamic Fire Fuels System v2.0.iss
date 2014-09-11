@@ -1,24 +1,24 @@
 #define PackageName      "Dynamic Fire Fuel System"
 #define PackageNameLong  "Dynamic Fire Fuel System"
-#define Version          "2.0.4"
+#define Version          "2.0.5"
 #define ReleaseType      "official"
 #define ReleaseNumber    "3"
 
 #define CoreVersion      "6.0"
 #define CoreReleaseAbbr  ""
 
-#include "J:\Scheller\LANDIS-II\deploy\package (Setup section) v6.0.iss"
+#include "C:\BRM\LANDIS_II\code\deploy\package (Setup section) v6.0.iss"
 #define ExtDir "C:\Program Files\LANDIS-II\v6\bin\extensions"
 #define AppDir "C:\Program Files\LANDIS-II\v6\"
 
 [Files]
 
 ; Dynamic Fire Fuel System v1.0 plug-in
-Source: ..\src\bin\debug\Landis.Extension.DynamicFire.dll; DestDir: {#ExtDir}; Flags: replacesameversion
-Source: ..\src\bin\debug\Landis.Extension.DynamicFuels.dll; DestDir: {#ExtDir}; Flags: replacesameversion
+Source: {#ExtDir}\Landis.Extension.DynamicFire.dll; DestDir: {#ExtDir}; Flags: replacesameversion
+Source: {#ExtDir}\Landis.Extension.DynamicFuels.dll; DestDir: {#ExtDir}; Flags: replacesameversion
 
 Source: docs\LANDIS-II Dynamic Fire System v2.0.3 User Guide.pdf; DestDir: {#AppDir}\docs
-Source: docs\LANDIS-II Dynamic Fuel System v2.0 User Guide.pdf; DestDir: {#AppDir}\docs
+Source: docs\LANDIS-II Dynamic Fuel System v2.0.1 User Guide.pdf; DestDir: {#AppDir}\docs
 
 #define DynFireSys "Dynamic Fire System 2.0.txt"
 Source: {#DynFireSys}; DestDir: {#LandisPlugInDir}
@@ -50,7 +50,7 @@ Filename: {#PlugInAdminTool}; Parameters: "add ""{#DynFuelSys}"" "; WorkingDir: 
 ;; Run plug-in admin tool to remove entries for each plug-in
 
 [Code]
-#include "J:\Scheller\LANDIS-II\deploy\package (Code section) v3.iss"
+#include "C:\BRM\LANDIS_II\code\deploy\package (Code section) v3.iss"
 
 //-----------------------------------------------------------------------------
 
