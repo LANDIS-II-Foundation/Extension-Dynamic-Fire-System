@@ -3,13 +3,15 @@
 
 using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
+using Landis.Library.Climate;
 using Landis.Core;
-//using log4net;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using System.Reflection;
+using System.Linq;
 
 namespace Landis.Extension.DynamicFire
 {
@@ -25,31 +27,27 @@ namespace Landis.Extension.DynamicFire
 
         public static readonly ExtensionType ExtType = new ExtensionType("disturbance:fire");
         public static readonly string ExtensionName = "Dynamic Fire System";
+        public static bool ClimateLibraryActive = false;
+        public static int FutureClimateBaseYear;
+        public static DataTable WeatherDataTable;
+        public static DataTable WindDataTable;
+        public static int WeatherRandomizer = 0;
+        public static ISeasonParameters[] SeasonParameters;
+
 
         private string mapNameTemplate;
         private StreamWriter log;
         private StreamWriter summaryLog;
         private int[] summaryFireRegionEventCount;
         private int[] ecoregionSitesCount;
-
         private int summaryTotalSites;
         private int summaryEventCount;
-
         private SizeType fireSizeType;
         private bool bui;
         private double severityCalibrate;
-
-        public static ISeasonParameters[] SeasonParameters;
         private List<IDynamicFireRegion> dynamicEcos;
         private List<IDynamicWeather> dynamicWeather;
-        
-        public static DataTable WeatherDataTable;
-        public static DataTable WindDataTable;
-
-        public static int WeatherRandomizer = 0;
-
         private static IInputParameters parameters;
-
         private static ICore modelCore;
 
         //---------------------------------------------------------------------
@@ -96,6 +94,12 @@ namespace Landis.Extension.DynamicFire
             severityCalibrate   = parameters.SeverityCalibrate;
             //DynamicInputs.Initialize(parameters.DynamicFireRegionInputFile, false);
 
+            //Initialize climate.
+            if (PlugIn.ClimateLibraryActive)
+            {
+                Climate.Initialize(parameters.ClimateConfigFile, false, modelCore);
+                FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
+            }
             
             modelCore.UI.WriteLine("   Initializing Fire Events...");
             Event.Initialize(parameters.SeasonParameters, parameters.FuelTypeParameters, parameters.FireDamages);

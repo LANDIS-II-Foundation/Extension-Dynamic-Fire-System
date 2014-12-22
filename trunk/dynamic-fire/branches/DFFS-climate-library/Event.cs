@@ -326,9 +326,9 @@ namespace Landis.Extension.DynamicFire
             this.maxFireParameter = ComputeSize(eco.MeanSize, eco.StandardDeviation, eco.MinSize, eco.MaxSize); 
             this.fireSeason         = fireSeason; 
 
-            bool climateLibrary = true;
+            //bool climateLibrary = true;
 
-            if (climateLibrary)
+            if (PlugIn.ClimateLibraryActive)
             {
                 //Alec: This is where we need to retrieve the individual day's weather data
 
@@ -502,21 +502,20 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            bool climateLibrary = true;  //A temporary cheat for Alec
             bool initiation = false;
 
             
-            if (climateLibrary)
+            if (PlugIn.ClimateLibraryActive)
             {
                 //First, test probability of ignition against random number
 
                 // Get FWI from new class
                 AnnualFireWeather.CalculateFireWeather(day, PlugIn.ModelCore.Ecoregion[site]);
                 // Get probability of ignition based on Jen Beverly equation and FWI;
-                //int FWIshape = FuelTypeParms[fuelIndex].IgnitionDistributionShape;  //Alec: These two values need to come from the fire input file
-                double FWIshape = -4.414;
-                //int FWIscale = FuelTypeParms[fuelIndex].IgnitionDistributionScale;
-                double FWIscale = 0.3368;
+                double FWIshape = FuelTypeParms[fuelIndex].IgnitionDistributionShape;  
+                //double FWIshape = -4.414;
+                double FWIscale = FuelTypeParms[fuelIndex].IgnitionDistributionScale;
+                //double FWIscale = 0.3368;
                 //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather being used for IgnProb calculations: FireWeatherIndex={0}", AnnualFireWeather.FireWeatherIndex);
 
                 double ignitionProbability = 1/(1+Math.Exp(-(FWIshape+FWIscale*AnnualFireWeather.FireWeatherIndex))); // My equation that includes FWIshape and FWIscale and AnnualFire.FireWeatherIndex. This equation comes from Beverly et al 2007

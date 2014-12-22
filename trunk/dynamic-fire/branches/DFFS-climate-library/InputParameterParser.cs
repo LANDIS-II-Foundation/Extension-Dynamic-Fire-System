@@ -36,18 +36,25 @@ namespace Landis.Extension.DynamicFire
 
         protected override IInputParameters Parse()
         {
-            // ReadLandisDataVar();
+            ReadLandisDataVar();
 
-            InputVar<string> landisData = new InputVar<string>("LandisData");
-            ReadVar(landisData);
-            if (landisData.Value.Actual != PlugIn.ExtensionName)
-                throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
+            //InputVar<string> landisData = new InputVar<string>("LandisData");
+            //ReadVar(landisData);
+            //if (landisData.Value.Actual != PlugIn.ExtensionName)
+            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
 
             InputParameters parameters = new InputParameters();
 
             InputVar<int> timestep = new InputVar<int>("Timestep");
             ReadVar(timestep);
             parameters.Timestep = timestep.Value;
+
+            InputVar<string> climateConfigFile = new InputVar<string>("ClimateConfigFile");
+            if (ReadOptionalVar(climateConfigFile))
+            {
+                parameters.ClimateConfigFile = climateConfigFile.Value;
+                PlugIn.ClimateLibraryActive = true;
+            }
 
             InputVar<SizeType> st = new InputVar<SizeType>("EventSizeType");
             ReadVar(st);
@@ -294,6 +301,8 @@ namespace Landis.Extension.DynamicFire
             InputVar<int> bui = new InputVar<int>("Fuel type coefficient - bui");
             InputVar<double> maxbe = new InputVar<double>("Fuel type coefficient - Maximum BE");
             InputVar<int> cbh = new InputVar<int>("Crown Base Height");
+            InputVar<double> idshape = new InputVar<double>("Ignition Distribution Shape - Climate Library");
+            InputVar<double> idscale = new InputVar<double>("Ignition Distribution Scale - Climate Library");
 
             const string FireDamage = "FireDamageTable";
             const string SeverityCalibrate = "SeverityCalibrationFactor";
@@ -336,9 +345,15 @@ namespace Landis.Extension.DynamicFire
                 ReadValue(cbh, currentLine);
                 fuelParms.CBH = cbh.Value;
 
+                ReadValue(idscale, currentLine);
+                fuelParms.IgnitionDistributionScale = idscale.Value;
+
+                ReadValue(idshape, currentLine);
+                fuelParms.IgnitionDistributionShape = idshape.Value;
+
                 parameters.FuelTypeParameters[fuelIndex.Value] = fuelParms;
                 
-                CheckNoDataAfter("the " + cbh.Name + " column",
+                CheckNoDataAfter("the " + idshape.Name + " column",
                                  currentLine);
 
                 GetNextLine();

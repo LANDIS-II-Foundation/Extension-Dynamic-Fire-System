@@ -16,6 +16,7 @@ namespace Landis.Extension.DynamicFire
     public interface IInputParameters
     {
         int Timestep{get;set;}
+        string ClimateConfigFile { get; set; }
         SizeType FireSizeType{get;set;}
         bool BUI{get;set;}
         double SeverityCalibrate { get;set;}
@@ -56,6 +57,7 @@ namespace Landis.Extension.DynamicFire
         private string initialWeatherPath;
         private string windInputPath;
         private string dynamicFireRegionInputFile;
+        private string climateConfigFile;
 
 
         //---------------------------------------------------------------------
@@ -73,6 +75,22 @@ namespace Landis.Extension.DynamicFire
                         throw new InputValueException(value.ToString(),
                                                       "Value must be = or > 0.");
                 timestep = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        public string ClimateConfigFile
+        {
+            get
+            {
+                return climateConfigFile;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    ValidatePath(value);
+                }
+                climateConfigFile = value;
             }
         }
         //---------------------------------------------------------------------
@@ -264,6 +282,17 @@ namespace Landis.Extension.DynamicFire
             fuelTypeParameters = new FuelType[100];
             for(int i=0; i<100; i++)
                 fuelTypeParameters[i] = new FuelType();
+        }
+        //---------------------------------------------------------------------
+
+        private void ValidatePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new InputValueException();
+            if (path.Trim(null).Length == 0)
+                throw new InputValueException(path,
+                                              "\"{0}\" is not a valid path.",
+                                              path);
         }
         //---------------------------------------------------------------------
 /*

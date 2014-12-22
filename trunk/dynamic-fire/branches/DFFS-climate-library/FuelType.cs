@@ -27,6 +27,8 @@ namespace Landis.Extension.DynamicFire
         int BUI{get;set;}
         double MaxBE{get;set;}
         int CBH{get;set;}  //Crown base height
+        double IgnitionDistributionShape { get; set; }
+        double IgnitionDistributionScale { get; set; }
     }
 }
 
@@ -46,6 +48,8 @@ namespace Landis.Extension.DynamicFire
         private int bui;
         private double maxBE;
         private int cbh;
+        private double ignitionDistributionShape;
+        private double ignitionDistributionScale;
         
         //---------------------------------------------------------------------
         public int FuelIndex
@@ -193,50 +197,35 @@ namespace Landis.Extension.DynamicFire
             }
         }
         //---------------------------------------------------------------------
-
-        public FuelType()
+        public double IgnitionDistributionScale
         {
-            this.baseFuel = BaseFuelType.NoFuel;
-            this.surfaceFuel = SurfaceFuelType.NoFuel;
-            this.initiationProbability = 0.0;
-            this.a = 0;
-            this.b = 0.0;
-            this.c = 0.0;
-            this.q = 0.0;
-            this.bui = 0;
-            this.maxBE = 0.0;
-            this.cbh = 0;
+            get
+            {
+                return ignitionDistributionScale;
+            }
+            set
+            {
+                if (value < -10.0 || value > 10.0)
+                    throw new InputValueException(value.ToString(),
+                        "Value must be between -10.0 and 10.0");
+                ignitionDistributionScale = value;
+            }
         }
         //---------------------------------------------------------------------
-/*
-        public FuelType(
-            int fuelIndex,
-            //string fuelName,
-            BaseFuelType baseFuel,
-            SurfaceFuelType surfaceFuel,
-            double initiationProbability,
-            int a,
-            double b,
-            double c,
-            double q,
-            int bui,
-            double maxBE,
-            int cbh)
+        public double IgnitionDistributionShape
         {
-            this.fuelIndex = fuelIndex;
-            //this.fuelName = fuelName;
-            this.baseFuel = baseFuel;
-            this.surfaceFuel = surfaceFuel;
-            this.initiationProbability = initiationProbability;
-            this.a = a;
-            this.b = b;
-            this.c = c;
-            this.q = q;
-            this.bui = bui;
-            this.maxBE = maxBE;
-            this.cbh = cbh;
+            get
+            {
+                return ignitionDistributionShape;
+            }
+            set
+            {
+                if (value < 0.0 || value > 10.0)
+                    throw new InputValueException(value.ToString(),
+                        "Value must be between 0 and 10.0");
+                ignitionDistributionShape = value;
+            }
         }
-
         //---------------------------------------------------------------------
 
         public FuelType()
@@ -251,7 +240,10 @@ namespace Landis.Extension.DynamicFire
             this.bui = 0;
             this.maxBE = 0.0;
             this.cbh = 0;
-        }*/
+            this.ignitionDistributionScale = 0.0;
+            this.ignitionDistributionShape = 0.0;
+        }
+        //---------------------------------------------------------------------
 
 
     }
