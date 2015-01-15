@@ -98,7 +98,7 @@ namespace Landis.Extension.DynamicFire
             if (PlugIn.ClimateLibraryActive)
             {
                 Climate.Initialize(parameters.ClimateConfigFile, false, modelCore);
-                FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
+                //FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
             }
             
             modelCore.UI.WriteLine("   Initializing Fire Events...");

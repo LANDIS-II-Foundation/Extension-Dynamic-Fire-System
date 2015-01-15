@@ -62,10 +62,16 @@ namespace Landis.Extension.DynamicFire
                 double relative_humidity = -9999;
 
 
-                PlugIn.ModelCore.UI.WriteLine(" Time = {0} + {1}.", PlugIn.ModelCore.CurrentTime, Climate.Future_DailyData.First().Key); 
+                PlugIn.ModelCore.UI.WriteLine(" Time = {0} + {1}.", PlugIn.ModelCore.CurrentTime, Climate.Future_DailyData.First().Key);
+                PlugIn.ModelCore.UI.WriteLine(" Ecoregion = {0}.", ecoregion.Name); 
+
                 int actualYear = PlugIn.ModelCore.CurrentTime + Climate.Future_DailyData.First().Key;
                 if (Climate.Future_DailyData.ContainsKey(actualYear))
                 {
+                    //Rob and Alec testing some stuff here.
+                    double test = Climate.Future_DailyData[actualYear][ecoregion.Index].AnnualAET;
+                    PlugIn.ModelCore.UI.WriteLine(" AET = {0} + {1}.", test);
+
                     myWeatherData = Climate.Future_DailyData[actualYear][ecoregion.Index];
                     temperature = (myWeatherData.DailyMaxTemp[d] + myWeatherData.DailyMinTemp[d]) / 2;  
                     precipitation = myWeatherData.DailyPrecip[d]; //  Alec: for some reason the temp in teh input file is an order of magnitude more than what is being printed in the output file

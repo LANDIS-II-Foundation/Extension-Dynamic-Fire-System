@@ -510,7 +510,8 @@ namespace Landis.Extension.DynamicFire
                 //First, test probability of ignition against random number
 
                 // Get FWI from new class
-                AnnualFireWeather.CalculateFireWeather(day, PlugIn.ModelCore.Ecoregion[site]);
+                IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+                AnnualFireWeather.CalculateFireWeather(day, ecoregion);
                 // Get probability of ignition based on Jen Beverly equation and FWI;
                 double FWIshape = FuelTypeParms[fuelIndex].IgnitionDistributionShape;  
                 //double FWIshape = -4.414;
