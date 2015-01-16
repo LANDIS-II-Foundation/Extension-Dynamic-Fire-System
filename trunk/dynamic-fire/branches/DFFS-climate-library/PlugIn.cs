@@ -99,7 +99,16 @@ namespace Landis.Extension.DynamicFire
             {
                 Climate.Initialize(parameters.ClimateConfigFile, false, modelCore);
                 //FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
+
+                foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+                {
+                    if (ecoregion.Active)
+                    {
+                        Climate.GenerateEcoregionClimateData(ecoregion, 0, -50, 20, 10);
+                    }
+                }
             }
+
             
             modelCore.UI.WriteLine("   Initializing Fire Events...");
             Event.Initialize(parameters.SeasonParameters, parameters.FuelTypeParameters, parameters.FireDamages);
@@ -182,17 +191,6 @@ namespace Landis.Extension.DynamicFire
         {
 
             SiteVars.InitializeFuelType();
-            modelCore.UI.WriteLine("   Processing landscape for Fire events ...");
-
-            //int randomDay = (int) (modelCore.GenerateUniform() * 365);
-            //int day = 233;
-            //double testTemp = TempRetrieve.GetTemperature(randomDay, ModelCore.Ecoregions[0]);
-
-            //modelCore.UI.WriteLine("   TEST Temperature for Day {0}, Year {1} = {2}.", randomDay, PlugIn.ModelCore.CurrentTime, testTemp);
-
-            //AnnualFireWeather.CalculateFireWeather(day, ModelCore.Ecoregions[0]);
-
-           
             SiteVars.Event.SiteValues = null;
             SiteVars.Severity.ActiveSiteValues = 0;
             SiteVars.Disturbed.ActiveSiteValues = false;
@@ -200,6 +198,7 @@ namespace Landis.Extension.DynamicFire
             SiteVars.MinNeighborTravelTime.ActiveSiteValues = Double.PositiveInfinity;
             SiteVars.RateOfSpread.ActiveSiteValues = 0.0;
 
+            modelCore.UI.WriteLine("   Processing landscape for Fire events ...");
             
             summaryTotalSites = 0;
             summaryEventCount = 0;
