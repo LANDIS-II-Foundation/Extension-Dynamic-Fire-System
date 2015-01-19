@@ -147,7 +147,7 @@ namespace Landis.Extension.DynamicFire
             }
 
             log.AutoFlush = true;
-            log.Write("Time,InitSite,InitFireRegion,InitFuel,InitPercentConifer,SelectedSizeOrDuration,SizeBin,Duration,FireSeason,WindSpeed,WindDirection,FFMC,BUI,PercentCuring,ISI,SitesChecked,CohortsKilled,MeanSeverity,");
+            log.Write("Time,InitSite,InitFireRegion,InitFuel,InitPercentConifer,SelectedSizeOrDuration,SizeBin,Duration,FireSeason,WindSpeed,WindDirection,FFMC,BUI,PercentCuring,ISI,SitesChecked,CohortsKilled,MeanSeverity,FWI,");
             foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
             {
                   log.Write("eco-{0},", fire_region.MapCode);
@@ -496,7 +496,8 @@ namespace Landis.Extension.DynamicFire
                           fireEvent.ISI,
                           fireEvent.NumSitesChecked,
                           fireEvent.CohortsKilled,
-                          fireEvent.EventSeverity);
+                          fireEvent.EventSeverity,
+                          fireEvent.FireWeatherIndex);
                 //----------
                 foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
                 {

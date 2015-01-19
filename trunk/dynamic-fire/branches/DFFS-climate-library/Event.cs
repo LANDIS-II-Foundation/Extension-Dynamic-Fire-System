@@ -52,6 +52,8 @@ namespace Landis.Extension.DynamicFire
         private double lengthD;
         private double lbr;  //lenght:breadth ratio
 
+        public double FireWeatherIndex;
+
         //---------------------------------------------------------------------
         static Event()
         {
@@ -339,6 +341,9 @@ namespace Landis.Extension.DynamicFire
                 //AnnualFireWeather.CalculateFireWeather(day, ecoregion); 
 
                 PlugIn.ModelCore.UI.WriteLine("Julian Day being used in Event.cs = {0}", day);
+
+                this.FireWeatherIndex = AnnualFireWeather.FireWeatherIndex;
+
                 this.windSpeed = AnnualFireWeather.WindSpeedVelocity;
                 PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
                 this.fineFuelMoistureCode = (int) AnnualFireWeather.FineFuelMoistureCode;
@@ -368,17 +373,6 @@ namespace Landis.Extension.DynamicFire
             }
 
 
-            //PlugIn.ModelCore.Log.WriteLine();
-            /*PlugIn.ModelCore.Log.WriteLine("   New Fire Event Data:  WSV={0}, FFMC={1}, BUI={2}, foliarMC={3}, windDirection={4}, Season={5}, FireRegion={6}, SizeBin = {7}.",
-                            this.windSpeed,
-                            this.fineFuelMoistureCode,
-                            this.buildUpIndex,
-                            this.foliarMC,
-                            this.windDirection,
-                            this.fireSeason.NameOfSeason,
-                            this.initiationFireRegion.Name,
-                            this.sizeBin
-                            );*/
         }
 
         //---------------------------------------------------------------------
@@ -519,7 +513,11 @@ namespace Landis.Extension.DynamicFire
                 //double FWIscale = 0.3368;
                 //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather being used for IgnProb calculations: FireWeatherIndex={0}", AnnualFireWeather.FireWeatherIndex);
 
-                double ignitionProbability = 1/(1+Math.Exp(-(FWIshape+FWIscale*AnnualFireWeather.FireWeatherIndex))); // My equation that includes FWIshape and FWIscale and AnnualFire.FireWeatherIndex. This equation comes from Beverly et al 2007
+                // A. Kretchun: My equation that includes FWIshape and FWIscale and AnnualFire.FireWeatherIndex. This equation comes from Beverly et al 2007
+                double ignitionProbability = 1/(1+Math.Exp(-(FWIshape+FWIscale*AnnualFireWeather.FireWeatherIndex))); 
+
+                
+                
                 //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: ignitionProbability={0}.", ignitionProbability);
 
                 // Add minimum:  If < 0.10, skip it.
