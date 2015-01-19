@@ -478,7 +478,7 @@ namespace Landis.Extension.DynamicFire
             int totalSitesInEvent = 0;
             if (fireEvent.EventSeverity > 0)
             {
-                log.Write("{0},\"{1}\",{2},{3},{4},{5:0.00},{6},{7:0.00},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17:0.00}",
+                log.Write("{0},\"{1}\",{2},{3},{4},{5:0.00},{6},{7:0.00},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17:0.00},{18:0.0}",
                           currentTime,
                           fireEvent.StartLocation,
                           fireEvent.InitiationFireRegion.Name,
