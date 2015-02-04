@@ -464,11 +464,10 @@ namespace Landis.Extension.DynamicFire
             double randomNum = PlugIn.ModelCore.GenerateUniform();
 
             ISeasonParameters fireSeason = Weather.GenerateSeason(seasons);
+            
             // Calculate random day for this season
-            int day = (int) ((fireSeason.EndDay - fireSeason.StartDay) * randomNum) + fireSeason.StartDay;// System.Random(1, 366);  This selects a random day during the Fire Season
+            int day = (int)((fireSeason.EndDay - fireSeason.StartDay) * randomNum) + fireSeason.StartDay;// System.Random(1, 366);  This selects a random day during the Fire Season
             PlugIn.ModelCore.UI.WriteLine("Day selected for fire calculations =  {0}", day);
-            //int day = 290;  //Alec: This needs to be coordinated with AnnualFireWeather
-            //
 
             if (SiteVars.PercentDeadFir[site] > 0) // If M3 or M4 type, use initProb if greater
             {
@@ -505,6 +504,8 @@ namespace Landis.Extension.DynamicFire
 
                 // Get FWI from new class
                 IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
+                
+                
                 AnnualFireWeather.CalculateFireWeather(day, ecoregion);
                 // Get probability of ignition based on Jen Beverly equation and FWI;
                 double FWIshape = FuelTypeParms[fuelIndex].IgnitionDistributionShape;  
@@ -521,7 +522,7 @@ namespace Landis.Extension.DynamicFire
                 //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: ignitionProbability={0}.", ignitionProbability);
 
                 // Add minimum:  If < 0.10, skip it.
-                if (initProb < 0.10)
+                if (AnnualFireWeather.FireWeatherIndex < 10) //initProb < 0.10)
                 {
                     return null;
                     //initiation = false;

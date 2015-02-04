@@ -35,11 +35,15 @@ namespace Landis.Extension.DynamicFire
 	
         public static void CalculateFireWeather(int day, IEcoregion ecoregion)
         {
+            int spring_start = PlugIn.SeasonParameters[0].StartDay;
+            int summer_start = PlugIn.SeasonParameters[1].StartDay;
+            int fall_start = PlugIn.SeasonParameters[2].StartDay;
+            int winter_start = PlugIn.SeasonParameters[2].EndDay + 1;
 
-            int spring_start = 92; //Alec: This neeeds to come from the dynamic fire input file now. This should be
-            int summer_start = 136;
-            int fall_start = 299;
-            int winter_start = 311;
+            //int spring_start = 92; //Alec: This neeeds to come from the dynamic fire input file now. This should be
+            //int summer_start = 136;
+            //int fall_start = 299;
+            //int winter_start = 311;
 
             ISeasonParameters season = null;
 
