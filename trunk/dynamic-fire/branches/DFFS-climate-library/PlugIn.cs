@@ -28,6 +28,7 @@ namespace Landis.Extension.DynamicFire
         public static readonly ExtensionType ExtType = new ExtensionType("disturbance:fire");
         public static readonly string ExtensionName = "Dynamic Fire System";
         public static bool ClimateLibraryActive = false;
+        public static bool ReadClimateLibrary = false;
         public static int FutureClimateBaseYear;
         public static DataTable WeatherDataTable;
         public static DataTable WindDataTable;
@@ -94,8 +95,12 @@ namespace Landis.Extension.DynamicFire
             severityCalibrate   = parameters.SeverityCalibrate;
             //DynamicInputs.Initialize(parameters.DynamicFireRegionInputFile, false);
 
-            //Initialize climate.
-            if (PlugIn.ClimateLibraryActive)
+            // Initial test for whether succession has initiated climate library.
+            if (Climate.Future_DailyData != null)
+                PlugIn.ClimateLibraryActive = true;
+
+            //Initialize climate from input file.
+            if (PlugIn.ReadClimateLibrary && !PlugIn.ClimateLibraryActive)
             {
                 Climate.Initialize(parameters.ClimateConfigFile, false, modelCore);
                 //FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
@@ -107,6 +112,7 @@ namespace Landis.Extension.DynamicFire
                         Climate.GenerateEcoregionClimateData(ecoregion, 0, -50, 20, 10);
                     }
                 }
+                PlugIn.ClimateLibraryActive = true;
             }
 
             

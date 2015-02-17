@@ -328,17 +328,8 @@ namespace Landis.Extension.DynamicFire
             this.maxFireParameter = ComputeSize(eco.MeanSize, eco.StandardDeviation, eco.MinSize, eco.MaxSize); 
             this.fireSeason         = fireSeason; 
 
-            //bool climateLibrary = true;
-
             if (PlugIn.ClimateLibraryActive)
             {
-                //Alec: This is where we need to retrieve the individual day's weather data
-
-                // Select random day from the fire season (fireSeason)
-
-                // Calculate fire weather predicated on that day based on the season
-
-                //AnnualFireWeather.CalculateFireWeather(day, ecoregion); 
 
                 PlugIn.ModelCore.UI.WriteLine("Julian Day being used in Event.cs = {0}", day);
 

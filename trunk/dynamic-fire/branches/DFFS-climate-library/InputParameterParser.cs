@@ -53,7 +53,7 @@ namespace Landis.Extension.DynamicFire
             if (ReadOptionalVar(climateConfigFile))
             {
                 parameters.ClimateConfigFile = climateConfigFile.Value;
-                PlugIn.ClimateLibraryActive = true;
+                PlugIn.ReadClimateLibrary = true;
             }
 
             InputVar<SizeType> st = new InputVar<SizeType>("EventSizeType");
