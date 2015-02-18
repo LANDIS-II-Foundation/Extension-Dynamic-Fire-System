@@ -5,6 +5,7 @@ using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
 using Landis.Library.Climate;
 using Landis.Core;
+using Landis.Library.Metadata;
 
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,9 @@ namespace Landis.Extension.DynamicFire
 
         public static readonly ExtensionType ExtType = new ExtensionType("disturbance:fire");
         public static readonly string ExtensionName = "Dynamic Fire System";
+        public static MetadataTable<EventsLog> eventLog;
+        public static MetadataTable<SummaryLog> summaryLog;
+
         public static bool ClimateLibraryActive = false;
         public static bool ReadClimateLibrary = false;
         public static int FutureClimateBaseYear;
@@ -37,12 +41,14 @@ namespace Landis.Extension.DynamicFire
 
 
         private string mapNameTemplate;
-        private StreamWriter log;
-        private StreamWriter summaryLog;
+        private string timeOfLastFireMap;
+        //private StreamWriter log;
+        //private StreamWriter summaryLog;
         private int[] summaryFireRegionEventCount;
+        private int[] summaryFireRegionSiteCount;
         private int[] ecoregionSitesCount;
-        private int summaryTotalSites;
-        private int summaryEventCount;
+        //private int summaryTotalSites;
+        //private int summaryEventCount;
         private SizeType fireSizeType;
         private bool bui;
         private double severityCalibrate;
@@ -93,6 +99,10 @@ namespace Landis.Extension.DynamicFire
             mapNameTemplate     = parameters.MapNamesTemplate;
             dynamicWeather      = parameters.DynamicWeather;
             severityCalibrate   = parameters.SeverityCalibrate;
+            timeOfLastFireMap = "./DFFS-output/TimeOfLastFire-{timestep}.img";
+
+            MetadataHandler.InitializeMetadata(parameters.Timestep, parameters.MapNamesTemplate, timeOfLastFireMap, ModelCore);
+
             //DynamicInputs.Initialize(parameters.DynamicFireRegionInputFile, false);
 
             // Initial test for whether succession has initiated climate library.
@@ -119,13 +129,13 @@ namespace Landis.Extension.DynamicFire
             modelCore.UI.WriteLine("   Initializing Fire Events...");
             Event.Initialize(parameters.SeasonParameters, parameters.FuelTypeParameters, parameters.FireDamages);
 
-
             SeasonParameters = parameters.SeasonParameters;
 
             dynamicEcos = parameters.DynamicFireRegions;
 
             summaryFireRegionEventCount = new int[FireRegions.AllData[0].Length];
-            ecoregionSitesCount        = new int[FireRegions.AllData[0].Length];
+            summaryFireRegionSiteCount = new int[FireRegions.AllData[0].Length];
+            ecoregionSitesCount = new int[FireRegions.AllData[0].Length];
 
             //foreach (IFireRegion fire_region in FireRegions.Dataset)
             //modelCore.Log.WriteLine("   FireSize={0}, SD={1}", fire_region.MeanSize, fire_region.StandardDeviation);
@@ -143,45 +153,45 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            modelCore.UI.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
-            try {
-                log = Landis.Data.CreateTextFile(parameters.LogFileName);
-            }
-            catch (Exception err) {
-                string mesg = string.Format("{0}", err.Message);
-                throw new System.ApplicationException(mesg);
-            }
+            //modelCore.UI.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
+            //try {
+            //    log = Landis.Data.CreateTextFile(parameters.LogFileName);
+            //}
+            //catch (Exception err) {
+            //    string mesg = string.Format("{0}", err.Message);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            log.AutoFlush = true;
-            log.Write("Time,InitSite,InitFireRegion,InitFuel,InitPercentConifer,SelectedSizeOrDuration,SizeBin,Duration,FireSeason,WindSpeed,WindDirection,FFMC,BUI,PercentCuring,ISI,SitesChecked,CohortsKilled,MeanSeverity,FWI,");
-            foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
-            {
-                  log.Write("eco-{0},", fire_region.MapCode);
-            }
-            log.Write("TotalSitesInEvent");
-            log.WriteLine("");
+            //log.AutoFlush = true;
+            //log.Write("Time,InitSite,InitFireRegion,InitFuel,InitPercentConifer,SelectedSizeOrDuration,SizeBin,Duration,FireSeason,WindSpeed,WindDirection,FFMC,BUI,PercentCuring,ISI,SitesChecked,CohortsKilled,MeanSeverity,FWI,");
+            //foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
+            //{
+            //      log.Write("eco-{0},", fire_region.MapCode);
+            //}
+            //log.Write("TotalSitesInEvent");
+            //log.WriteLine("");
 
-            try {
-                summaryLog = Landis.Data.CreateTextFile(parameters.SummaryLogFileName);
-            }
-            catch (Exception err) {
-                string mesg = string.Format("{0}", err.Message);
-                throw new System.ApplicationException(mesg);
-            }
+            //try {
+            //    summaryLog = Landis.Data.CreateTextFile(parameters.SummaryLogFileName);
+            //}
+            //catch (Exception err) {
+            //    string mesg = string.Format("{0}", err.Message);
+            //    throw new System.ApplicationException(mesg);
+            //}
 
-            summaryLog.AutoFlush = true;
-            summaryLog.Write("TimeStep, TotalSitesBurned, NumberFires");
-            foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
-            {
-                    summaryLog.Write(", eco-{0}", fire_region.MapCode);
-            }
-            summaryLog.WriteLine("");
-            summaryLog.Write("0, 0, 0");
-            foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
-            {
-                    summaryLog.Write(", {0}", ecoregionSitesCount[fire_region.Index]);
-            }
-            summaryLog.WriteLine("");
+            //summaryLog.AutoFlush = true;
+            //summaryLog.Write("TimeStep, TotalSitesBurned, NumberFires");
+            //foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
+            //{
+            //        summaryLog.Write(", eco-{0}", fire_region.MapCode);
+            //}
+            //summaryLog.WriteLine("");
+            //summaryLog.Write("0, 0, 0");
+            //foreach (IDynamicInputRecord fire_region in FireRegions.AllData[0])
+            //{
+            //        summaryLog.Write(", {0}", ecoregionSitesCount[fire_region.Index]);
+            //}
+            //summaryLog.WriteLine("");
 
             if (isDebugEnabled)
                 modelCore.UI.WriteLine("Initialization done");
@@ -206,8 +216,8 @@ namespace Landis.Extension.DynamicFire
 
             modelCore.UI.WriteLine("   Processing landscape for Fire events ...");
             
-            summaryTotalSites = 0;
-            summaryEventCount = 0;
+            //summaryTotalSites = 0;
+            //summaryEventCount = 0;
 
             //Update the fire regions data as necessary:
             foreach (var pair in FireRegions.AllData)
@@ -229,6 +239,7 @@ namespace Landis.Extension.DynamicFire
             foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
             {
                 summaryFireRegionEventCount[fire_region.Index] = 0;
+                summaryFireRegionSiteCount[fire_region.Index] = 0;
             }
 
 
@@ -409,8 +420,8 @@ namespace Landis.Extension.DynamicFire
                                 if (FireEvent != null)
                                 {
                                     LogEvent(modelCore.CurrentTime, FireEvent);
-                                    summaryEventCount++;
-                                    //fireCount++;  //RMS test
+                                    summaryFireRegionEventCount[fire_region.Index]++;
+                                    summaryFireRegionSiteCount[fire_region.Index] += FireEvent.TotalSitesDamaged;
                                 }
                             }
                         }
@@ -450,7 +461,7 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            path = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.img", modelCore.CurrentTime);
+            path = MapNames.ReplaceTemplateVars(timeOfLastFireMap, modelCore.CurrentTime);
             modelCore.UI.WriteLine("   Writing TimeOfLstFire output map to {0} ...", path);
             using (IOutputRaster<IntPixel> outputRaster = modelCore.CreateRaster<IntPixel>(path, modelCore.Landscape.Dimensions))
             {
@@ -480,53 +491,91 @@ namespace Landis.Extension.DynamicFire
                               Event fireEvent)
         {
 
+            //log.Write("Time,InitSite,InitFireRegion,InitFuel,InitPercentConifer,SelectedSizeOrDuration,SizeBin,Duration,FireSeason,WindSpeed,WindDirection,FFMC,BUI,PercentCuring,ISI,SitesChecked,CohortsKilled,MeanSeverity,FWI,");
+
+            eventLog.Clear();
+            EventsLog el = new EventsLog();
+            el.Time = currentTime;
+            el.InitRow = fireEvent.StartLocation.Row;
+            el.InitColumn = fireEvent.StartLocation.Column;
+            el.InitFuel = fireEvent.InitiationFuel;
+            el.InitPercentConifer = fireEvent.InitiationPercentConifer;
+            el.SizeOrDuration = fireEvent.MaxFireParameter;
+            el.SizeBin = fireEvent.SizeBin;
+            el.Duration = fireEvent.MaxDuration;
+            el.FireSeason = fireEvent.FireSeason.NameOfSeason.ToString();
+            el.WindSpeed = fireEvent.WindSpeed;
+            el.WindDirection = fireEvent.WindDirection;
+            el.FFMC = fireEvent.FFMC;
+            el.BUI = fireEvent.BuildUpIndex;
+            el.PercentCuring = fireEvent.FireSeason.PercentCuring;
+            el.ISI = fireEvent.ISI;
+            el.TotalSites = fireEvent.NumSitesChecked;
+            el.FWI = fireEvent.FireWeatherIndex;
+            el.CohortsKilled = fireEvent.CohortsKilled;
+            el.MeanSeverity = fireEvent.EventSeverity;
+
+
+            eventLog.AddObject(el);
+            eventLog.WriteToFile();
+
         //HEADER:  Time,Initiation Site,Sites Checked,Cohorts Killed,Mean Severity,
-            int totalSitesInEvent = 0;
-            if (fireEvent.EventSeverity > 0)
-            {
-                log.Write("{0},\"{1}\",{2},{3},{4},{5:0.00},{6},{7:0.00},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17:0.00},{18:0.0}",
-                          currentTime,
-                          fireEvent.StartLocation,
-                          fireEvent.InitiationFireRegion.Name,
-                          fireEvent.InitiationFuel,
-                          fireEvent.InitiationPercentConifer,
-                          fireEvent.MaxFireParameter,
-                          fireEvent.SizeBin,
-                          fireEvent.MaxDuration,
-                          fireEvent.FireSeason.NameOfSeason,
-                          fireEvent.WindSpeed,
-                          fireEvent.WindDirection,
-                          fireEvent.FFMC,
-                          fireEvent.BuildUpIndex,
-                          fireEvent.FireSeason.PercentCuring,
-                          fireEvent.ISI,
-                          fireEvent.NumSitesChecked,
-                          fireEvent.CohortsKilled,
-                          fireEvent.EventSeverity,
-                          fireEvent.FireWeatherIndex);
-                //----------
-                foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
-                {
-                        log.Write(",{0}", fireEvent.SitesInEvent[fire_region.Index]);
-                        totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
-                        summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
-                }
-                summaryTotalSites += totalSitesInEvent;
-                log.Write(", {0}", totalSitesInEvent);
-                log.WriteLine("");
-            }
+            //int totalSitesInEvent = 0;
+            //if (fireEvent.EventSeverity > 0)
+            //{
+            //    log.Write("{0},\"{1}\",{2},{3},{4},{5:0.00},{6},{7:0.00},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17:0.00},{18:0.0}",
+            //              currentTime,
+            //              fireEvent.StartLocation,
+            //              fireEvent.InitiationFireRegion.Name,
+            //              fireEvent.InitiationFuel,
+            //              fireEvent.InitiationPercentConifer,
+            //              fireEvent.MaxFireParameter,
+            //              fireEvent.SizeBin,
+            //              fireEvent.MaxDuration,
+            //              fireEvent.FireSeason.NameOfSeason,
+            //              fireEvent.WindSpeed,
+            //              fireEvent.WindDirection,
+            //              fireEvent.FFMC,
+            //              fireEvent.BuildUpIndex,
+            //              fireEvent.FireSeason.PercentCuring,
+            //              fireEvent.ISI,
+            //              fireEvent.NumSitesChecked,
+            //              fireEvent.CohortsKilled,
+            //              fireEvent.EventSeverity,
+            //              fireEvent.FireWeatherIndex);
+            //    //----------
+            //    foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
+            //    {
+            //            log.Write(",{0}", fireEvent.SitesInEvent[fire_region.Index]);
+            //            totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
+            //            summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
+            //    }
+            //    summaryTotalSites += totalSitesInEvent;
+            //    log.Write(", {0}", totalSitesInEvent);
+            //    log.WriteLine("");
+            //}
         }
 
         //---------------------------------------------------------------------
 
         private void WriteSummaryLog(int   currentTime)
         {
-            summaryLog.Write("{0},{1},{2}", currentTime, summaryTotalSites, summaryEventCount);
+            //summaryLog.Write("{0},{1},{2}", currentTime, summaryTotalSites, summaryEventCount);
             foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
             {
-                    summaryLog.Write(",{0}", summaryFireRegionEventCount[fire_region.Index]);
+                summaryLog.Clear();
+                SummaryLog sl = new SummaryLog();
+                sl.Time = currentTime;
+                sl.FireRegion = fire_region.Name;
+                sl.TotalBurnedSites = summaryFireRegionSiteCount[fire_region.Index];
+                sl.NumberFires = summaryFireRegionEventCount[fire_region.Index];
+
+                summaryLog.AddObject(sl);
+                summaryLog.WriteToFile();
+
+                    //summaryLog.Write(",{0}", summaryFireRegionEventCount[fire_region.Index]);
             }
-            summaryLog.WriteLine("");
+            //summaryLog.WriteLine("");
         }
 
         private static List<Location> Shuffle<Location>(List<Location> list)

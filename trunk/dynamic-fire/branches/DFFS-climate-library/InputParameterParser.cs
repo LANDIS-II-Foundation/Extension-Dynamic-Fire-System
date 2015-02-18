@@ -83,7 +83,7 @@ namespace Landis.Extension.DynamicFire
 
             const string DynamicFireRegionTable = "DynamicFireRegionTable";
             //const string DynamicFireRegionTable2 = "DynamicFireRegionTable2";
-            const string InitialFireEcoregionsMap = "InitialFireRegionsMap";
+            //const string InitialFireEcoregionsMap = "InitialFireRegionsMap";
             const string InitialFireEcoregionsMap2 = "InitialFireRegionsMap2";
             //const string FireRegime2 = "FireRegime2";
 
