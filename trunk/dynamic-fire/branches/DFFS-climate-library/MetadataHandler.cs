@@ -63,7 +63,7 @@ namespace Landis.Extension.DynamicFire
             OutputMetadata mapOut_Severity = new OutputMetadata()
             {
                 Type = OutputType.Map,
-                Name = "severity",
+                Name = "Severity",
                 FilePath = @MapFileName,
                 Map_DataType = MapDataType.Ordinal,
                 Map_Unit = FieldUnits.Severity_Rank,
@@ -74,9 +74,9 @@ namespace Landis.Extension.DynamicFire
             OutputMetadata mapOut_Time = new OutputMetadata()
             {
                 Type = OutputType.Map,
-                Name = "timeLastFire",
+                Name = "TimeLastFire",
                 FilePath = @TimeMapFileName,
-                Map_DataType = MapDataType.Ordinal,
+                Map_DataType = MapDataType.Continuous,
                 Map_Unit = FieldUnits.Year,
                 Visualize = true,
             };

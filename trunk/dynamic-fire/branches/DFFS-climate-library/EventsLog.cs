@@ -31,13 +31,13 @@ namespace Landis.Extension.DynamicFire
         [DataFieldAttribute(Desc = "Size Bin")]
         public double SizeBin { set; get; }
 
-        [DataFieldAttribute(Desc = "Duration")]
+        [DataFieldAttribute(Unit = FieldUnits.min, Desc = "Duration")]
         public double Duration { set; get; }
 
         [DataFieldAttribute(Desc = "Fire Season")]
         public string FireSeason { set; get; }
 
-        [DataFieldAttribute(Desc = "Wind Speed")]
+        [DataFieldAttribute(Unit = FieldUnits.m_s, Desc = "Wind Speed")]
         public double WindSpeed { set; get; }
 
         [DataFieldAttribute(Desc = "Wind Direction")]
