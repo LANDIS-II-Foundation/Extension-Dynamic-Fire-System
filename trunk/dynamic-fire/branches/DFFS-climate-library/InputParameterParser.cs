@@ -56,6 +56,13 @@ namespace Landis.Extension.DynamicFire
                 PlugIn.ReadClimateLibrary = true;
             }
 
+            InputVar<double> rha = new InputVar<double>("RelativeHumiditySlopeAdjust");
+            if (ReadOptionalVar(rha))
+                parameters.RelativeHumiditySlopeAdjustment = rha.Value;
+            else
+                parameters.RelativeHumiditySlopeAdjustment = 1.0;
+
+
             InputVar<SizeType> st = new InputVar<SizeType>("EventSizeType");
             ReadVar(st);
             parameters.FireSizeType = st.Value;

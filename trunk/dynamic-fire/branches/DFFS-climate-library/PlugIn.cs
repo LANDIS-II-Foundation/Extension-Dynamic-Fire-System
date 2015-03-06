@@ -38,6 +38,7 @@ namespace Landis.Extension.DynamicFire
         public static DataTable WindDataTable;
         public static int WeatherRandomizer = 0;
         public static ISeasonParameters[] SeasonParameters;
+        public static double RelativeHumiditySlopeAdjust;
 
 
         private string mapNameTemplate;
@@ -94,6 +95,7 @@ namespace Landis.Extension.DynamicFire
         public override void Initialize()
         {
             Timestep            = parameters.Timestep;
+            RelativeHumiditySlopeAdjust = parameters.RelativeHumiditySlopeAdjustment;
             fireSizeType        = parameters.FireSizeType;
             bui                 = parameters.BUI;
             mapNameTemplate     = parameters.MapNamesTemplate;

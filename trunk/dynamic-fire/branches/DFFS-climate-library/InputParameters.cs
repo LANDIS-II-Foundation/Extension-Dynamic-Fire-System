@@ -16,8 +16,10 @@ namespace Landis.Extension.DynamicFire
     public interface IInputParameters
     {
         int Timestep{get;set;}
-        string ClimateConfigFile { get; set; }
+        string ClimateConfigFile { get; set; }    
+        double RelativeHumiditySlopeAdjustment { get; set; }   //does this go in the interface or below in the input parameters?
         SizeType FireSizeType{get;set;}
+
         bool BUI{get;set;}
         double SeverityCalibrate { get;set;}
         List<IDynamicFireRegion> DynamicFireRegions {get;}
@@ -43,7 +45,9 @@ namespace Landis.Extension.DynamicFire
         : IInputParameters
     {
         private int timestep;
+        
         private SizeType fireSizeType;
+        
         private bool buildUpIndex;
         private double severityCalibrate;
         private List<IDynamicFireRegion> dynamicFireRegions;
@@ -58,6 +62,7 @@ namespace Landis.Extension.DynamicFire
         private string windInputPath;
         private string dynamicFireRegionInputFile;
         private string climateConfigFile;
+        private double relativeHumiditySlopeAdjust;
 
 
         //---------------------------------------------------------------------
@@ -91,6 +96,21 @@ namespace Landis.Extension.DynamicFire
                     ValidatePath(value);
                 }
                 climateConfigFile = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        public string RelativeHumiditySlopeAdjustment
+        {
+            get
+            {
+                return relativeHumiditySlopeAdjust;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new InputValueException(value.ToString(), "Probability of adjustment factor must be > 0.0 and < 1");
+                relativeHumiditySlopeAdjust = value;
             }
         }
         //---------------------------------------------------------------------
