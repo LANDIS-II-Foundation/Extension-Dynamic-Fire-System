@@ -54,11 +54,11 @@ namespace Landis.Extension.DynamicFire
             foreach (IDynamicInputRecord fire_region in FireRegions.Dataset)
             {
                
-                    PlugIn.ModelCore.UI.WriteLine("Code={0}, Name={1}, Mu={2:0.00}, Sigma={3:0.00}, Min={4}, Max={5}.", fire_region.MapCode,fire_region.Name,
-                        timestepData[fire_region.Index].MeanSize,
-                        timestepData[fire_region.Index].StandardDeviation,
-                        timestepData[fire_region.Index].MinSize,
-                        timestepData[fire_region.Index].MaxSize);
+                    ////PlugIn.ModelCore.UI.WriteLine("Code={0}, Name={1}, Mu={2:0.00}, Sigma={3:0.00}, Min={4}, Max={5}.", fire_region.MapCode,fire_region.Name,
+                    //    timestepData[fire_region.Index].MeanSize,
+                    //    timestepData[fire_region.Index].StandardDeviation,
+                    //    timestepData[fire_region.Index].MinSize,
+                    //    timestepData[fire_region.Index].MaxSize);
 
                
             }
@@ -67,7 +67,7 @@ namespace Landis.Extension.DynamicFire
         //---------------------------------------------------------------------
         public static void Initialize(string filename, bool writeOutput)
         {
-            PlugIn.ModelCore.UI.WriteLine("   Loading dynamic input data from file \"{0}\" ...", filename);
+            //PlugIn.ModelCore.UI.WriteLine("   Loading dynamic input data from file \"{0}\" ...", filename);
             DynamicInputsParser parser = new DynamicInputsParser();
             try
             {

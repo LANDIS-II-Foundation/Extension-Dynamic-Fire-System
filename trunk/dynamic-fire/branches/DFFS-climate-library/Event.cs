@@ -331,18 +331,18 @@ namespace Landis.Extension.DynamicFire
             if (PlugIn.ClimateLibraryActive)
             {
 
-                PlugIn.ModelCore.UI.WriteLine("Julian Day being used in Event.cs = {0}", day);
+                //PlugIn.ModelCore.UI.WriteLine("Julian Day being used in Event.cs = {0}", day);
 
                 this.FireWeatherIndex = AnnualFireWeather.FireWeatherIndex;
 
                 this.windSpeed = AnnualFireWeather.WindSpeedVelocity;
-                PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
+                //PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
                 this.fineFuelMoistureCode = (int) AnnualFireWeather.FineFuelMoistureCode;
-                PlugIn.ModelCore.UI.WriteLine("FFMC being used in Event.cs = {0}", this.fineFuelMoistureCode);
+                //PlugIn.ModelCore.UI.WriteLine("FFMC being used in Event.cs = {0}", this.fineFuelMoistureCode);
                 this.buildUpIndex = (int) AnnualFireWeather.BuildUpIndex;
-                PlugIn.ModelCore.UI.WriteLine("BUI being used in Event.cs = {0}", this.buildUpIndex);
+                //PlugIn.ModelCore.UI.WriteLine("BUI being used in Event.cs = {0}", this.buildUpIndex);
                 this.windDirection = (double) AnnualFireWeather.WindAzimuth;
-                PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
+                //PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
                 this.foliarMC = Weather.GenerateFMC(this.fireSeason, eco);
                 //PlugIn.ModelCore.UI.WriteLine("fireSeason being used in Event.cs = {0}", FireSeason.EndDay);
 
@@ -458,7 +458,7 @@ namespace Landis.Extension.DynamicFire
             
             // Calculate random day for this season
             int day = (int)((fireSeason.EndDay - fireSeason.StartDay) * randomNum) + fireSeason.StartDay;// System.Random(1, 366);  This selects a random day during the Fire Season
-            PlugIn.ModelCore.UI.WriteLine("Day selected for fire calculations =  {0}", day);
+            //PlugIn.ModelCore.UI.WriteLine("Day selected for fire calculations =  {0}", day);
 
             if (SiteVars.PercentDeadFir[site] > 0) // If M3 or M4 type, use initProb if greater
             {

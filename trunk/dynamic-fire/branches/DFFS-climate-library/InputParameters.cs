@@ -108,8 +108,8 @@ namespace Landis.Extension.DynamicFire
             }
             set
             {
-                if (value < 0.0 || value > 1.0)
-                    throw new InputValueException(value.ToString(), "Probability of adjustment factor must be > 0.0 and < 1");
+                if (value < 0.0 || value > 50.0)
+                    throw new InputValueException(value.ToString(), "Relative Humidity Slope Adjustment must be > 0.0 and < 50");
                 relativeHumiditySlopeAdjust = value;
             }
         }

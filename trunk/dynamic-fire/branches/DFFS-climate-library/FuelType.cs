@@ -220,7 +220,7 @@ namespace Landis.Extension.DynamicFire
             }
             set
             {
-                if (value < 0.0 || value > 10.0)
+                if (value < -10.0 || value > 10.0)
                     throw new InputValueException(value.ToString(),
                         "Value must be between 0 and 10.0");
                 ignitionDistributionShape = value;

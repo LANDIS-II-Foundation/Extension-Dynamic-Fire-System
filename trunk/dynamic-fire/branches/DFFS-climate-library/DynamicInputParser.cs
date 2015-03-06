@@ -107,7 +107,7 @@ namespace Landis.Extension.DynamicFire
 
                     //IDynamicInputRecord[,] inputTable = new IDynamicInputRecord[PlugIn.ModelCore.Species.Count, PlugIn.ModelCore.Ecoregions.Count];
                     allData.Add(yr, inputTable);
-                    PlugIn.ModelCore.UI.WriteLine("  Dynamic Input Parser:  Add new year = {0}.", yr);
+                    //PlugIn.ModelCore.UI.WriteLine("  Dynamic Input Parser:  Add new year = {0}.", yr);
                 }
 
                 ReadValue(mapCode, currentLine);
