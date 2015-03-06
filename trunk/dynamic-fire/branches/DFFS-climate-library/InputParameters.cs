@@ -100,7 +100,7 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-        public string RelativeHumiditySlopeAdjustment
+        public double RelativeHumiditySlopeAdjustment
         {
             get
             {
