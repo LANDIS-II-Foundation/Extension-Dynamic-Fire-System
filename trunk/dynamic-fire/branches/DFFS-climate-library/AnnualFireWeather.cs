@@ -70,7 +70,9 @@ namespace Landis.Extension.DynamicFire
                 //PlugIn.ModelCore.UI.WriteLine(" Time = {0} + {1}.", PlugIn.ModelCore.CurrentTime, Climate.Future_DailyData.First().Key);
                 //PlugIn.ModelCore.UI.WriteLine(" Ecoregion = {0}.", ecoregion.Name); 
 
-                int actualYear = PlugIn.ModelCore.CurrentTime + Climate.Future_DailyData.First().Key;
+                int actualYear = (PlugIn.ModelCore.CurrentTime -1) + Climate.Future_DailyData.First().Key;  
+
+                //PlugIn.ModelCore.UI.WriteLine("PlugIn Current time = {0}, FutureDailyDataKey= {1}, actualYear={2} .", PlugIn.ModelCore.CurrentTime - 1, Climate.Future_DailyData.First().Key, actualYear);
                 if (Climate.Future_DailyData.ContainsKey(actualYear))
                 {
                     //Rob and Alec testing some stuff here.
