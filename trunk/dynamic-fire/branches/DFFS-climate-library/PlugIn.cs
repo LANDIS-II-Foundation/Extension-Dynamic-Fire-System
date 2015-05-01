@@ -115,6 +115,7 @@ namespace Landis.Extension.DynamicFire
             if (PlugIn.ReadClimateLibrary && !PlugIn.ClimateLibraryActive)
             {
                 Climate.Initialize(parameters.ClimateConfigFile, false, modelCore);
+                modelCore.UI.WriteLine("   Climate Library Active...");  //Instrument to check if CL is being called
                 //FutureClimateBaseYear = Climate.Future_MonthlyData.Keys.Min();
 
                 foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)

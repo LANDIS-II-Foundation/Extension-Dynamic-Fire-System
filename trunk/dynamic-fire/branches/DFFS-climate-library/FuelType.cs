@@ -27,8 +27,8 @@ namespace Landis.Extension.DynamicFire
         int BUI{get;set;}
         double MaxBE{get;set;}
         int CBH{get;set;}  //Crown base height
-        double IgnitionDistributionShape { get; set; }
         double IgnitionDistributionScale { get; set; }
+        double IgnitionDistributionShape { get; set; }
     }
 }
 
@@ -205,9 +205,9 @@ namespace Landis.Extension.DynamicFire
             }
             set
             {
-                if (value < -10.0 || value > 10.0)
+                if (value < 0.0 || value > 10.0)
                     throw new InputValueException(value.ToString(),
-                        "Value must be between -10.0 and 10.0");
+                        "Value must be between 0.0 and 10.0");
                 ignitionDistributionScale = value;
             }
         }
@@ -222,7 +222,7 @@ namespace Landis.Extension.DynamicFire
             {
                 if (value < -10.0 || value > 10.0)
                     throw new InputValueException(value.ToString(),
-                        "Value must be between 0 and 10.0");
+                        "Value must be between -10.0 and 10.0");
                 ignitionDistributionShape = value;
             }
         }

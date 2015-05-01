@@ -70,9 +70,9 @@ namespace Landis.Extension.DynamicFire
             foreach (DataRow myDataRow in weatherDS.Tables["Table"].Rows)
             {
                 FFMC = (int) Math.Round(Convert.ToDouble(myDataRow["FFMC"]));
-                //PlugIn.ModelCore.Log.WriteLine("   New Event FFMC:  {0}", FFMC.ToString());
+                //PlugIn.ModelCore.UI.WriteLine("   New Event FFMC:  {0}", FFMC);
             }
-
+            PlugIn.ModelCore.UI.WriteLine("   New Event FFMC:  {0}", FFMC);
             return FFMC;
         }
         //---------------------------------------------------------------------
@@ -116,7 +116,9 @@ namespace Landis.Extension.DynamicFire
             f_F = 91.9 * System.Math.Exp(-0.1386 * m) *
                             (1 + (System.Math.Pow(m, 5.31) / 49300000));
             return f_F;
+            //PlugIn.ModelCore.UI.WriteLine("Weather.cs FFMC = {0}", FFMC);
         }
+        
         //---------------------------------------------------------------------
         public static double CalculateWindEffect(double WSV)
         {

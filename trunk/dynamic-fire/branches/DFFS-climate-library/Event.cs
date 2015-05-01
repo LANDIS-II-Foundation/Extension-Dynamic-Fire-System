@@ -489,7 +489,7 @@ namespace Landis.Extension.DynamicFire
             bool initiation = false;
 
             
-            if (PlugIn.ClimateLibraryActive)
+            if (PlugIn.ClimateLibraryActive) //Alec: This is a y/n for climate library activation
             {
                 //First, test probability of ignition against random number
 
@@ -507,8 +507,6 @@ namespace Landis.Extension.DynamicFire
 
                 // A. Kretchun: My equation that includes FWIshape and FWIscale and AnnualFire.FireWeatherIndex. This equation comes from Beverly et al 2007
                 double ignitionProbability = 1/(1+Math.Exp(-(FWIshape+FWIscale*AnnualFireWeather.FireWeatherIndex))); 
-
-                
                 
                 //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: ignitionProbability={0}.", ignitionProbability);
 

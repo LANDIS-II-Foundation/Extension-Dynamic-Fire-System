@@ -49,7 +49,7 @@ namespace Landis.Extension.DynamicFire
             ReadVar(timestep);
             parameters.Timestep = timestep.Value;
 
-            InputVar<string> climateConfigFile = new InputVar<string>("ClimateConfigFile");
+            InputVar<string> climateConfigFile = new InputVar<string>("ClimateConfigFile"); 
             if (ReadOptionalVar(climateConfigFile))
             {
                 parameters.ClimateConfigFile = climateConfigFile.Value;
@@ -447,15 +447,15 @@ namespace Landis.Extension.DynamicFire
             ReadVar(mapNames);
             parameters.MapNamesTemplate = mapNames.Value;
 
-            InputVar<string> logFile = new InputVar<string>("LogFile");
-            ReadVar(logFile);
-            parameters.LogFileName = logFile.Value;
+            //InputVar<string> logFile = new InputVar<string>("LogFile");
+            //ReadVar(logFile);
+            //parameters.LogFileName = logFile.Value;
 
-            InputVar<string> summaryLogFile = new InputVar<string>("SummaryLogFile");
-            ReadVar(summaryLogFile);
-            parameters.SummaryLogFileName = summaryLogFile.Value;
+            //InputVar<string> summaryLogFile = new InputVar<string>("SummaryLogFile");
+            //ReadVar(summaryLogFile);
+            //parameters.SummaryLogFileName = summaryLogFile.Value;
 
-            CheckNoDataAfter(string.Format("the {0} parameter", summaryLogFile.Name));
+            //CheckNoDataAfter(string.Format("the {0} parameter", summaryLogFile.Name));
 
             return parameters; //.GetComplete();
         }

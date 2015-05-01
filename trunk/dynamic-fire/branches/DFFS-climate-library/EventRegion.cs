@@ -314,6 +314,9 @@ namespace Landis.Extension.DynamicFire
 
             double ISI = 0.208 * f_F * f_W;
 
+            //PlugIn.ModelCore.UI.WriteLine("  Debug EventRegion: FFMC={0}.", fireEvent.FFMC);
+            //PlugIn.ModelCore.UI.WriteLine("  Debug EventRegion: InitialSpreadIndex={0}.", ISI);
+
             SiteVars.ISI[site] = ISI;
 
             double BISI = 0.208 * f_F * f_backW;

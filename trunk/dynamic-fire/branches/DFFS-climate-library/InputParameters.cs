@@ -28,8 +28,8 @@ namespace Landis.Extension.DynamicFire
         IFuelType[] FuelTypeParameters{get;}
         List<IFireDamage> FireDamages{get;}
         string MapNamesTemplate{get;set;}
-        string LogFileName{get;set;}
-        string SummaryLogFileName{get;set;}
+        //string LogFileName{get;set;}
+        //string SummaryLogFileName{get;set;}
         string InitialWeatherPath{get;set;}
         string WindInputPath { get; set; }
         string DynamicFireRegionInputFile { get; set; }
@@ -56,8 +56,8 @@ namespace Landis.Extension.DynamicFire
         private IFuelType[] fuelTypeParameters;
         private List<IFireDamage> damages;
         private string mapNamesTemplate;
-        private string logFileName;
-        private string summaryLogFileName;
+        //private string logFileName;
+        //private string summaryLogFileName;
         private string initialWeatherPath;
         private string windInputPath;
         private string dynamicFireRegionInputFile;
@@ -221,16 +221,16 @@ namespace Landis.Extension.DynamicFire
         /// <summary>
         /// Name of log file.
         /// </summary>
-        public string LogFileName
-        {
-            get {
-                return logFileName;
-            }
-            set {
-                    // FIXME: check for null or empty path (value);
-                logFileName = value;
-            }
-        }
+        //public string LogFileName
+        //{
+        //    get {
+        //        return logFileName;
+        //    }
+        //    set {
+        //            // FIXME: check for null or empty path (value);
+        //        logFileName = value;
+        //    }
+        //}
 
         //---------------------------------------------------------------------
 
@@ -250,16 +250,16 @@ namespace Landis.Extension.DynamicFire
         /// <summary>
         /// Name of log file.
         /// </summary>
-        public string SummaryLogFileName
-        {
-            get {
-                return summaryLogFileName;
-            }
-            set {
-                    // FIXME: check for null or empty path (value);
-                summaryLogFileName = value;
-            }
-        }
+        //public string SummaryLogFileName
+        //{
+        //    get {
+        //        return summaryLogFileName;
+        //    }
+        //    set {
+        //            // FIXME: check for null or empty path (value);
+        //        summaryLogFileName = value;
+        //    }
+        //}
         /// <summary>
         /// Wind input file
         /// </summary>
