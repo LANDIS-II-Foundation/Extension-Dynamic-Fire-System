@@ -67,9 +67,6 @@ namespace Landis.Extension.DynamicFire
                 WindAzimuth = -9999.0;
                 double relative_humidity = -9999;
 
-                //PlugIn.ModelCore.UI.WriteLine(" Time = {0} + {1}.", PlugIn.ModelCore.CurrentTime, Climate.Future_DailyData.First().Key);
-                //PlugIn.ModelCore.UI.WriteLine(" Ecoregion = {0}.", ecoregion.Name); 
-
                 int actualYear = (PlugIn.ModelCore.CurrentTime -1) + Climate.Future_DailyData.First().Key;  
 
                 //PlugIn.ModelCore.UI.WriteLine("PlugIn Current time = {0}, FutureDailyDataKey= {1}, actualYear={2} .", PlugIn.ModelCore.CurrentTime - 1, Climate.Future_DailyData.First().Key, actualYear);
@@ -81,19 +78,13 @@ namespace Landis.Extension.DynamicFire
 
                     myWeatherData = Climate.Future_DailyData[actualYear][ecoregion.Index];
                     temperature = (myWeatherData.DailyMaxTemp[d] + myWeatherData.DailyMinTemp[d]) / 2;  
-                    precipitation = myWeatherData.DailyPrecip[d]; //  Alec: for some reason the temp in teh input file is an order of magnitude more than what is being printed in the output file
+                    precipitation = myWeatherData.DailyPrecip[d];
                     WindSpeedVelocity = myWeatherData.DailyWindSpeed[d];
                     WindAzimuth = myWeatherData.DailyWindDirection[d];
                     //relative_humidity = myWeatherData.DailyRH[d];  //This allows fire to use avg RH -ML
                     //relative_humidity = 100 * Math.Exp((17.269 * myWeatherData.DailyMinTemp[d]) / (273.15 + myWeatherData.DailyMinTemp[d]) - (17.269 * temperature) / (273.15 + temperature)); Original equation with original multiplier-ML
                     relative_humidity = 100 * Math.Exp((RHslopeadjust * myWeatherData.DailyMinTemp[d]) / (273.15 + myWeatherData.DailyMinTemp[d]) - (RHslopeadjust * temperature) / (273.15 + temperature));
-                    //PlugIn.ModelCore.UI.WriteLine(" RH = {0:0.00}.", relative_humidity); 
 
-                    //PlugIn.ModelCore.UI.WriteLine("Temperature = {0}, JD = {1}", temperature, d); //Alec: These are all checks included in the log file for accuracy purposes
-                    //PlugIn.ModelCore.UI.WriteLine("Precipitation = {0}, JD = {1}", precipitation, d);
-                    //PlugIn.ModelCore.UI.WriteLine("Wind speed = {0}, JD = {1}", WindSpeedVelocity, d);
-                    //PlugIn.ModelCore.UI.WriteLine("Wind azimuth = {0}, JD = {1}", WindAzimuth, d);
-                    //PlugIn.ModelCore.UI.WriteLine("Relative Humidity = {0}, JD = {1}", relative_humidity, d);
                 }
                 else
                 {
