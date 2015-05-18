@@ -328,26 +328,14 @@ namespace Landis.Extension.DynamicFire
             this.maxFireParameter = ComputeSize(eco.MeanSize, eco.StandardDeviation, eco.MinSize, eco.MaxSize); 
             this.fireSeason         = fireSeason; 
 
-            if (PlugIn.ClimateLibraryActive)
+            if (PlugIn.ClimateLibraryActive) //If T, ClimateLibraryActive retrieves internally calculated fire weather variables from AnnualFireWeather.cs
             {
-
-                //PlugIn.ModelCore.UI.WriteLine("Julian Day being used in Event.cs = {0}", day);
-
                 this.FireWeatherIndex = AnnualFireWeather.FireWeatherIndex;
-
                 this.windSpeed = AnnualFireWeather.WindSpeedVelocity;
-                //PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
                 this.fineFuelMoistureCode = (int) AnnualFireWeather.FineFuelMoistureCode;
-                //PlugIn.ModelCore.UI.WriteLine("FFMC being used in Event.cs = {0}", this.fineFuelMoistureCode);
                 this.buildUpIndex = (int) AnnualFireWeather.BuildUpIndex;
-                //PlugIn.ModelCore.UI.WriteLine("BUI being used in Event.cs = {0}", this.buildUpIndex);
                 this.windDirection = (double) AnnualFireWeather.WindAzimuth;
-                //PlugIn.ModelCore.UI.WriteLine("windSpeed being used in Event.cs = {0}", this.windSpeed);
                 this.foliarMC = Weather.GenerateFMC(this.fireSeason, eco);
-                //PlugIn.ModelCore.UI.WriteLine("fireSeason being used in Event.cs = {0}", FireSeason.EndDay);
-
-                //PlugIn.ModelCore.UI.WriteLine("FFMC Event class check. FFMC = {0}, JD = {1}", fineFuelMoistureCode, day);
-
             }
             else
             {
@@ -491,24 +479,19 @@ namespace Landis.Extension.DynamicFire
             
             if (PlugIn.ClimateLibraryActive) //Alec: This is a y/n for climate library activation
             {
-                //First, test probability of ignition against random number
 
-                // Get FWI from new class
                 IEcoregion ecoregion = PlugIn.ModelCore.Ecoregion[site];
                 
                 
                 AnnualFireWeather.CalculateFireWeather(day, ecoregion);
                 // Get probability of ignition based on Jen Beverly equation and FWI;
                 double FWIshape = FuelTypeParms[fuelIndex].IgnitionDistributionShape;  
-                //double FWIshape = -4.414;
+
                 double FWIscale = FuelTypeParms[fuelIndex].IgnitionDistributionScale;
-                //double FWIscale = 0.3368;
-                //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather being used for IgnProb calculations: FireWeatherIndex={0}", AnnualFireWeather.FireWeatherIndex);
 
                 // A. Kretchun: My equation that includes FWIshape and FWIscale and AnnualFire.FireWeatherIndex. This equation comes from Beverly et al 2007
                 double ignitionProbability = 1/(1+Math.Exp(-(FWIshape+FWIscale*AnnualFireWeather.FireWeatherIndex))); 
-                
-                //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: ignitionProbability={0}.", ignitionProbability);
+
 
                 // Add minimum:  If < 0.10, skip it.
                 if (AnnualFireWeather.FireWeatherIndex < 10) //initProb < 0.10)

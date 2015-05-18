@@ -7,11 +7,11 @@ using Landis.Core;
 
 namespace Landis.Extension.DynamicFire
 {
-//This is the Dynamic Fire class that contains all the Python calculations. Refer to 'Progress_Date.txt' for next tasks
+// This class calculates fire weather variables. These calculations are based on the Canadian Fire and Fuels System.
+// Refer to Lawson and Armitage 2008 "Weather Guide for the Canadian Forest Fire Danger Rating System" for further explanation
 
     public class AnnualFireWeather
     {
-        // These are the fire weather varaibles that may be used elsewhere
 
         public static double FireWeatherIndex; 
             
@@ -40,12 +40,6 @@ namespace Landis.Extension.DynamicFire
             int fall_start = PlugIn.SeasonParameters[2].StartDay;
             int winter_start = PlugIn.SeasonParameters[2].EndDay + 1;
             double RHslopeadjust =  PlugIn.RelativeHumiditySlopeAdjust;
-            //PlugIn.ModelCore.UI.WriteLine(" RHslopeadj_factor = {0:0.000}.", RHslopeadjust); 
-
-            //int spring_start = 92; //Alec: This neeeds to come from the dynamic fire input file now. This should be
-            //int summer_start = 136;
-            //int fall_start = 299;
-            //int winter_start = 311;
 
             ISeasonParameters season = null;
 
@@ -69,22 +63,17 @@ namespace Landis.Extension.DynamicFire
 
                 int actualYear = (PlugIn.ModelCore.CurrentTime -1) + Climate.Future_DailyData.First().Key;  
 
-                //PlugIn.ModelCore.UI.WriteLine("PlugIn Current time = {0}, FutureDailyDataKey= {1}, actualYear={2} .", PlugIn.ModelCore.CurrentTime - 1, Climate.Future_DailyData.First().Key, actualYear);
                 if (Climate.Future_DailyData.ContainsKey(actualYear))
                 {
-                    //Rob and Alec testing some stuff here.
                     double test = Climate.Future_DailyData[actualYear][ecoregion.Index].AnnualAET;
-                    //PlugIn.ModelCore.UI.WriteLine(" AET = {0} + {1}.", test);
 
                     myWeatherData = Climate.Future_DailyData[actualYear][ecoregion.Index];
                     temperature = (myWeatherData.DailyMaxTemp[d] + myWeatherData.DailyMinTemp[d]) / 2;  
                     precipitation = myWeatherData.DailyPrecip[d];
                     WindSpeedVelocity = myWeatherData.DailyWindSpeed[d];
                     WindAzimuth = myWeatherData.DailyWindDirection[d];
-                    //relative_humidity = myWeatherData.DailyRH[d];  //This allows fire to use avg RH -ML
-                    //relative_humidity = 100 * Math.Exp((17.269 * myWeatherData.DailyMinTemp[d]) / (273.15 + myWeatherData.DailyMinTemp[d]) - (17.269 * temperature) / (273.15 + temperature)); Original equation with original multiplier-ML
                     relative_humidity = 100 * Math.Exp((RHslopeadjust * myWeatherData.DailyMinTemp[d]) / (273.15 + myWeatherData.DailyMinTemp[d]) - (RHslopeadjust * temperature) / (273.15 + temperature));
-
+                    //Relative humidity calculations include RHslopeadjust variable to correct for location of study.
                 }
                 else
                 {
@@ -102,7 +91,6 @@ namespace Landis.Extension.DynamicFire
                     DroughtCode_yesterday = DroughtCode;
                 }
  
-                //These are all the intermediate fire weather variables that are not used in any other classes
                 double mo = Calculate_mo(d, FineFuelMoistureCode_yesterday);  
                 double rf = Calculate_rf(d, precipitation);
                 double mr = Calculate_mr(d, mo, rf);
@@ -151,31 +139,9 @@ namespace Landis.Extension.DynamicFire
         private static double Calculate_mo(int d, double FineFuelMoistureCode_yesterday)
 	{
 		double mo = 0;
-		
-		//if (day == spring_start)
-        //{
+
 			mo = 147.2 * (101.0 - FineFuelMoistureCode_yesterday)/(59.5 + FineFuelMoistureCode_yesterday);  //This used to be an explicit seed value for FFMC
-        //}
-        //else 
-        //{
-        //    if (day > 0)
-        //    {
-        //        try
-        //        {
-        //            mo = 147.2 * (101.0 - FineFuelMoistureCode[day - 1]) / (59.5 + FineFuelMoistureCode[day - 1]);  //This used to be FFMCyesterday
-        //        }
-        //        catch
-        //        {  
-        //            throw new System.ArgumentException("mo cannot be null", "original"); //mo = 'na'
-        //        }
-        //    }   
-        //    else
-        //    {
-        //        throw new System.ArgumentException("mo cannot be null", "original");  //mo = 'na'
-        //    }
-        //}
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: mo={0}.", mo);
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: FineFuelMoistureCode_yesterday={0}.", FineFuelMoistureCode_yesterday);
+
 		return mo;
 	}
 
@@ -190,7 +156,6 @@ namespace Landis.Extension.DynamicFire
 		rf = 0;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: rf={0}.", rf);
 		return rf;
 	}
 
@@ -226,7 +191,6 @@ namespace Landis.Extension.DynamicFire
             mr = 250;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: mr={0}.", mr);
 		return mr;
 	}
 
@@ -236,7 +200,6 @@ namespace Landis.Extension.DynamicFire
 		
 		Ed = 0.942 * Math.Pow(relative_humidity, 0.679) + 11.0 * Math.Exp((relative_humidity-100.0)/10.0) + 0.18 * (21.1 - temperature) * (1.0 - Math.Exp(-0.115 * relative_humidity));
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Ed={0}.", Ed);
 		return Ed;
 	}
 
@@ -246,7 +209,6 @@ namespace Landis.Extension.DynamicFire
 		
 		Ew = 0.618 * Math.Pow(relative_humidity, 0.753) + 10.0 * Math.Exp((relative_humidity-100.0)/10.0) + 0.18 * (21.1 - temperature) * (1.0 - Math.Exp(-0.115 * relative_humidity));                          //selfs
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Ew={0}.", Ew);
 		return Ew;
 	}
 
@@ -256,7 +218,6 @@ namespace Landis.Extension.DynamicFire
 		
         ko = 0.424 * (1.0 - Math.Pow((relative_humidity/100.0), 1.7)) + 0.0694 * Math.Pow(WindSpeedVelocity, 0.5) * (1.0- Math.Pow((relative_humidity/100.0), 8));
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: ko={0}.", ko);
 		return ko;
 	}
 
@@ -266,7 +227,6 @@ namespace Landis.Extension.DynamicFire
 
         kd = ko * 0.581 * Math.Exp(0.0365 * temperature);    
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: kd={0}.", kd);
 		return kd;
 	}
 
@@ -276,7 +236,6 @@ namespace Landis.Extension.DynamicFire
 
         kl =0.424 * (1.0 - Math.Pow(((100.0 - relative_humidity)/100.0), 1.7)) + 0.0694 * Math.Pow(WindSpeedVelocity, 0.5) * (1.0 - Math.Pow(((100.0 - relative_humidity)/100.0), 8));
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: kl={0}.", kl);
 		return kl;
 	}
 
@@ -286,7 +245,6 @@ namespace Landis.Extension.DynamicFire
         
         kw = kl * 0.581 * Math.Exp(0.0365 * temperature);
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: kw={0}.", kw);
 		return kw;
 	}
 
@@ -322,10 +280,9 @@ namespace Landis.Extension.DynamicFire
         }                  
 		catch
         {
-			throw new System.ArgumentException("m cannot be null", "original"); //m = 'na'
+			throw new System.ArgumentException("m cannot be null", "original"); 
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: m={0}.", m);
 		return m;    
 	}
 
@@ -348,7 +305,6 @@ namespace Landis.Extension.DynamicFire
 			throw new System.ArgumentException("FFMC cannot be null", "original");   
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: FineFuelMoistureCode={0}.", FineFuelMoistureCode);
         return;
 	}
 
@@ -365,7 +321,6 @@ namespace Landis.Extension.DynamicFire
 			re = 0; 
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: re={0}.", re);
 		return re;
 	}
 
@@ -383,7 +338,6 @@ namespace Landis.Extension.DynamicFire
 			throw new System.ArgumentException("Mo cannot be null", "original");  
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Mo={0}.", Mo);
 		return Mo;
 	}
 
@@ -393,23 +347,7 @@ namespace Landis.Extension.DynamicFire
 
 		try
         {
-            //if (d == spring_start)
-            //{
-            //    if (DMC_start <= 33)
-            //    {
-            //        b = 100.0/(0.5 + 0.3 * DMC_start); 
-            //    }
 
-            //    else if (DMC_start > 65)
-            //    {
-            //        b = 6.2 * Math.Log(DMC_start)-17.2;
-            //    }
-				
-            //    else
-            //    {
-            //        b = 14.0 - 1.3 * Math.Log(DMC_start); 
-            //    }
-            //}
             if (DuffMoistureCode_yesterday <= 33 && d > 0)
             {
 				b = 100/(0.5 + 0.3 * DuffMoistureCode_yesterday);
@@ -435,8 +373,7 @@ namespace Landis.Extension.DynamicFire
         {
 			throw new System.ArgumentException("b cannot be null", "original"); 
         }
-        
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: b={0}.", b);
+
 		return b;
 	}
 
@@ -453,7 +390,6 @@ namespace Landis.Extension.DynamicFire
 			throw new System.ArgumentException("Mr cannot be null", "original");  
 		}
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Mr={0}.", Mr);
 		return Mr;
 	}
 
@@ -486,7 +422,6 @@ namespace Landis.Extension.DynamicFire
             } 
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Pr={0}.", Pr);
 		return Pr;
 	}
 
@@ -544,7 +479,6 @@ namespace Landis.Extension.DynamicFire
             month = 12;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: month={0}.", month);
         return month;                
     }
 
@@ -589,7 +523,6 @@ namespace Landis.Extension.DynamicFire
             Le1 = 0.0;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Le1={0}.", Le1);
 		return Le1;
 	}
 
@@ -619,7 +552,6 @@ namespace Landis.Extension.DynamicFire
             Le2 = 0.0;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Le2={0}.", Le2);
 		return Le2;
 	}
 
@@ -636,7 +568,6 @@ namespace Landis.Extension.DynamicFire
 			Le = Le1;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Le={0}.", Le);
 		return Le;
 	}
 
@@ -654,7 +585,6 @@ namespace Landis.Extension.DynamicFire
 			K = 1.894 * (temperature + 1.1) * (100.0 - relative_humidity) * Le * Math.Pow(10.0, -6.0);
         }
 
-       //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: K={0}.", K);
 		return K;
 	}
 
@@ -670,8 +600,6 @@ namespace Landis.Extension.DynamicFire
             DuffMoistureCode = DuffMoistureCode_yesterday + 100.0 * K;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: DuffMoistureCode_yesterday={0}.", DuffMoistureCode_yesterday);
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: DuffMoistureCode={0}.", DuffMoistureCode);
         return DuffMoistureCode;
 	}
 
@@ -689,7 +617,6 @@ namespace Landis.Extension.DynamicFire
         	rd = 0;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: rd={0}.", rd);
 		return rd;
 	}
 
@@ -708,7 +635,6 @@ namespace Landis.Extension.DynamicFire
             throw new System.ArgumentException("Qo cannot be null", "original");
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Qo={0}.", Qo);
         return Qo;
 	}
 
@@ -724,8 +650,7 @@ namespace Landis.Extension.DynamicFire
         {
 			throw new System.ArgumentException("Qr cannot be null", "original");   
         }
-		
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Qr={0}.", Qr);
+
 		return Qr;
 	}
 
@@ -746,8 +671,7 @@ namespace Landis.Extension.DynamicFire
         {
 			throw new System.ArgumentException("Dr cannot be null", "original");  
         }
-            
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Dr={0}.", Dr);
+
 		return Dr;
 	}
 
@@ -792,7 +716,6 @@ namespace Landis.Extension.DynamicFire
             Lf = -1.6;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: Lf={0}.", Lf);
 		return Lf;
 	}
 
@@ -810,7 +733,6 @@ namespace Landis.Extension.DynamicFire
             V = 0.36 * (temperature+2.8) + Lf;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: V={0}.", V);
 		return V;
 	}
 
@@ -840,8 +762,6 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: DroughtCode_yesterday={0}.", DroughtCode_yesterday);
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: DroughtCode={0}.", DroughtCode);
         return DroughtCode;
 	}
 
@@ -850,8 +770,7 @@ namespace Landis.Extension.DynamicFire
 		double WindFunction_ISI = 0.0;
 
         WindFunction_ISI = Math.Exp(0.05039 * WindSpeedVelocity);
-		
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: WindFunction_ISI={0}.", WindFunction_ISI);
+
 		return WindFunction_ISI;
 	}
 
@@ -869,7 +788,6 @@ namespace Landis.Extension.DynamicFire
 			throw new System.ArgumentException("FFMC_ISI cannot be null", "original");  
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: FineFuelMoistureFunction_ISI={0}.", FineFuelMoistureFunction_ISI);
 		return FineFuelMoistureFunction_ISI;
 	}
 
@@ -887,7 +805,6 @@ namespace Landis.Extension.DynamicFire
             throw new System.ArgumentException("ISI cannot be null", "original");  
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: InitialSpreadIndex={0}.", InitialSpreadIndex);
 		return InitialSpreadIndex;
 	}
 
@@ -902,7 +819,6 @@ namespace Landis.Extension.DynamicFire
 				BuildUpIndex = DuffMoistureCode-(1.0 - 0.8 * DroughtCode/(DuffMoistureCode + 0.4 * DroughtCode))*(0.92 + (0.0114 * Math.Pow(DuffMoistureCode, 1.7)));
             }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: BuildUpIndex calculations, DroughtCode={0}.", DroughtCode);
 		return BuildUpIndex; 
 	}
 
@@ -926,7 +842,6 @@ namespace Landis.Extension.DynamicFire
 			throw new System.ArgumentException("fD cannot be null", "original");  
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: fD={0}.", fD);
 		return fD;
 	}
 
@@ -944,7 +859,6 @@ namespace Landis.Extension.DynamicFire
             throw new System.ArgumentException("B cannot be null", "original");  
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: B={0}.", B);
 		return B;
 	}
 
@@ -961,11 +875,10 @@ namespace Landis.Extension.DynamicFire
                 FireWeatherIndex = B;
             }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: FireWeatherIndex={0}.", FireWeatherIndex);
 		return FireWeatherIndex;
 	}
 
-    private static double Calculate_I_scale(int d,  double FireWeatherIndex) //int spring_start, int winter_start,
+    private static double Calculate_I_scale(int d,  double FireWeatherIndex) 
 	{
 		double I_scale = 0.0;
 
@@ -978,7 +891,6 @@ namespace Landis.Extension.DynamicFire
                 throw new System.ArgumentException("I_scale cannot be null", "original");   
             }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: I_scale={0}.", I_scale);
 		return I_scale;
 	}
 
@@ -996,7 +908,6 @@ namespace Landis.Extension.DynamicFire
             throw new System.ArgumentException("DSR cannot be null", "original");   
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: DSR={0}.", DSR);
 		return DSR;
 	}
 
@@ -1021,7 +932,6 @@ namespace Landis.Extension.DynamicFire
             mySeason = Season.Winter;
         }
 
-        //PlugIn.ModelCore.UI.WriteLine("  Debug FireWeather: season={0}.", mySeason);
         return;
     }
 
