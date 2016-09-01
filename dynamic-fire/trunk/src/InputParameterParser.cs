@@ -16,17 +16,17 @@ namespace Landis.Extension.DynamicFire
     public class InputParameterParser
         : TextParser<IInputParameters>
     {
-
         //---------------------------------------------------------------------
-
         public override string LandisDataValue
         {
             get
             {
-                return "Dynamic Fire System";
+                return PlugIn.ExtensionName;
             }
         }
-        static InputParameterParser()
+        //---------------------------------------------------------------------
+
+        public InputParameterParser()
         {
             Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
             RegisterForInputValues();
@@ -36,12 +36,12 @@ namespace Landis.Extension.DynamicFire
 
         protected override IInputParameters Parse()
         {
-            ReadLandisDataVar();
+            // ReadLandisDataVar();
 
-            //InputVar<string> landisData = new InputVar<string>("LandisData");
-            //ReadVar(landisData);
-            //if (landisData.Value.Actual != PlugIn.ExtensionName)
-            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
+            InputVar<string> landisData = new InputVar<string>("LandisData");
+            ReadVar(landisData);
+            if (landisData.Value.Actual != PlugIn.ExtensionName)
+                throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
 
             InputParameters parameters = new InputParameters();
 
@@ -69,126 +69,46 @@ namespace Landis.Extension.DynamicFire
             
             }
 
+
             //----------------------------------------------------------
             // First, read table of additional parameters for ecoregions
             PlugIn.ModelCore.UI.WriteLine("   Loading FireRegion data...");
-            //IEditableFireRegionDataset dataset = new EditableFireRegionDataset();
-            List<IFireRegion> dataset = new List<IFireRegion>(0);
-            
-            Dictionary <string, int> nameLineNumbers = new Dictionary<string, int>();
-            Dictionary <ushort, int> mapCodeLineNumbers = new Dictionary<ushort, int>();
 
-            InputVar<string> name = new InputVar<string>("Name");
-            InputVar<ushort> mapCode = new InputVar<ushort>("Map Code");
-            InputVar<double> meanSize = new InputVar<double>("Mean Size");
-            InputVar<double> standardDeviation = new InputVar<double>("Standard Deviation");
-            InputVar<int> maxSize = new InputVar<int>("Max Size");
-            InputVar<int> spLo = new InputVar<int>("Spring Low FMC");
-            InputVar<int> spHi = new InputVar<int>("Spring High FMC");
-            InputVar<double> spHiPro = new InputVar<double>("Spring High FMC proportion");
-            InputVar<int> suLo = new InputVar<int>("Summer Low FMC");
-            InputVar<int> suHi = new InputVar<int>("Summer High FMC");
-            InputVar<double> suHiPro = new InputVar<double>("Summer High FMC proportion");
-            InputVar<int> faLo = new InputVar<int>("Fall Low FMC");
-            InputVar<int> faHi = new InputVar<int>("Fall High FMC");
-            InputVar<double> faHiPro = new InputVar<double>("Fall High FMC proportion");
-            InputVar<int> ftc = new InputVar<int>("Open Type Fuel");
-            InputVar<double> ein = new InputVar<double>("FireRegion Ignition Number");
-          
-            Dictionary <string, int> lineNumbers = new Dictionary<string, int>();
-            const string DynamicFireRegionTable = "DynamicEcoregionTable";
-            const string InitialFireEcoregionsMap = "InitialFireEcoregionsMap";
+            const string DynamicFireRegionTable = "DynamicFireRegionTable";
+            //const string DynamicFireRegionTable2 = "DynamicFireRegionTable2";
+            const string InitialFireEcoregionsMap = "InitialFireRegionsMap";
+            const string InitialFireEcoregionsMap2 = "InitialFireRegionsMap2";
+            //const string FireRegime2 = "FireRegime2";
 
-            int fireRegionIndex = 0;            
-            while (! AtEndOfInput && CurrentName != InitialFireEcoregionsMap) {
-                //IEditableFireRegionParameters ecoparameters = new EditableFireRegionParameters();
-                IFireRegion ecoparameters = new FireRegion(fireRegionIndex);
+            InputVar<string> dynInputFile = new InputVar<string>(DynamicFireRegionTable);
+            ReadVar(dynInputFile);
+            parameters.DynamicFireRegionInputFile = dynInputFile.Value;
 
-                dataset.Add(ecoparameters);
+            DynamicInputs.Initialize(parameters.DynamicFireRegionInputFile, false);
 
-                StringReader currentLine = new StringReader(CurrentLine);
-
-                int lineNumber;
-
-                ReadValue(mapCode, currentLine);
-                if (mapCodeLineNumbers.TryGetValue(mapCode.Value.Actual, out lineNumber))
-                    throw new InputValueException(mapCode.Value.String,
-                                                  "The map code {0} was previously used on line {1}",
-                                                  mapCode.Value.Actual, lineNumber);
-                else
-                    mapCodeLineNumbers[mapCode.Value.Actual] = LineNumber;
-                ecoparameters.MapCode = mapCode.Value;
-
-                ReadValue(name, currentLine);
-                if (nameLineNumbers.TryGetValue(name.Value.Actual, out lineNumber))
-                    throw new InputValueException(name.Value.String,
-                                                  "The name \"{0}\" was previously used on line {1}",
-                                                  name.Value.Actual, lineNumber);
-                else
-                    nameLineNumbers[name.Value.Actual] = LineNumber;
-                ecoparameters.Name = name.Value;
-
-                ReadValue(meanSize, currentLine);
-                ecoparameters.MeanSize = meanSize.Value;
-
-                ReadValue(standardDeviation, currentLine);
-                ecoparameters.StandardDeviation = standardDeviation.Value;
-                
-                ReadValue(maxSize, currentLine);
-                ecoparameters.MaxSize = maxSize.Value;
-
-                ReadValue(spLo, currentLine);
-                ecoparameters.SpringFMCLo = spLo.Value;
-                
-                ReadValue(spHi, currentLine);
-                ecoparameters.SpringFMCHi = spHi.Value;
-
-                ReadValue(spHiPro, currentLine);
-                ecoparameters.SpringFMCHiProp = spHiPro.Value;
-
-                ReadValue(suLo, currentLine);
-                ecoparameters.SummerFMCLo = suLo.Value;
-                
-                ReadValue(suHi, currentLine);
-                ecoparameters.SummerFMCHi = suHi.Value;
-
-                ReadValue(suHiPro, currentLine);
-                ecoparameters.SummerFMCHiProp = suHiPro.Value;
-
-                ReadValue(faLo, currentLine);
-                ecoparameters.FallFMCLo = faLo.Value;
-                
-                ReadValue(faHi, currentLine);
-                ecoparameters.FallFMCHi = faHi.Value;
-
-                ReadValue(faHiPro, currentLine);
-                ecoparameters.FallFMCHiProp = faHiPro.Value;
-                
-                ReadValue(ftc, currentLine);
-                ecoparameters.OpenFuelType = ftc.Value;
-                
-                ReadValue(ein, currentLine);
-                ecoparameters.EcoIgnitionNum = ein.Value;
-                
-                fireRegionIndex++;
-               
-                CheckNoDataAfter("the " + ein.Name + " column",
-                                 currentLine);
-                                 
-                GetNextLine();
-            }
+            //Second regime must have non-overlapping mapcodes and region names
             
             //Moved below since FireRegions now include seasonRecords
-            FireRegions.Dataset = dataset; 
-            
-            InputVar<string> ecoregionsMap = new InputVar<string>("InitialFireEcoregionsMap");
+            // Check This 
+            FireRegions.Dataset = FireRegions.AllData[0];
+
+            InputVar<string> ecoregionsMap = new InputVar<string>("InitialFireRegionsMap");
             ReadVar(ecoregionsMap);
             FireRegions.ReadMap(ecoregionsMap.Value);
+
+            if (CurrentName == InitialFireEcoregionsMap2)
+            {
+                InputVar<string> ecoregionsMap2 = new InputVar<string>("InitialFireRegionsMap2");
+                ReadVar(ecoregionsMap2);
+                FireRegions.ReadMap2(ecoregionsMap2.Value);
+            }
+
+
 
             //----------------------------------------------------------
             // Read in the table of dynamic ecoregions:
 
-            ReadName(DynamicFireRegionTable);
+            //ReadName(DynamicFireRegionTable);
 
             InputVar<string> mapName = new InputVar<string>("Dynamic Map Name");
             InputVar<int> year = new InputVar<int>("Year to read in new FireRegion Map");
@@ -208,10 +128,10 @@ namespace Landis.Extension.DynamicFire
                 ReadValue(year, currentLine);
                 dynEco.Year = year.Value;
                 
-                if (year.Value.Actual <= previousYear)
+                if (year.Value.Actual < previousYear)
                 {
                     throw new InputValueException(year.Value.String,
-                        "Year must > the year ({0}) of the preceeding ecoregion map",
+                        "Year must >= the year ({0}) of the preceeding ecoregion map",
                         previousYear);
                 }
 
@@ -271,7 +191,7 @@ namespace Landis.Extension.DynamicFire
                 ReadValue(seasonName, currentLine);
                 sn = (int) seasonName.Value.Actual;
                 
-                //PlugIn.ModelCore.UI.WriteLine("      Season index = {0}.", sn);
+                //PlugIn.ModelCore.Log.WriteLine("      Season index = {0}.", sn);
 
                 ISeasonParameters seasonParms = new SeasonParameters();
                 parameters.SeasonParameters[sn] = seasonParms;
@@ -641,7 +561,7 @@ namespace Landis.Extension.DynamicFire
         }
 
         //---------------------------------------------------------------------
-
+        /*
         private IFireRegion GetFireRegion(InputValue<string>      ecoregionName,
                                         Dictionary<string, int> lineNumbers)
         {
@@ -661,6 +581,7 @@ namespace Landis.Extension.DynamicFire
 
             return ecoregion;
         }
+         * */
         
     }
 }

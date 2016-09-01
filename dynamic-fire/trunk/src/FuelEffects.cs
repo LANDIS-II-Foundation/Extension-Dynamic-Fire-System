@@ -16,21 +16,30 @@ namespace Landis.Extension.DynamicFire
         // This method calculates the initial rate of spread for a specific site.
         // See below for the method that estimates the initial rate of spread for a broad area.
         
-        public static double InitialRateOfSpread(double ISI, ISeasonParameters season, Site site)
+        public static double InitialRateOfSpread(double ISI, ISeasonParameters season, Site site, bool secondRegionMap)
         {   
 
             
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (secondRegionMap)
+                fuelIndex = SiteVars.CFSFuelType2[site];
             int PC = SiteVars.PercentConifer[site];
             int PH = SiteVars.PercentHardwood[site];
             int PDF = SiteVars.PercentDeadFir[site];
             
-            //PlugIn.ModelCore.UI.WriteLine("Fuel Type Code = {0}.", siteFuelType.ToString());
+            //PlugIn.ModelCore.Log.WriteLine("Fuel Type Code = {0}.", siteFuelType.ToString());
             
             double RSI = 0.0;  
             
-            if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Conifer ||
-                Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.ConiferPlantation)
+            //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Conifer ||
+                //Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.ConiferPlantation)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C1 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C2 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C3 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C4 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C5 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C6 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.C7)
             {
                 double a = Event.FuelTypeParms[fuelIndex].A;
                 double b = Event.FuelTypeParms[fuelIndex].B;
@@ -77,14 +86,15 @@ namespace Landis.Extension.DynamicFire
                         RSI = ((1 - percentHard) * RSIconifer) + (percentHard * RSIdecid);
                     }
 
-                    //PlugIn.ModelCore.UI.WriteLine("Calculating ROSi for a MIXED type. PH={0}, PC={1}, LeafStatus={2}.", PH, PC, season.LeafStatus);
-                    //PlugIn.ModelCore.UI.WriteLine("  RSIcon={0:0.0}, RSIdecid={1:0.0}, RSImix={2:0.000}.", RSIconifer, RSIdecid, RSI);
+                    //PlugIn.ModelCore.Log.WriteLine("Calculating ROSi for a MIXED type. PH={0}, PC={1}, LeafStatus={2}.", PH, PC, season.LeafStatus);
+                    //PlugIn.ModelCore.Log.WriteLine("  RSIcon={0:0.0}, RSIdecid={1:0.0}, RSImix={2:0.000}.", RSIconifer, RSIdecid, RSI);
 
                 }
             }
                 
 
-            if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
             //siteFuelType == FuelTypeCode.O1a)
             {
                 double a, b, c;
@@ -129,7 +139,8 @@ namespace Landis.Extension.DynamicFire
                 }
             }
             
-            if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.NoFuel || fuelIndex == 0)
+            //if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.NoFuel || fuelIndex == 0)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.NoFuel || fuelIndex == 0)
             //siteFuelType == FuelTypeCode.NoFuel)
             {
                 if (PDF > 0)
@@ -156,10 +167,14 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            if( Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Slash || 
-                Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous)
+            //if( Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Slash || 
+                //Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.S1 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.S2 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.S3 ||
+                Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.D1)
             {
-                //PlugIn.ModelCore.UI.WriteLine("Calculating ROSi for a DECIDUOUS or SLASH type.");
+                //PlugIn.ModelCore.Log.WriteLine("Calculating ROSi for a DECIDUOUS or SLASH type.");
 
                 double a = Event.FuelTypeParms[fuelIndex].A;
                 double b = Event.FuelTypeParms[fuelIndex].B;
@@ -167,14 +182,16 @@ namespace Landis.Extension.DynamicFire
                     
                 RSI = CalculateRSI(a, b, c, ISI);
 
-                if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous 
+                //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous 
+                if(Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.D1 
                     && season.LeafStatus == LeafOnOff.LeafOn)
                 //if(siteFuelType == FuelTypeCode.D1 && season.LeafStatus == LeafOnOff.LeafOn)
                     RSI *= 0.2;
                 
                 if (PDF > 0)
                 {
-                    if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous
+                    //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Deciduous
+                    if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.D1 
                         && season.LeafStatus == LeafOnOff.LeafOn)  //M-4
                     //siteFuelType == FuelTypeCode.D1) 
                     {

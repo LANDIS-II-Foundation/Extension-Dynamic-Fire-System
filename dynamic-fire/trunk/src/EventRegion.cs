@@ -95,6 +95,8 @@ namespace Landis.Extension.DynamicFire
                         Site destSite = weighted.Site;
 
                         int fuelIndex = (int)SiteVars.CFSFuelType[destSite];
+                        if (fireEvent.InitiationFireRegion.MapCode > FireRegions.MaxMapCode)
+                            fuelIndex = (int)SiteVars.CFSFuelType2[destSite];
 
                         if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open
                             && fireEvent.FireSeason.PercentCuring == 0)
@@ -148,7 +150,7 @@ namespace Landis.Extension.DynamicFire
             while (!finished)
             {
                 count++;
-                //PlugIn.ModelCore.UI.WriteLine("      Re-Calculating optimal travel time:  {0} times.", count);
+                //PlugIn.ModelCore.Log.WriteLine("      Re-Calculating optimal travel time:  {0} times.", count);
                 finished = true;
 
                 // Loop through list and check each for a new, shorter travel time.
@@ -165,7 +167,7 @@ namespace Landis.Extension.DynamicFire
                         {
                             SiteVars.CostTime[destSite] = newCostTime;
                             SiteVars.TravelTime[destSite] = newTravelTime;
-                            //PlugIn.ModelCore.UI.WriteLine("      OldTT = {0:0.00}, NewTT = {1:0.00}, OldMinNeighborTT = {2:0.00}, MinNeighborTT = {3:0.00}.",
+                            //PlugIn.ModelCore.Log.WriteLine("      OldTT = {0:0.00}, NewTT = {1:0.00}, OldMinNeighborTT = {2:0.00}, MinNeighborTT = {3:0.00}.",
                             //oldTravelTime, SiteVars.TravelTime[destSite],
                             SiteVars.MinNeighborTravelTime[destSite] = SiteVars.TravelTime[srcSite];
                             if ((oldTravelTime - newTravelTime) > 0.5)
@@ -210,7 +212,7 @@ namespace Landis.Extension.DynamicFire
                 {
                     travelTime = CalculateTravelTime(neighbor, srcSite, fireEvent, buildUp);
                     //if (travelTime < 1)
-                    //    PlugIn.ModelCore.UI.WriteLine("Travel time < 1");
+                    //    PlugIn.ModelCore.Log.WriteLine("Travel time < 1");
                     temp.Add(new WeightedSite(neighbor, travelTime));
                 }
             }
@@ -236,7 +238,7 @@ namespace Landis.Extension.DynamicFire
                 {
                     lowestNeighbor = relneighbor;
                     SiteVars.MinNeighborTravelTime[site] = SiteVars.TravelTime[relneighbor];
-                    //PlugIn.ModelCore.UI.WriteLine("Location = {0},{1}.  MinTravelTime = {2}.", lowestNeighbor.Row, lowestNeighbor.Column, SiteVars.TravelTime[relneighbor]);
+                    //PlugIn.ModelCore.Log.WriteLine("Location = {0},{1}.  MinTravelTime = {2}.", lowestNeighbor.Row, lowestNeighbor.Column, SiteVars.TravelTime[relneighbor]);
                 }
             }
 
@@ -249,28 +251,37 @@ namespace Landis.Extension.DynamicFire
             if (!site.IsActive || !firesource.IsActive)
                 throw new ApplicationException("Either site or fire source are not active.");
 
-            //Calculate Fire regime size adjustment:
-            IFireRegion fire_region = SiteVars.FireRegion[site];
+            //Calculate Fire regime size adjustment (FRUA):
+            //Get local fire_region
+            IDynamicInputRecord fire_region = SiteVars.FireRegion[site];
+            if (fireEvent.SecondRegionMap)
+                fire_region = SiteVars.FireRegion2[site];
+            
             double FRUA = fire_region.MeanSize;
 
+            //Get source fire region
             fire_region = SiteVars.FireRegion[firesource];
+            if (fireEvent.SecondRegionMap)
+                fire_region = SiteVars.FireRegion2[site];
+
             FRUA = FRUA / fire_region.MeanSize;
 
-
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (fireEvent.SecondRegionMap)
+                fuelIndex = SiteVars.CFSFuelType2[site];
             int percentConifer = SiteVars.PercentConifer[site];
             int percentHardwood = SiteVars.PercentHardwood[site];
             int percentDeadFir = SiteVars.PercentDeadFir[site];
             List<int> siteWindList = new List<int>();
             int siteWindSpeed, siteWindDirection;
 
-            //PlugIn.ModelCore.UI.WriteLine("         Fuel Type Code = {0}.", temp.ToString());
+            //PlugIn.ModelCore.Log.WriteLine("         Fuel Type Code = {0}.", temp.ToString());
 
             ISeasonParameters season = fireEvent.FireSeason;
 
             double f_F = Weather.CalculateFuelMoistureEffect(fireEvent.FFMC);
             double ISZ = 0.208 * f_F;  //No wind
-            double RSZ = FuelEffects.InitialRateOfSpread(ISZ, season, site);
+            double RSZ = FuelEffects.InitialRateOfSpread(ISZ, season, site, fireEvent.SecondRegionMap);
 
             if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.ConiferPlantation)//SurfaceFuel == SurfaceFuelType.C6)
             {
@@ -286,7 +297,7 @@ namespace Landis.Extension.DynamicFire
             }
             double BE = 0;
 
-            siteWindList = CalculateSlopeEffect(fireEvent.WindSpeed, fireEvent.WindDirection, site, RSZ, f_F, season);
+            siteWindList = CalculateSlopeEffect(fireEvent.WindSpeed, fireEvent.WindDirection, site, RSZ, f_F, season, fireEvent.SecondRegionMap);
             if (siteWindList.Count > 0)
             {
                 siteWindSpeed = siteWindList[0];
@@ -307,8 +318,8 @@ namespace Landis.Extension.DynamicFire
 
             double BISI = 0.208 * f_F * f_backW;
 
-            double BROSi = FuelEffects.InitialRateOfSpread(BISI, season, site);
-            double ROSi = FuelEffects.InitialRateOfSpread(ISI, season, site);
+            double BROSi = FuelEffects.InitialRateOfSpread(BISI, season, site, fireEvent.SecondRegionMap);
+            double ROSi = FuelEffects.InitialRateOfSpread(ISI, season, site,fireEvent.SecondRegionMap);
 
             if (ROSi == 0)
             {
@@ -340,6 +351,11 @@ namespace Landis.Extension.DynamicFire
                 ROSi *= BE;
                 BROSi *= BE;
                 SiteVars.RateOfSpread[site] = ROSi;
+                if (ROSi > 1000)
+                {
+                    PlugIn.ModelCore.UI.WriteLine("ROSi > 1000");
+                }
+
 
                 double LB = CalculateLengthBreadthRatio(siteWindSpeed, fuelIndex);
 
@@ -431,9 +447,9 @@ namespace Landis.Extension.DynamicFire
                 SiteVars.AdjROS[site] = r;
                 //----------
 
-                //PlugIn.ModelCore.UI.WriteLine("      FROSi = {0}, BROSi = {1}.", FROSi, BROSi);
-                //PlugIn.ModelCore.UI.WriteLine("      beta = {0:0.00}, theta = {1:0.00}, alpha = {2:0.00}, Travel time = {3:0.000000}.", beta, theta, alpha, 1/r);
-                //PlugIn.ModelCore.UI.WriteLine("      Travel time = {0:0.000000}.  R = {1}.", 1/r, r);
+                //PlugIn.ModelCore.Log.WriteLine("      FROSi = {0}, BROSi = {1}.", FROSi, BROSi);
+                //PlugIn.ModelCore.Log.WriteLine("      beta = {0:0.00}, theta = {1:0.00}, alpha = {2:0.00}, Travel time = {3:0.000000}.", beta, theta, alpha, 1/r);
+                //PlugIn.ModelCore.Log.WriteLine("      Travel time = {0:0.000000}.  R = {1}.", 1/r, r);
                 if (site == firesource)
                 {
                     double rate = 1.0 / r;  //units = minutes / meter
@@ -445,7 +461,7 @@ namespace Landis.Extension.DynamicFire
                     double rate = 1.0 / r;  //units = minutes / meter
                     double cost = rate * PlugIn.ModelCore.CellLength;     //units = minutes
                     //if (cost < 1)
-                     //   PlugIn.ModelCore.UI.WriteLine("Travel time < 1 min");
+                     //   PlugIn.ModelCore.Log.WriteLine("Travel time < 1 min");
                     return cost;
                 }
             }
@@ -518,7 +534,8 @@ namespace Landis.Extension.DynamicFire
 
             double lengthBreadthRatio = 0.0;
 
-            if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            //if(Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
             {
                 if (WSV < 1.0)
                     lengthBreadthRatio = 1.0; //(FBP; 81)
@@ -575,8 +592,8 @@ namespace Landis.Extension.DynamicFire
             //    lessThan = false;
             if ((LengthA + LengthB <= sumDist) || (LengthA <= radius))
                 lessThan = true;
-            //PlugIn.ModelCore.UI.WriteLine("LengthA={0:0.0}, LengthB={1:0.0}, C={2:0.0}, D={3:0.0}.", LengthA, LengthB, C,D);
-            //PlugIn.ModelCore.UI.WriteLine("dXf1={0:0.0}, dYf1={1:0.0}, dXburn={2:0.0}, dYburn={3:0.0}.", dXf1, dYf1,dXburn,dYburn);
+            //PlugIn.ModelCore.Log.WriteLine("LengthA={0:0.0}, LengthB={1:0.0}, C={2:0.0}, D={3:0.0}.", LengthA, LengthB, C,D);
+            //PlugIn.ModelCore.Log.WriteLine("dXf1={0:0.0}, dYf1={1:0.0}, dXburn={2:0.0}, dYburn={3:0.0}.", dXf1, dYf1,dXburn,dYburn);
             //return true;
             return lessThan;
         }
@@ -632,7 +649,7 @@ namespace Landis.Extension.DynamicFire
         }
         private static List<int> CalculateSlopeEffect(int windSpeed, int windDirection,
                                                 Site site, double RSZ, double f_F,
-                                                ISeasonParameters season)
+                                                ISeasonParameters season, bool secondRegionMap)
         {
             List<int> siteWindList = new List<int>();
             if ((SiteVars.GroundSlope[site] == 0) || (RSZ == 0))
@@ -661,8 +678,12 @@ namespace Landis.Extension.DynamicFire
                 double ISF = 0.0;
                 double a, b, c;
                 int fuelIndex = SiteVars.CFSFuelType[site];
+                if (secondRegionMap)
+                    fuelIndex = SiteVars.CFSFuelType2[site];
+                
 
-                if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+                //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+                if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
                 //(siteFuelType == FuelTypeCode.O1a)
                 {
                     int percentCuring = season.PercentCuring;
@@ -756,7 +777,9 @@ namespace Landis.Extension.DynamicFire
             double a = Event.FuelTypeParms[fuelIndex].A;
             double b = Event.FuelTypeParms[fuelIndex].B;
             double c = Event.FuelTypeParms[fuelIndex].C;
-            if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+
+            //if (Event.FuelTypeParms[fuelIndex].BaseFuel == BaseFuelType.Open)
+            if (Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1a || Event.FuelTypeParms[fuelIndex].SurfaceFuel == SurfaceFuelType.O1b)
             //siteFuelType == FuelTypeCode.O1a)
             {
                 double CF = (0.02 * season.PercentCuring) - 1;

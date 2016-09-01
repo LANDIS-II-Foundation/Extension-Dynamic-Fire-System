@@ -10,8 +10,10 @@ namespace Landis.Extension.DynamicFire
     {
         private static ISiteVar<Event> eventVar;
         private static ISiteVar<int> timeOfLastFire;
-        private static ISiteVar<IFireRegion> fire_regions;
+        private static ISiteVar<IDynamicInputRecord> fire_regions;
+        private static ISiteVar<IDynamicInputRecord> fire_regions2;
         private static ISiteVar<int> cfsFuelType;
+        private static ISiteVar<int> cfsFuelType2;
         private static ISiteVar<int> decidFuelType;
         private static ISiteVar<int> percentConifer;
         private static ISiteVar<int> percentHardwood;
@@ -43,7 +45,8 @@ namespace Landis.Extension.DynamicFire
             
             eventVar            = PlugIn.ModelCore.Landscape.NewSiteVar<Event>(InactiveSiteMode.DistinctValues);
             timeOfLastFire      = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
-            fire_regions          = PlugIn.ModelCore.Landscape.NewSiteVar<IFireRegion>();
+            fire_regions = PlugIn.ModelCore.Landscape.NewSiteVar<IDynamicInputRecord>();
+            fire_regions2 = PlugIn.ModelCore.Landscape.NewSiteVar<IDynamicInputRecord>();
             percentDeadFir      = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
             severity            = PlugIn.ModelCore.Landscape.NewSiteVar<byte>();
             lastSeverity        = PlugIn.ModelCore.Landscape.NewSiteVar<byte>();
@@ -72,6 +75,7 @@ namespace Landis.Extension.DynamicFire
 
 
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.FireRegion, "Fire.FireRegion");
+            PlugIn.ModelCore.RegisterSiteVar(SiteVars.FireRegion2, "Fire.FireRegion2");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.Severity, "Fire.Severity");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.LastSeverity, "Fire.LastSeverity");
             PlugIn.ModelCore.RegisterSiteVar(SiteVars.TimeOfLastFire, "Fire.TimeOfLastEvent");
@@ -84,6 +88,7 @@ namespace Landis.Extension.DynamicFire
             PlugIn.ModelCore.UI.WriteLine("   Initializing Fuel Type.");
 
             cfsFuelType     = PlugIn.ModelCore.GetSiteVar<int>("Fuels.CFSFuelType");
+            cfsFuelType2    = PlugIn.ModelCore.GetSiteVar<int>("Fuels.CFSFuelType");
             decidFuelType   = PlugIn.ModelCore.GetSiteVar<int>("Fuels.DecidFuelType");
             percentConifer  = PlugIn.ModelCore.GetSiteVar<int>("Fuels.PercentConifer");
             percentHardwood = PlugIn.ModelCore.GetSiteVar<int>("Fuels.PercentHardwood");
@@ -98,13 +103,21 @@ namespace Landis.Extension.DynamicFire
 
         //---------------------------------------------------------------------
 
-        public static ISiteVar<IFireRegion> FireRegion
+        public static ISiteVar<IDynamicInputRecord> FireRegion
         {
             get {
                 return fire_regions;
             }
         }
+        //---------------------------------------------------------------------
 
+        public static ISiteVar<IDynamicInputRecord> FireRegion2
+        {
+            get
+            {
+                return fire_regions2;
+            }
+        }
         //---------------------------------------------------------------------
 
         public static ISiteVar<int> TimeOfLastFire
@@ -131,6 +144,14 @@ namespace Landis.Extension.DynamicFire
         }
         //---------------------------------------------------------------------
 
+        public static ISiteVar<int> CFSFuelType2
+        {
+            get
+            {
+                return cfsFuelType2;
+            }
+        }
+        //---------------------------------------------------------------------
         public static ISiteVar<int> DecidFuelType
         {
             get {

@@ -10,7 +10,9 @@ namespace Landis.Extension.DynamicFire
 {
     public class FireRegions
     {
-        public static List<IFireRegion> Dataset;
+        public static IDynamicInputRecord[] Dataset;
+        public static int MaxMapCode;
+        public static Dictionary<int, IDynamicInputRecord[]> AllData;
 
         //---------------------------------------------------------------------
 
@@ -36,15 +38,16 @@ namespace Landis.Extension.DynamicFire
 
             using (map) {
                 IntPixel pixel = map.BufferPixel;
+                MaxMapCode = 0;
                 foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
                     int mapCode = pixel.MapCode.Value;
                     if (site.IsActive)
                     {
-                        if (Dataset == null)
-                            PlugIn.ModelCore.UI.WriteLine("FireRegion.Dataset not set correctly.");
-                        IFireRegion fire_region = Find(mapCode);
+                        //if (Dataset == null)
+                         //   PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
+                        IDynamicInputRecord fire_region = Find(mapCode);
 
                         if (fire_region == null)
                         {
@@ -53,29 +56,76 @@ namespace Landis.Extension.DynamicFire
                         }
                         SiteVars.FireRegion[site] = fire_region;
                         fire_region.FireRegionSites.Add(site.Location);
+                        if (mapCode > MaxMapCode)
+                            MaxMapCode = mapCode;
                     }
                 }
             }
         }
 
-        private static IFireRegion Find(int mapCode)
+        public static void ReadMap2(string path)
         {
-            foreach (IFireRegion fireregion in Dataset)
+            IInputRaster<IntPixel> map;
+
+            try
             {
-                if (fireregion.MapCode == mapCode)
+                map = PlugIn.ModelCore.OpenRaster<IntPixel>(path);
+            }
+            catch (FileNotFoundException)
+            {
+                string mesg = string.Format("Error: The file {0} does not exist", path);
+                throw new System.ApplicationException(mesg);
+            }
+
+            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            {
+                string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
+                throw new System.ApplicationException(mesg);
+            }
+
+            using (map)
+            {
+                IntPixel pixel = map.BufferPixel;
+                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
                 {
-                    //PlugIn.ModelCore.UI.WriteLine("FireRegion mapCode {0}.  Find {1}", fireregion.MapCode, mapCode);
-                    return fireregion;
+                    map.ReadBufferPixel();
+                    int mapCode = pixel.MapCode.Value;
+                    if (site.IsActive)
+                    {
+                        //if (Dataset == null)
+                        //    PlugIn.ModelCore.Log.WriteLine("FireRegion.Dataset not set correctly.");
+                        IDynamicInputRecord fire_region = Find(mapCode);
+
+                        if (fire_region == null)
+                        {
+                            string mesg = string.Format("Unknown map code = {0}, Row/Column = {1}/{2}", mapCode, site.Location.Row, site.Location.Column);
+                            throw new System.ApplicationException(mesg);
+                        }
+                        SiteVars.FireRegion2[site] = fire_region;
+                        fire_region.FireRegionSites.Add(site.Location);
+                    }
+                }
+            }
+        }
+
+        public static IDynamicInputRecord Find(int mapCode)
+        {            
+            foreach (IDynamicInputRecord regionRecord in FireRegions.AllData[0])
+            {
+                if (regionRecord.MapCode == mapCode)
+                {
+                    //PlugIn.ModelCore.Log.WriteLine("FireRegion mapCode {0}.  Find {1}", fireregion.MapCode, mapCode);
+                    return regionRecord;
                 }
             }
             return null;
         }
 
-        public static IFireRegion FindName(string name)
+        public static IDynamicInputRecord FindName(string name)
         {
-            foreach(IFireRegion fireregion in Dataset)
-                if(fireregion.Name == name)
-                    return fireregion;
+            foreach(IDynamicInputRecord regionRecord in FireRegions.AllData[0])
+                if(regionRecord.Name == name)
+                    return regionRecord;
 
             return null;
         }

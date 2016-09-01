@@ -19,6 +19,8 @@ namespace Landis.Extension.DynamicFire
             int PC = SiteVars.PercentConifer[site];
 
             int fuelIndex = SiteVars.CFSFuelType[site];
+            if (fireEvent.InitiationFireRegion.MapCode > FireRegions.MaxMapCode)
+                fuelIndex = SiteVars.CFSFuelType2[site];
             int CBH = Event.FuelTypeParms[fuelIndex].CBH;
             //If M3 or M4 type (PDF >0) assign appropriate fuel index
             if (PDF > 0)
@@ -92,7 +94,7 @@ namespace Landis.Extension.DynamicFire
             if (CFB < 0.1 && ROS >= lowThreshold) severity = 2;
             if (CFB < 0.1 && ROS < lowThreshold) severity = 1;
 
-            //PlugIn.ModelCore.UI.WriteLine("      Severity = {0}.  CSI={1}, RSO={2}, ROS={3}, CFB={4}.", severity, CSI, RSO, ROS, CFB);
+            //PlugIn.ModelCore.Log.WriteLine("      Severity = {0}.  CSI={1}, RSO={2}, ROS={3}, CFB={4}.", severity, CSI, RSO, ROS, CFB);
 
             return severity;
         }

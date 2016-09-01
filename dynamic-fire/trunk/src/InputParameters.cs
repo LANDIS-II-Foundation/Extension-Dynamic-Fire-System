@@ -28,6 +28,7 @@ namespace Landis.Extension.DynamicFire
         string LogFileName{get;set;}
         string SummaryLogFileName{get;set;}
         string InitialWeatherPath{get;set;}
+        string DynamicFireRegionInputFile { get; set; }
     }
 }
 
@@ -52,6 +53,7 @@ namespace Landis.Extension.DynamicFire
         private string logFileName;
         private string summaryLogFileName;
         private string initialWeatherPath;
+        private string dynamicFireRegionInputFile;
 
 
         //---------------------------------------------------------------------
@@ -216,6 +218,21 @@ namespace Landis.Extension.DynamicFire
             set {
                     // FIXME: check for null or empty path (value);
                 summaryLogFileName = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Input file for the dynamic inputs
+        /// </summary>
+        public string DynamicFireRegionInputFile
+        {
+            get
+            {
+                return dynamicFireRegionInputFile;
+            }
+            set
+            {
+                dynamicFireRegionInputFile = value;
             }
         }
         //---------------------------------------------------------------------

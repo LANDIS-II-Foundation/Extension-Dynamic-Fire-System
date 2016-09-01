@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!--<!DOCTYPE metadata SYSTEM "http://www.esri.com/metadata/esriprof80.dtd">-->
+<metadata xml:lang="en"><Esri><MetaID>{2B290B72-2994-4CAD-8644-CBEB9C060834}</MetaID><CreaDate>20130404</CreaDate><CreaTime>09421500</CreaTime><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process Name="CopyRaster_1" ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Data Management Tools.tbx\CopyRaster" Date="20130404" Time="094215">CopyRaster "Reclass of Calculation" C:\BRM\LANDIS_II\Code\landis-extensions\trunk\dynamic-fire\branches\multi-regime\tests\dyn-input\fire-ecoregion2.img # # # NONE NONE 8_BIT_UNSIGNED</Process></lineage></DataProperties></Esri></metadata>

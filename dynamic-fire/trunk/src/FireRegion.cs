@@ -18,6 +18,7 @@ namespace Landis.Extension.DynamicFire
         
         double MeanSize  {get;set;}
         double StandardDeviation  {get;set;}
+        int MinSize { get; set; }
         int MaxSize {get;set;}
         int SpringFMCLo  {get;set;}
         int SpringFMCHi  {get;set;}
@@ -49,6 +50,7 @@ namespace Landis.Extension.DynamicFire
         
         private double meanSize;
         private double standardDeviation;
+        private int minSize;
         private int maxSize;
         private int springFMCLo;
         private int springFMCHi;
@@ -117,6 +119,7 @@ namespace Landis.Extension.DynamicFire
                 return meanSize;
             }
             set {
+
                 meanSize = value;
             }
         }
@@ -138,6 +141,24 @@ namespace Landis.Extension.DynamicFire
             }
         }
         
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Minimum event size (hectares).
+        /// </summary>
+        public int MinSize
+        {
+            get
+            {
+                return minSize;
+            }
+            set
+            {
+                if (value < 0)
+                    throw new InputValueException(value.ToString(),
+                                                  "Value must be = or > 0.");
+                minSize = value;
+            }
+        }
         //---------------------------------------------------------------------
         /// <summary>
         /// Maximum event size (hectares).
