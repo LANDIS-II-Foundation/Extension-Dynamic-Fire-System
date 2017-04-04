@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<project name="Fire2006">
-    <property name="Landis-core"
-              value="5.1" />
-    <include buildfile="${edu.wisc.forest.flel.build}/project.build" />
-</project>
