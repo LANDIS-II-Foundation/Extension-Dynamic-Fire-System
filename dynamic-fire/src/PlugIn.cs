@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using System.Reflection;
+using Landis.Library.Metadata;
 
 namespace Landis.Extension.DynamicFire
 {
@@ -27,8 +28,8 @@ namespace Landis.Extension.DynamicFire
         public static readonly string ExtensionName = "Dynamic Fire System";
 
         private string mapNameTemplate;
-        private StreamWriter log;
-        private StreamWriter summaryLog;
+        public static MetadataTable<EventsLog> eventLog;
+        public static MetadataTable<SummaryLog> summaryLog;
         private int[] summaryFireRegionEventCount;
         private int[] ecoregionSitesCount;
 
@@ -118,44 +119,32 @@ namespace Landis.Extension.DynamicFire
             }
 
             modelCore.UI.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
-            try {
-                log = Landis.Data.CreateTextFile(parameters.LogFileName);
-            }
-            catch (Exception err) {
-                string mesg = string.Format("{0}", err.Message);
-                throw new System.ApplicationException(mesg);
-            }
 
-            log.AutoFlush = true;
-            log.Write("Time,InitSite,InitFireRegion,InitFuel,InitPercentConifer,SelectedSizeOrDuration,SizeBin,Duration,FireSeason,WindSpeed,WindDirection,FFMC,BUI,PercentCuring,ISI,SitesChecked,CohortsKilled,MeanSeverity,");
+            MetadataHandler.InitializeMetadata(mapNameTemplate, parameters.LogFileName, parameters.SummaryLogFileName);
+
+            List<string> colnames = new List<string>();
             foreach (IFireRegion fire_region in FireRegions.Dataset)
             {
-                  log.Write("eco-{0},", fire_region.MapCode);
+                colnames.Add(fire_region.MapCode.ToString());
             }
-            log.Write("TotalSitesInEvent");
-            log.WriteLine("");
+            ExtensionMetadata.ColumnNames = colnames;
 
-            try {
-                summaryLog = Landis.Data.CreateTextFile(parameters.SummaryLogFileName);
-            }
-            catch (Exception err) {
-                string mesg = string.Format("{0}", err.Message);
-                throw new System.ApplicationException(mesg);
-            }
+            summaryLog.Clear();
+            SummaryLog sl = new SummaryLog();
+            sl.Time = 0;
+            sl.TotalSitesBurned = 0;
+            sl.NumberFires = 0;
+            sl.EcoMaps_ = new int[FireRegions.Dataset.Count];
+            int i = 0;
 
-            summaryLog.AutoFlush = true;
-            summaryLog.Write("TimeStep, TotalSitesBurned, NumberFires");
             foreach (IFireRegion fire_region in FireRegions.Dataset)
             {
-                    summaryLog.Write(", eco-{0}", fire_region.MapCode);
+                sl.EcoMaps_[i] = ecoregionSitesCount[fire_region.Index];
+                i = i + 1;
             }
-            summaryLog.WriteLine("");
-            summaryLog.Write("0, 0, 0");
-            foreach (IFireRegion fire_region in FireRegions.Dataset)
-            {
-                    summaryLog.Write(", {0}", ecoregionSitesCount[fire_region.Index]);
-            }
-            summaryLog.WriteLine("");
+
+            summaryLog.AddObject(sl);
+            summaryLog.WriteToFile();
 
             if (isDebugEnabled)
                 modelCore.UI.WriteLine("Initialization done");
@@ -407,35 +396,41 @@ namespace Landis.Extension.DynamicFire
             int totalSitesInEvent = 0;
             if (fireEvent.EventSeverity > 0)
             {
-                log.Write("{0},\"{1}\",{2},{3},{4},{5:0.00},{6},{7:0.00},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17:0.00}",
-                          currentTime,
-                          fireEvent.StartLocation,
-                          fireEvent.InitiationFireRegion.Name,
-                          fireEvent.InitiationFuel,
-                          fireEvent.InitiationPercentConifer,
-                          fireEvent.MaxFireParameter,
-                          fireEvent.SizeBin,
-                          fireEvent.MaxDuration,
-                          fireEvent.FireSeason.NameOfSeason,
-                          fireEvent.WindSpeed,
-                          fireEvent.WindDirection,
-                          fireEvent.FFMC,
-                          fireEvent.BuildUpIndex,
-                          fireEvent.FireSeason.PercentCuring,
-                          fireEvent.ISI,
-                          fireEvent.NumSitesChecked,
-                          fireEvent.CohortsKilled,
-                          fireEvent.EventSeverity);
+                eventLog.Clear();
+                EventsLog el = new EventsLog();
+                el.Time = currentTime;
+                el.InitSite = fireEvent.StartLocation;
+                el.InitFireRegion = fireEvent.InitiationFireRegion.Name;
+                el.InitFuel = fireEvent.InitiationFuel;
+                el.InitPercentConifer = fireEvent.InitiationPercentConifer;
+                el.SelectedSizeOrDuration = fireEvent.MaxFireParameter;
+                el.SizeBin = fireEvent.SizeBin;
+                el.Duration = fireEvent.MaxDuration;
+                el.FireSeason = fireEvent.FireSeason.NameOfSeason;
+                el.WindSpeed = fireEvent.WindSpeed;
+                el.WindDirection = fireEvent.WindDirection;
+                el.FFMC = fireEvent.FFMC;
+                el.BUI = fireEvent.BuildUpIndex;
+                el.PercentCuring = fireEvent.FireSeason.PercentCuring;
+                el.ISI = fireEvent.ISI;
+                el.SitesChecked = fireEvent.NumSitesChecked;
+                el.CohortsKilled = fireEvent.CohortsKilled;
+                el.MeanSeverity = fireEvent.EventSeverity;
+                el.EcoMaps_ = new int[FireRegions.Dataset.Count];
+                int i = 0;
                 //----------
                 foreach (IFireRegion fire_region in FireRegions.Dataset)
                 {
-                        log.Write(",{0}", fireEvent.SitesInEvent[fire_region.Index]);
-                        totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
-                        summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
+                    el.EcoMaps_[i] = fireEvent.SitesInEvent[fire_region.Index];
+                    totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
+                    summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
+                    i = i + 1;
                 }
                 summaryTotalSites += totalSitesInEvent;
-                log.Write(", {0}", totalSitesInEvent);
-                log.WriteLine("");
+                el.TotalSitesInEvent = totalSitesInEvent;
+                eventLog.AddObject(el);
+                eventLog.WriteToFile();
+
             }
         }
 
@@ -443,12 +438,21 @@ namespace Landis.Extension.DynamicFire
 
         private void WriteSummaryLog(int   currentTime)
         {
-            summaryLog.Write("{0},{1},{2}", currentTime, summaryTotalSites, summaryEventCount);
+            summaryLog.Clear();
+            SummaryLog sl = new SummaryLog();
+            sl.Time = currentTime;
+            sl.TotalSitesBurned = summaryTotalSites;
+            sl.NumberFires = summaryEventCount;
+            sl.EcoMaps_ = new int[FireRegions.Dataset.Count];
+            int i = 0;
+            
             foreach (IFireRegion fire_region in FireRegions.Dataset)
             {
-                    summaryLog.Write(",{0}", summaryFireRegionEventCount[fire_region.Index]);
+                sl.EcoMaps_[i] = summaryFireRegionEventCount[fire_region.Index];
+                i = i + 1;
             }
-            summaryLog.WriteLine("");
+            summaryLog.AddObject(sl);
+            summaryLog.WriteToFile();
         }
 
         private static List<Location> Shuffle<Location>(List<Location> list)

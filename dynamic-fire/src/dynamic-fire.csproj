@@ -45,6 +45,10 @@
     <Reference Include="Landis.Library.Cohorts">
       <HintPath>..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
+    <Reference Include="Landis.Library.Metadata, Version=1.0.1.31296, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Landis.Library.Metadata.dll</HintPath>
+    </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4023.30148, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
@@ -75,6 +79,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EventRegion.cs" />
+    <Compile Include="EventsLog.cs" />
     <Compile Include="FireDamages.cs" />
     <Compile Include="FireRegion.cs">
       <SubType>Code</SubType>
@@ -95,6 +100,7 @@
     <Compile Include="MapNames.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MetadataHandler.cs" />
     <Compile Include="PlugIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +108,7 @@
     <Compile Include="SiteVars.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SummaryLog.cs" />
     <Compile Include="Topography.cs" />
     <Compile Include="ShortPixel.cs">
       <SubType>Code</SubType>
