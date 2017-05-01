@@ -52,7 +52,7 @@ DisturbanceConversionTable
 >>	6	40		ClearcutSprucePlant	<< If a harvest prescription includes planting, 
 							<< this entry could be an alternative method for assigning fuel type 6
 
-MapFileNames	fire/FuelType-{timestep}.img
+MapFileNames		fire/FuelType-{timestep}.img
 PctConiferFileName	fire/PctConifer-{timestep}.img
 PctDeadFirFileName	fire/PctDeadFir-{timestep}.img
 
