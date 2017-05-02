@@ -1,13 +1,16 @@
 LandisData  "Dynamic Fire System"
 
->> Note:  All inputs are provided as examples only.  They are not intended to serve as default values.
-
 Timestep  10
 
-EventSizeType	size_based  <<'size-based' or 'duration_based'
+>>---------------------------------------
+>> FIRE INPUTS
+>>----------------------------------------
+
+EventSizeType	size_based  		<<'size-based' or 'duration_based'
 
 
-BuildUpIndex	Y	<< yes or no; Y or N
+BuildUpIndex	Y			<< yes or no; Y or N
+
 
 >> Fire Region Data Table
 >> Fire region| Fire Size    | Seasonal Foliar Moisture Content (FMC) Data: Hi, Lo, and Proportion (Pr) | Other Ecorgion Data
@@ -18,13 +21,16 @@ BuildUpIndex	Y	<< yes or no; Y or N
    2    fire2   4.5  0.3  50   85      105     0.70   94      120     0.40    120     120     0.50        2         0.2
    3    fire3   5.0  0.5  50   85      110     0.60   90      120     0.70    120     120     0.50        16        0.1
 
-InitialFireEcoregionsMap  fire-ecoregion.gis
+InitialFireEcoregionsMap  	dynamic-fire_Ecoregions_s1e2.gis
+
+
 
 DynamicEcoregionTable
 >>Year	FileName
 
-GroundSlopeFile        slope.gis
-UphillSlopeAzimuthMap  upslope_azi.gis
+GroundSlopeFile        		dynamic-fire_GroundSlope_s1e2.gis
+UphillSlopeAzimuthMap  		dynamic-fire_UphillSlope_s1e2.gis
+
 
 SeasonTable
 >> Season  Leaf,    Prop of  Percent  DayLength
@@ -34,7 +40,7 @@ SeasonTable
    Summer  LeafOn   0.50     51		1.0
    Fall    LeafOff  0.30     100	1.0
 
-InitialWeatherDatabase  Fire_Weather_Data.csv  << Example weather from Labrador
+InitialWeatherDatabase  	dynamic-fire_WeatherData_s1e2.csv  << Example weather from Labrador
 
 DynamicWeatherTable
 >>Year  FileName
@@ -76,6 +82,7 @@ FireDamageTable
     100%                1
 
 
-MapNames  fire/severity-{timestep}.img
-LogFile   dynamic-fire-test-log.csv
-SummaryLogFile fire/summary-log.csv
+MapNames  		fire/severity-{timestep}.img
+LogFile   		fire/dynamic-fire-test-log.csv
+SummaryLogFile 		fire/summary-log.csv
+
