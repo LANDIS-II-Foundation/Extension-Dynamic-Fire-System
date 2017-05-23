@@ -67,7 +67,7 @@ namespace Landis.Extension.DynamicFire
         public double MeanSeverity { set; get; }
 
         [DataFieldAttribute(Desc = "Ecoregion Sites by MapCode", ColumnList = true)]
-        public int[] EcoMaps_ { set; get; }
+        public double[] EcoMaps_ { set; get; }
 
         [DataFieldAttribute(Desc = "Total Sites In Event")]
         public int TotalSitesInEvent { set; get; }
