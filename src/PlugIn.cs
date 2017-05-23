@@ -87,19 +87,7 @@ namespace Landis.Extension.DynamicFire
 
         public override void Initialize()
         {
-            if (Debugger.Launch())
-            {
-                modelCore.UI.WriteLine("Debugger is attached");
-                if (Debugger.IsLogging())
-                {
-                    modelCore.UI.WriteLine("Debugging is logging");
-                }
-                Debugger.Break();
-            }
-            else
-            {
-                modelCore.UI.WriteLine("Debugger not attached");
-            }
+            
             Timestep            = parameters.Timestep;
             fireSizeType        = parameters.FireSizeType;
             bui                 = parameters.BUI;
