@@ -19,6 +19,6 @@ namespace Landis.Extension.DynamicFire
         public int NumberFires { set; get; }
 
         [DataFieldAttribute(Desc = "Ecoregion Sites by Map Code", ColumnList = true)]
-        public int[] EcoMaps_ { set; get; }
+        public double[] EcoMaps_ { set; get; }
     }
 }

@@ -30,34 +30,37 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Landis.Core">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Landis.Library.AgeOnlyCohorts">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Landis.Library.Cohorts">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Landis.Library.Metadata">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Landis.SpatialModeling">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="log4net">
-     <SpecificVersion>False</SpecificVersion>
-     <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,7 +68,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-	<Reference Include="Troschuetz.Random" />
+    <Reference Include="Troschuetz.Random" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BytePixel.cs" />
@@ -96,11 +99,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>rem call $(ProjectDir)attachDebugger.bat $(TargetDir) $(TargetName)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>call $(SolutionDir)\install-libs.cmd</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -110,5 +113,3 @@
   </Target>
   -->
 </Project>
-
-
