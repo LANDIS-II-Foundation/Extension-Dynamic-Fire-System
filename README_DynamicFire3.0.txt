@@ -4,16 +4,17 @@ Project Component:	Extension-Dynamic-Fire
 Component Deposition:	https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire
 Author:			LANDIS-II Foundation
 Origin Date:		30 Apr 2017
-Final Date:		30 Apr 2017
+Final Date:		31 May 2017
 
 
 Welcome to the source code repository for Extension-Dynamic-Fire, a LANDIS-II disturbance extension.
 
 Extension-Dynamic-Fire couples with Extension-Dynamic-Fuels to produce the Dynamic Fire Fuels System.
-The Dynamic Fire Fuels System uses various probability models to account for the basic characteristics of fire 
-at any given point on the landscape; namely, the possibility of ignition and initiation, the likelihood of
-fire spread, the probabilities of fire event size and severity, and the possibilities of damge
-to tree cohorts.
+The Dynamic Fire Fuel System couples Extension-Dynamic-Fire with a dynamic fuels extension, currently
+either Extension-Dynamic-Fuels or Extension-Dynamic-Biomass-Fuels. The Dynamic Fire Fuels System uses various 
+probability models to account for the basic characteristics of fire at any given point on the landscape; namely, 
+the possibility of ignition and initiation, the likelihood of fire spread, the probabilities of fire event size 
+and severity, and the possibilities of damge to tree cohorts.
 
 Fire starts are based upon a hierarchical fire frequency model that divides fire
 occurrence into two separate events – fire ignition and fire initiation. A fire ignition is defined as 
@@ -36,6 +37,11 @@ that allows the fire regime (i.e., fire size distribution and fire rotation) to 
 landscape configuration of fuels. When the duration-based option is applied all sites with a minimum 
 cumulative travel time that is less than or equal to the predetermined fire duration are selected to 
 become the burned area for that individual fire event.
+
+The Dynamic Fuel Fire System requires that a dynamic fuels extension (currently, either Extension-Dynamic-Fuels or 
+Extension-Dynamic-Biomass-Fuels) be in close synchrony with a dynamic fire extension (currently, Extension-Dynamic-Fire).
+For this reason this extension should be listed IMMEDIATELY BEFORE "Extension-Dynamic-Fire" in the Disturbance Extension
+section of the LANDIS-II scenario setup file (see the scenario_*.txt file in the \examples directory). 
 
 
  

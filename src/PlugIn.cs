@@ -11,6 +11,7 @@ using System.IO;
 using System.Data;
 using System.Reflection;
 using Landis.Library.Metadata;
+using System.Diagnostics;
 
 namespace Landis.Extension.DynamicFire
 {
@@ -86,6 +87,7 @@ namespace Landis.Extension.DynamicFire
 
         public override void Initialize()
         {
+            
             Timestep            = parameters.Timestep;
             fireSizeType        = parameters.FireSizeType;
             bui                 = parameters.BUI;
@@ -120,8 +122,6 @@ namespace Landis.Extension.DynamicFire
 
             modelCore.UI.WriteLine("   Opening and Initializing Fire log files \"{0}\" and \"{1}\"...", parameters.LogFileName, parameters.SummaryLogFileName);
 
-            MetadataHandler.InitializeMetadata(mapNameTemplate, parameters.LogFileName, parameters.SummaryLogFileName);
-
             List<string> colnames = new List<string>();
             foreach (IFireRegion fire_region in FireRegions.Dataset)
             {
@@ -129,12 +129,16 @@ namespace Landis.Extension.DynamicFire
             }
             ExtensionMetadata.ColumnNames = colnames;
 
+            MetadataHandler.InitializeMetadata(mapNameTemplate, parameters.LogFileName, parameters.SummaryLogFileName);
+
+            
+
             summaryLog.Clear();
             SummaryLog sl = new SummaryLog();
             sl.Time = 0;
             sl.TotalSitesBurned = 0;
             sl.NumberFires = 0;
-            sl.EcoMaps_ = new int[FireRegions.Dataset.Count];
+            sl.EcoMaps_ = new double[FireRegions.Dataset.Count];
             int i = 0;
 
             foreach (IFireRegion fire_region in FireRegions.Dataset)
@@ -142,7 +146,6 @@ namespace Landis.Extension.DynamicFire
                 sl.EcoMaps_[i] = ecoregionSitesCount[fire_region.Index];
                 i = i + 1;
             }
-
             summaryLog.AddObject(sl);
             summaryLog.WriteToFile();
 
@@ -416,7 +419,7 @@ namespace Landis.Extension.DynamicFire
                 el.SitesChecked = fireEvent.NumSitesChecked;
                 el.CohortsKilled = fireEvent.CohortsKilled;
                 el.MeanSeverity = fireEvent.EventSeverity;
-                el.EcoMaps_ = new int[FireRegions.Dataset.Count];
+                el.EcoMaps_ = new double[FireRegions.Dataset.Count];
                 int i = 0;
                 //----------
                 foreach (IFireRegion fire_region in FireRegions.Dataset)
@@ -443,7 +446,7 @@ namespace Landis.Extension.DynamicFire
             sl.Time = currentTime;
             sl.TotalSitesBurned = summaryTotalSites;
             sl.NumberFires = summaryEventCount;
-            sl.EcoMaps_ = new int[FireRegions.Dataset.Count];
+            sl.EcoMaps_ = new double[FireRegions.Dataset.Count];
             int i = 0;
             
             foreach (IFireRegion fire_region in FireRegions.Dataset)

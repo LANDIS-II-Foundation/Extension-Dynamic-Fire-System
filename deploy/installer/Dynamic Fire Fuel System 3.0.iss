@@ -30,10 +30,10 @@ Source: ..\..\src\bin\debug\Landis.Extension.DynamicFuels.dll; DestDir: {#ExtDir
 
 
 ; Complete example for testing the extension
-Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\Dynamic Fire
-Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\Dynamic Fire
-Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\Dynamic Fire
-Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\Dynamic Fire
+Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
+Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
+Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
+Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
 
 
 ; LANDIS-II identifies the extensions with the info in these .txt file
