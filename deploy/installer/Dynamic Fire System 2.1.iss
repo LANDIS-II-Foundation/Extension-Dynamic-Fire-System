@@ -39,10 +39,10 @@ Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
 ; LANDIS-II identifies the extensions with the info in these .txt file
 ; NB. New releases must modify the name of these file and the info in them
 
-#define InfoTxta "Dynamic Fire Component 3.0.txt"
+#define InfoTxta "Dynamic Fire Component 2.1.txt"
 Source: {#InfoTxta}; DestDir: {#LandisPlugInDir}
 
-#define InfoTxtb "Dynamic Fuel Component 2.0.txt"
+#define InfoTxtb "Dynamic Fuel Component 2.1.txt"
 Source: {#InfoTxtb}; DestDir: {#LandisPlugInDir}
 
 
