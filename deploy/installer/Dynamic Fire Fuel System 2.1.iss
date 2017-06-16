@@ -1,6 +1,6 @@
 #define PackageName      "Dynamic Fire Fuel System"
 #define PackageNameLong  "Dynamic Fire Fuel System"
-#define Version          "3.0"
+#define Version          "2.1"
 #define ReleaseType      "official"
 #define CoreVersion      "6.0"
 #define CoreReleaseAbbr  ""
@@ -26,7 +26,7 @@ Source: ..\..\src\bin\debug\Landis.Extension.DynamicFuels.dll; DestDir: {#ExtDir
 
 
 ; User Guides are no longer shipped with installer
-; Source: docs\LANDIS-II Dynamic Fire System v2.0.3 User Guide.pdf; DestDir: {#AppDir}\docs
+; Source: docs\LANDIS-II Dynamic Fire System v2.1 User Guide.pdf; DestDir: {#AppDir}\docs
 
 
 ; Complete example for testing the extension
