@@ -1,10 +1,10 @@
-Title:			README_DynamicFire3.0
+Title:			README_DynamicFire2.1
 Project:		LANDIS-II Landscape Change Model
 Project Component:	Extension-Dynamic-Fire
 Component Deposition:	https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire
 Author:			LANDIS-II Foundation
 Origin Date:		30 Apr 2017
-Final Date:		31 May 2017
+Final Date:		15 Jun 2017
 
 
 Welcome to the source code repository for Extension-Dynamic-Fire, a LANDIS-II disturbance extension.
@@ -17,7 +17,7 @@ the possibility of ignition and initiation, the likelihood of fire spread, the p
 and severity, and the possibilities of damge to tree cohorts.
 
 Fire starts are based upon a hierarchical fire frequency model that divides fire
-occurrence into two separate events – fire ignition and fire initiation. A fire ignition is defined as 
+occurrence into two separate events â€“ fire ignition and fire initiation. A fire ignition is defined as 
 the first instantaneous instance of a fire, caused by either natural or anthropogenic sources. Fire 
 initiation is defined as the likelihood that a fire ignition will burn an entire cell, and is a 
 probabilistic function of the fuel conditions of that cell.
