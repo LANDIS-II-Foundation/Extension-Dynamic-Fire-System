@@ -6,5 +6,4 @@ Type         disturbance:fuel
 Assembly     Landis.Extension.DynamicFuels
 Class        Landis.Extension.DynamicFuels.PlugIn
 Description  "Dynamic Fire Fuel System"
-UserGuide    "LANDIS-II Dynamic Fuel System v2.1 User Guide.pdf"
 CoreVersion  6.0
