@@ -1,6 +1,6 @@
 #define PackageName      "Dynamic Fire Fuel System"
 #define PackageNameLong  "Dynamic Fire Fuel System"
-#define Version          "3.0"
+#define Version          "2.1"
 #define ReleaseType      "official"
 #define CoreVersion      "6.0"
 #define CoreReleaseAbbr  ""
@@ -25,24 +25,20 @@ Source: ..\..\src\bin\debug\Landis.Extension.DynamicFuels.dll; DestDir: {#ExtDir
 ; (There are no auxiliary libraries)
 
 
-; User Guides are no longer shipped with installer
-; Source: docs\LANDIS-II Dynamic Fire System v2.0.3 User Guide.pdf; DestDir: {#AppDir}\docs
-
-
 ; Complete example for testing the extension
-Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
-Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
-Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
-Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System
+Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System; Flags: replacesameversion
+Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System; Flags: replacesameversion
+Source: ..\examples\*.bat; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System; Flags: replacesameversion
+Source: ..\examples\*.csv; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System; Flags: replacesameversion
 
 
 ; LANDIS-II identifies the extensions with the info in these .txt file
 ; NB. New releases must modify the name of these file and the info in them
 
-#define InfoTxta "Dynamic Fire Component 3.0.txt"
+#define InfoTxta "Dynamic Fire Component 2.1.txt"
 Source: {#InfoTxta}; DestDir: {#LandisPlugInDir}
 
-#define InfoTxtb "Dynamic Fuel Component 2.0.txt"
+#define InfoTxtb "Dynamic Fuel Component 2.1.txt"
 Source: {#InfoTxtb}; DestDir: {#LandisPlugInDir}
 
 
