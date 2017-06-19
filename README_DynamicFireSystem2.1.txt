@@ -1,16 +1,16 @@
-Title:			README_DynamicFire2.1
+﻿Title:			README_DynamicFireSystem2.1
 Project:		LANDIS-II Landscape Change Model
 Project Component:	Extension-Dynamic-Fire
-Component Deposition:	https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire
+Component Deposition:	https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire-System
 Author:			LANDIS-II Foundation
 Origin Date:		30 Apr 2017
 Final Date:		15 Jun 2017
 
 
-Welcome to the source code repository for Extension-Dynamic-Fire, a LANDIS-II disturbance extension.
+Welcome to the source code repository for Extension-Dynamic-Fire-System, a LANDIS-II disturbance extension.
 
-Extension-Dynamic-Fire couples with Extension-Dynamic-Fuels to produce the Dynamic Fire Fuels System.
-The Dynamic Fire Fuel System couples Extension-Dynamic-Fire with a dynamic fuels extension, currently
+Extension-Dynamic-Fire-System couples with Extension-Dynamic-Fuel-System to produce the Dynamic Fire Fuels System.
+The Dynamic Fire Fuel System couples Extension-Dynamic-Fire-System with a dynamic fuels extension, currently
 either Extension-Dynamic-Fuels or Extension-Dynamic-Biomass-Fuels. The Dynamic Fire Fuels System uses various 
 probability models to account for the basic characteristics of fire at any given point on the landscape; namely, 
 the possibility of ignition and initiation, the likelihood of fire spread, the probabilities of fire event size 

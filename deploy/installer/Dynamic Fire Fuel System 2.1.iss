@@ -25,10 +25,6 @@ Source: ..\..\src\bin\debug\Landis.Extension.DynamicFuels.dll; DestDir: {#ExtDir
 ; (There are no auxiliary libraries)
 
 
-; User Guides are no longer shipped with installer
-; Source: docs\LANDIS-II Dynamic Fire System v2.1 User Guide.pdf; DestDir: {#AppDir}\docs
-
-
 ; Complete example for testing the extension
 Source: ..\examples\*.txt; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System; Flags: replacesameversion
 Source: ..\examples\*.gis; DestDir: {#AppDir}\examples\Dynamic Fire Fuel System; Flags: replacesameversion
