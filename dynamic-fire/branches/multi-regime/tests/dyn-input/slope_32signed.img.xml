@@ -1,3 +1,0 @@
-<?xml version="1.0"?>
-<!--<!DOCTYPE metadata SYSTEM "http://www.esri.com/metadata/esriprof80.dtd">-->
-<metadata xml:lang="en"><Esri><MetaID>{B22514EF-AB51-49B3-81A3-9BF7C7A5DA40}</MetaID><CreaDate>20130405</CreaDate><CreaTime>10355700</CreaTime><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process Name="CopyRaster_2" ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Data Management Tools.tbx\CopyRaster" Date="20130405" Time="103557">CopyRaster slope.gis C:\BRM\LANDIS_II\Code\landis-extensions\trunk\dynamic-fire\branches\multi-regime\tests\dyn-input\slope_32signed.img # # # NONE NONE 32_BIT_SIGNED</Process></lineage></DataProperties></Esri></metadata>
