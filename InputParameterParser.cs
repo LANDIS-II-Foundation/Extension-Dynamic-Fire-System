@@ -56,6 +56,15 @@ namespace Landis.Extension.DynamicFire
                 PlugIn.ReadClimateLibrary = true;
             }
 
+            if(climateConfigFile.Value == null)
+            {
+                throw new System.IO.FileNotFoundException("The Climate Config File does not exist.");
+            }
+            else if (!System.IO.File.Exists(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), climateConfigFile.Value)))
+            {
+                throw new System.IO.FileNotFoundException("The path specified for the Climate Config File is invalid.", climateConfigFile.Value);
+            }
+
             InputVar<double> rha = new InputVar<double>("RelativeHumiditySlopeAdjust");
             if (ReadOptionalVar(rha))
                 parameters.RelativeHumiditySlopeAdjustment = rha.Value;
