@@ -1,7 +1,6 @@
-//  Copyright 2006-2010 USFS Portland State University, Northern Research Station, University of Wisconsin
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using Landis.Core;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +27,7 @@ namespace Landis.Extension.DynamicFire
         }
         static InputParameterParser()
         {
-            Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
+            //Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
             RegisterForInputValues();
         }
 
@@ -37,11 +36,6 @@ namespace Landis.Extension.DynamicFire
         protected override IInputParameters Parse()
         {
             ReadLandisDataVar();
-
-            //InputVar<string> landisData = new InputVar<string>("LandisData");
-            //ReadVar(landisData);
-            //if (landisData.Value.Actual != PlugIn.ExtensionName)
-            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
 
             InputParameters parameters = new InputParameters();
 
@@ -612,22 +606,22 @@ namespace Landis.Extension.DynamicFire
         /// </summary>
         public static void RegisterForInputValues()
         {
-            Edu.Wisc.Forest.Flel.Util.Type.SetDescription<BaseFuelType>("Base Fuel Type Code");
+            Landis.Utilities.Type.SetDescription<BaseFuelType>("Base Fuel Type Code");
             InputValues.Register<BaseFuelType>(BFParse);
 
-            Edu.Wisc.Forest.Flel.Util.Type.SetDescription<SurfaceFuelType>("Surface Fuel Type Code");
+            Landis.Utilities.Type.SetDescription<SurfaceFuelType>("Surface Fuel Type Code");
             InputValues.Register<SurfaceFuelType>(SFParse);
 
-            Edu.Wisc.Forest.Flel.Util.Type.SetDescription<SizeType>("Size Type Indicator");
+            Landis.Utilities.Type.SetDescription<SizeType>("Size Type Indicator");
             InputValues.Register<SizeType>(STParse);
 
-            Edu.Wisc.Forest.Flel.Util.Type.SetDescription<SeasonName>("Season Name");
+            Landis.Utilities.Type.SetDescription<SeasonName>("Season Name");
             InputValues.Register<SeasonName>(SNParse);
 
-            Edu.Wisc.Forest.Flel.Util.Type.SetDescription<LeafOnOff>("Leaf On or Off");
+            Landis.Utilities.Type.SetDescription<LeafOnOff>("Leaf On or Off");
             InputValues.Register<LeafOnOff>(LooParse);
 
-            Edu.Wisc.Forest.Flel.Util.Type.SetDescription<Distribution>("Random Number Distribution");
+            Landis.Utilities.Type.SetDescription<Distribution>("Random Number Distribution");
             InputValues.Register<Distribution>(DistParse);
         }
         //---------------------------------------------------------------------

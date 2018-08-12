@@ -157,7 +157,7 @@ namespace Landis.Extension.DynamicFire
             {
                 //GammaDistribution randVar = new GammaDistribution(RandomNumberGenerator.Singleton);
                 PlugIn.ModelCore.GammaDistribution.Alpha = parameter1;      // mean
-                PlugIn.ModelCore.GammaDistribution.Theta = parameter2;   // std dev
+                PlugIn.ModelCore.GammaDistribution.Beta = parameter2;   // std dev
                 PlugIn.ModelCore.GammaDistribution.NextDouble();
             }
             if(dist == Distribution.Weibull)

@@ -6,4 +6,4 @@ Type         disturbance:fire
 Assembly     Landis.Extension.DynamicFire
 Class        Landis.Extension.DynamicFire.PlugIn
 Description  "Dynamic Fire System"
-CoreVersion  6.0
+CoreVersion  7.0

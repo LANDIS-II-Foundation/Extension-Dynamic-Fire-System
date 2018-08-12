@@ -1,116 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{62771E6E-2D49-4ADD-A860-FCAEB4D01549}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dynamic_fire</RootNamespace>
-    <AssemblyName>Landis.Extension.DynamicFire</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Landis.Extension.DynamicFire</RootNamespace>
+    <AssemblyName>Landis.Extension.DynamicFire-v3</AssemblyName>
+    <AssemblyTitle>Landis.Extension.DynamicFire-v3</AssemblyTitle>
+    <AssemblyCompany>Landis-II-Foundation</AssemblyCompany>
+    <AssemblyProduct>Landis.Extension.DynamicFire-v3</AssemblyProduct>
+    <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
+    <AssemblyVersion>3.0</AssemblyVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire-System</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseUrl>https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire-System/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
+    <NeutralLanguage>English</NeutralLanguage>
+    <Authors>Landis-II-Foundation</Authors>
+    <Product>Landis.Extension.DynamicFire-v3</Product>
+    <Copyright>Landis-II-Foundation</Copyright>
+    <Version>3.0</Version>
+    <PackageTags>LANDIS-II;Landis;Extension;fire</PackageTags>
+    <Description>Dynamic Fire System for LANDIS-II</Description>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <FileVersion>7.0.0.0</FileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>c:\program files\landis-ii\v6\bin\extensions\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Edu.Wisc.Forest.Flel.Util">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Landis.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Landis.Library.AgeOnlyCohorts">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Landis.Library.Cohorts">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Landis.Library.Metadata">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Landis.SpatialModeling">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="log4net">
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Troschuetz.Random" />
+    <PackageReference Include="Landis.Core" Version="2.0.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="BytePixel.cs" />
-    <Compile Include="CSVParser.cs" />
-    <Compile Include="DynamicFireRegion.cs" />
-    <Compile Include="DynamicWeather.cs" />
-    <Compile Include="Event.cs" />
-    <Compile Include="EventRegion.cs" />
-    <Compile Include="EventsLog.cs" />
-    <Compile Include="FireDamages.cs" />
-    <Compile Include="FireRegion.cs" />
-    <Compile Include="FireRegions.cs" />
-    <Compile Include="FireSeverity.cs" />
-    <Compile Include="FuelEffects.cs" />
-    <Compile Include="FuelType.cs" />
-    <Compile Include="InputParameterParser.cs" />
-    <Compile Include="InputParameters.cs" />
-    <Compile Include="IntPixel.cs" />
-    <Compile Include="MapNames.cs" />
-    <Compile Include="MetadataHandler.cs" />
-    <Compile Include="PlugIn.cs" />
-    <Compile Include="SeasonParameters.cs" />
-    <Compile Include="SiteVars.cs" />
-    <Compile Include="SummaryLog.cs" />
-    <Compile Include="Topography.cs" />
-    <Compile Include="ShortPixel.cs" />
-    <Compile Include="Weather.cs" />
+    <Reference Include="Landis.Library.AgeOnlyCohorts-v3">
+      <HintPath>lib\Landis.Library.AgeOnlyCohorts-v3.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Cohorts-v2">
+      <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Metadata-v2">
+      <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-<!--
-  <PropertyGroup>
-    <PostBuildEvent>rem call $(ProjectDir)attachDebugger.bat $(TargetDir) $(TargetName)</PostBuildEvent>
-  </PropertyGroup>
-  -->
-  <PropertyGroup>
-    <PreBuildEvent>call $(SolutionDir)\install-libs.cmd</PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
+
+
