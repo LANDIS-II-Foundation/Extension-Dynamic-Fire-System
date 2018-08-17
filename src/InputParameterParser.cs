@@ -27,7 +27,7 @@ namespace Landis.Extension.DynamicFire
         }
         static InputParameterParser()
         {
-            //Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
+            Landis.Utilities.Percentage p = new Landis.Utilities.Percentage();
             RegisterForInputValues();
         }
 
