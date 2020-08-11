@@ -1,7 +1,6 @@
-//  Copyright 2006-2010 USFS Portland State University, Northern Research Station, University of Wisconsin
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
-using Edu.Wisc.Forest.Flel.Util;
+using Landis.Utilities;
 using System.Collections.Generic;
 
 namespace Landis.Extension.DynamicFire
