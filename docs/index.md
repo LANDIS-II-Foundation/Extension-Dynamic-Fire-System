@@ -4,7 +4,7 @@ The Dynamic Fire System simulates fire ignition, initiation, spread, and damage.
 
 The Dynamic Fire System extension must be used in conjunction with a fuel extension. The Dynamic Fuels extension uses cohort species and age-ranges to determine a fuel type for each cell on the landscape. The fuel types should match the fuel types created in the Dynamic Fire System extension. Prescriptions from the Base Harvest extension and mortality from the BDA extension can optionally cause fuel types to change.
 
-An alternative fuels extension that classifies fuel types based on species biomass is now available. See the [Dynamic Biomass Fuel System](http://www.landis-ii.org/extensions/biomass-fuels) extension.
+An alternative fuels extension that classifies fuel types based on species biomass is now available. See the [Dynamic Biomass Fuel System](https://landis-ii-foundation.github.io/Extension-Dynamic-Biomass-Fuels/) extension.
 
 # Release Notes
 
