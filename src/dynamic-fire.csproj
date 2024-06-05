@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Landis.Extension.DynamicFire</RootNamespace>
-    <AssemblyName>Landis.Extension.DynamicFire-v3</AssemblyName>
-    <AssemblyTitle>Landis.Extension.DynamicFire-v3</AssemblyTitle>
     <AssemblyCompany>Landis-II-Foundation</AssemblyCompany>
-    <AssemblyProduct>Landis.Extension.DynamicFire-v3</AssemblyProduct>
     <AssemblyCopyright>Landis-II-Foundation</AssemblyCopyright>
-    <AssemblyVersion>3.0</AssemblyVersion>
+    <AssemblyName>Landis.Extension.DynamicFire-v4</AssemblyName>
+    <AssemblyTitle>Landis.Extension.DynamicFire-v4</AssemblyTitle>
+    <AssemblyProduct>Landis.Extension.DynamicFire-v4</AssemblyProduct>
+    <AssemblyVersion>4.0</AssemblyVersion>
+    <RootNamespace>Landis.Extension.DynamicFire</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire-System</RepositoryUrl>
@@ -18,23 +18,19 @@
     <Authors>Landis-II-Foundation</Authors>
     <Product>Landis.Extension.DynamicFire-v3</Product>
     <Copyright>Landis-II-Foundation</Copyright>
-    <Version>3.0</Version>
+    <Version>4.0</Version>
     <PackageTags>LANDIS-II;Landis;Extension;fire</PackageTags>
     <Description>Dynamic Fire System for LANDIS-II</Description>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <FileVersion>7.0.0.0</FileVersion>
+    <FileVersion>4.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Landis.Core" Version="2.0.0" />
+    <PackageReference Include="Landis.Core" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Landis.Library.AgeOnlyCohorts-v3">
-      <HintPath>lib\Landis.Library.AgeOnlyCohorts-v3.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Library.Cohorts-v2">
-      <HintPath>lib\Landis.Library.Cohorts-v2.dll</HintPath>
+    <Reference Include="Landis.Library.UniversalCohorts-v1">
     </Reference>
     <Reference Include="Landis.Library.Metadata-v2">
       <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>

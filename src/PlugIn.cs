@@ -1,16 +1,12 @@
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
-using Landis.Library.AgeOnlyCohorts;
+//using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 using Landis.Core;
-using log4net;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Data;
-using System.Reflection;
 using Landis.Library.Metadata;
-using System.Diagnostics;
 
 namespace Landis.Extension.DynamicFire
 {
@@ -68,7 +64,12 @@ namespace Landis.Extension.DynamicFire
                 return modelCore;
             }
         }
-        
+        public override void AddCohortData()
+        {
+            // Add unique cohort parameters here
+            return;
+        }
+
         //---------------------------------------------------------------------
 
         public override void LoadParameters(string dataFile,

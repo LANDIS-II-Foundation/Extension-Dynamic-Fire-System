@@ -1,10 +1,7 @@
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
 using Landis.Utilities;
-using Landis.Library.AgeOnlyCohorts;
-using Landis.SpatialModeling;
-using Landis.Core;
-using System.Collections.Generic;
+//using Landis.Library.UniversalCohorts;
 
 
 namespace Landis.Extension.DynamicFire

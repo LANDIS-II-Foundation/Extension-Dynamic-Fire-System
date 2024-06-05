@@ -1,13 +1,12 @@
 # LANDIS-II support library GitHub URL
-$master = "https://github.com/LANDIS-II-Foundation/Support-Library-Dlls-v7/raw/master/"
+$master = "https://github.com/LANDIS-II-Foundation/Support-Library-Dlls-v8/raw/main/"
 
 
 #************************************************
 # LANDIS-II support library dependencies
 # Modify here when any dependencies changed 
 
-$dlls = "Landis.Library.AgeOnlyCohorts-v3.dll",
-"Landis.Library.Cohorts-v2.dll",
+$dlls = "Landis.Library.UniversalCohorts-v1.dll",
 "Landis.Library.Metadata-v2.dll"
 #************************************************
 
