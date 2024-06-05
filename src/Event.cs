@@ -586,7 +586,7 @@ namespace Landis.Extension.DynamicFire
                 foreach(IFireDamage damage in damages)
                 {
                     //IFireDamage damage = damages[i];
-                    if (siteSeverity - cohort.Species.FireTolerance >= damage.SeverTolerDifference)
+                    if (siteSeverity - SpeciesData.FireTolerance[cohort.Species] >= damage.SeverTolerDifference)
                     {
                         if (damage.MaxAge >= ageAsPercent)
                         {

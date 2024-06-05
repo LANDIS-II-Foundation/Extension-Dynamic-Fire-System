@@ -2,6 +2,8 @@
 
 using Landis.Utilities;
 using System.Collections.Generic;
+using Landis.Core;
+
 
 namespace Landis.Extension.DynamicFire
 {
@@ -15,6 +17,7 @@ namespace Landis.Extension.DynamicFire
     public interface IInputParameters
     {
         int Timestep{get;set;}
+        Landis.Library.Parameters.Species.AuxParm<int> FireTolerance { get; }
         SizeType FireSizeType{get;set;}
         bool BUI{get;set;}
         double SeverityCalibrate { get;set;}
@@ -39,18 +42,9 @@ namespace Landis.Extension.DynamicFire
         : IInputParameters
     {
         private int timestep;
-        private SizeType fireSizeType;
-        private bool buildUpIndex;
-        private double severityCalibrate;
-        private List<IDynamicFireRegion> dynamicFireRegions;
-        private List<IDynamicWeather> dynamicWeather;
-        private ISeasonParameters[] seasons;
-        private IFuelType[] fuelTypeParameters;
-        private List<IFireDamage> damages;
         private string mapNamesTemplate;
-        private string logFileName;
-        private string summaryLogFileName;
-        private string initialWeatherPath;
+
+        public Landis.Library.Parameters.Species.AuxParm<int> FireTolerance { get; set; }
 
 
         //---------------------------------------------------------------------
@@ -71,26 +65,10 @@ namespace Landis.Extension.DynamicFire
             }
         }
         //---------------------------------------------------------------------
-        public SizeType FireSizeType
-        {
-            get {
-                return fireSizeType;
-            }
-            set {
-                fireSizeType = value;
-            }
-        }
+        public SizeType FireSizeType { get; set; }
         //---------------------------------------------------------------------
-        
-        public bool BUI
-        {
-            get {
-                return buildUpIndex;
-            }
-            set {
-                buildUpIndex = value;
-            }
-        }
+
+        public bool BUI { get; set; }
 
         //---------------------------------------------------------------------
         /*
@@ -101,61 +79,22 @@ namespace Landis.Extension.DynamicFire
             }
         }*/
         //---------------------------------------------------------------------
-        
-        public double SeverityCalibrate
-        {
-            get {
-                return severityCalibrate;
-            }
-            set
-            {
-                severityCalibrate = value;
-            }
-        }
-        
-        //---------------------------------------------------------------------
-        
-        public List<IDynamicFireRegion> DynamicFireRegions
-        {
-            get {
-                return dynamicFireRegions;
-            }
-        }
-        //---------------------------------------------------------------------
-        public List<IDynamicWeather> DynamicWeather
-        {
-            get
-            {
-                return dynamicWeather;
-            }
-        }
-        //---------------------------------------------------------------------
 
-        public ISeasonParameters[] SeasonParameters
-        {
-            get {
-                return seasons;
-            }
-            set {
-                seasons = value;
-            }
-         
-        }
-        //---------------------------------------------------------------------
-        public IFuelType[] FuelTypeParameters
-        {
-            get {
-                return fuelTypeParameters;
-            }
-        }
+        public double SeverityCalibrate { get; set; }
 
         //---------------------------------------------------------------------
-        public List<IFireDamage> FireDamages
-        {
-            get {
-                return damages;
-            }
-        }
+
+        public List<IDynamicFireRegion> DynamicFireRegions { get; }
+        //---------------------------------------------------------------------
+        public List<IDynamicWeather> DynamicWeather { get; }
+        //---------------------------------------------------------------------
+
+        public ISeasonParameters[] SeasonParameters { get; set; }
+        //---------------------------------------------------------------------
+        public IFuelType[] FuelTypeParameters { get; }
+
+        //---------------------------------------------------------------------
+        public List<IFireDamage> FireDamages { get; }
 
         //---------------------------------------------------------------------
 
@@ -178,90 +117,32 @@ namespace Landis.Extension.DynamicFire
         /// <summary>
         /// Name of log file.
         /// </summary>
-        public string LogFileName
-        {
-            get {
-                return logFileName;
-            }
-            set {
-                    // FIXME: check for null or empty path (value);
-                logFileName = value;
-            }
-        }
+        public string LogFileName { get; set; }
 
         //---------------------------------------------------------------------
 
         /// <summary>
         /// Name of log file.
         /// </summary>
-        public string InitialWeatherPath
-        {
-            get {
-                return initialWeatherPath;
-            }
-            set {
-                    // FIXME: check for null or empty path (value);
-                initialWeatherPath = value;
-            }
-        }
+        public string InitialWeatherPath { get; set; }
         /// <summary>
         /// Name of log file.
         /// </summary>
-        public string SummaryLogFileName
-        {
-            get {
-                return summaryLogFileName;
-            }
-            set {
-                    // FIXME: check for null or empty path (value);
-                summaryLogFileName = value;
-            }
-        }
+        public string SummaryLogFileName { get; set; }
         //---------------------------------------------------------------------
 
-        public InputParameters()
+        public InputParameters(ISpeciesDataset speciesDataset)
         {
-            seasons = new SeasonParameters[3];
-            damages = new List<IFireDamage>();
-            dynamicFireRegions = new List<IDynamicFireRegion>();
-            dynamicWeather = new List<IDynamicWeather>();
+            SeasonParameters = new SeasonParameters[3];
+            FireDamages = new List<IFireDamage>();
+            DynamicFireRegions = new List<IDynamicFireRegion>();
+            DynamicWeather = new List<IDynamicWeather>();
             
-            fuelTypeParameters = new FuelType[100];
+            FuelTypeParameters = new FuelType[100];
             for(int i=0; i<100; i++)
-                fuelTypeParameters[i] = new FuelType();
+                FuelTypeParameters[i] = new FuelType();
+            FireTolerance = new Landis.Library.Parameters.Species.AuxParm<int>(speciesDataset);
         }
-        //---------------------------------------------------------------------
-/*
-        public Parameters(int               timestep,
-                          SizeType          fireSizeType,
-                          bool              buildUpIndex,
-                          //int               weatherRandomizer,
-                          double            severityCalibrate,
-                          IDynamicFireRegion[]      dynamicFireRegions,
-                          IDynamicWeather[]    dynamicWeather,
-                          ISeasonParameters[]  seasonParameters,
-                          IFuelType[]  fuelTypeParameters,
-                          IFireDamage[]    damages,
-                          string            mapNameTemplate,
-                          string            logFileName,
-                          string            summaryLogFileName,
-                          string            initialWeatherPath
-                          )
-        {
-            this.timestep = timestep;
-            this.fireSizeType = fireSizeType;
-            this.buildUpIndex = buildUpIndex;
-            //this.weatherRandomizer = weatherRandomizer;
-            this.severityCalibrate = severityCalibrate;
-            this.dynamicFireRegions = dynamicFireRegions;
-            this.dynamicWeather = dynamicWeather;
-            this.seasonParameters = seasonParameters;
-            this.fuelTypeParameters = fuelTypeParameters;
-            this.damages = damages;
-            this.mapNamesTemplate = mapNameTemplate;
-            this.logFileName = logFileName;
-            this.summaryLogFileName = summaryLogFileName;
-            this.initialWeatherPath = initialWeatherPath;
-        }*/
+       
     }
 }

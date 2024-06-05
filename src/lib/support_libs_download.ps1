@@ -7,6 +7,7 @@ $master = "https://github.com/LANDIS-II-Foundation/Support-Library-Dlls-v8/raw/m
 # Modify here when any dependencies changed 
 
 $dlls = "Landis.Library.UniversalCohorts-v1.dll",
+"Landis.Library.Parameters-v2.dll",
 "Landis.Library.Metadata-v2.dll"
 #************************************************
 

@@ -204,3 +204,5 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+testings/version-tests/v5.1-1.0/dynamic-fire-test-log.csv
+testings/v5.1-1.0/dynamic-fire-test-log.csv

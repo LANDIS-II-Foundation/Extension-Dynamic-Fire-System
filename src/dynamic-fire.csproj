@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyCompany>Landis-II-Foundation</AssemblyCompany>
@@ -32,7 +32,9 @@
   <ItemGroup>
     <Reference Include="Landis.Library.UniversalCohorts-v1">
     </Reference>
-    <Reference Include="Landis.Library.Metadata-v2">
+		<Reference Include="Landis.Library.Parameters-v2">
+		</Reference>
+		<Reference Include="Landis.Library.Metadata-v2">
       <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
     </Reference>
   </ItemGroup>
