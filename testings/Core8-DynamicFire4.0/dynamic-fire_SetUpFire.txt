@@ -2,6 +2,8 @@ LandisData  "Dynamic Fire System"
 
 Timestep  10
 
+Species_CSV_File DynamicFire_Spp_Table.csv
+
 >>---------------------------------------
 >> FIRE INPUTS
 >>----------------------------------------
@@ -21,15 +23,15 @@ BuildUpIndex	Y			<< yes or no; Y or N
    2    fire2   4.5  0.3  50   85      105     0.70   94      120     0.40    120     120     0.50        2         0.2
    3    fire3   5.0  0.5  50   85      110     0.60   90      120     0.70    120     120     0.50        16        0.1
 
-InitialFireEcoregionsMap  	dynamic-fire_Ecoregions_s1e2.gis
+InitialFireEcoregionsMap  	Ecoregions.tif
 
 
 
 DynamicEcoregionTable
 >>Year	FileName
 
-GroundSlopeFile        		dynamic-fire_GroundSlope_s1e2.gis
-UphillSlopeAzimuthMap  		dynamic-fire_UphillSlope_s1e2.gis
+GroundSlopeFile        		GroundSlope.tif
+UphillSlopeAzimuthMap  		UphillSlope.tif
 
 
 SeasonTable
@@ -40,7 +42,7 @@ SeasonTable
    Summer  LeafOn   0.50     51		1.0
    Fall    LeafOff  0.30     100	1.0
 
-InitialWeatherDatabase  	dynamic-fire_WeatherData_s1e2.csv  << Example weather from Labrador
+InitialWeatherDatabase  	dynamic-fire_WeatherData.csv  << Example weather from Labrador
 
 DynamicWeatherTable
 >>Year  FileName
@@ -82,7 +84,7 @@ FireDamageTable
     100%                1
 
 
-MapNames  		fire/severity-{timestep}.img
+MapNames  		fire/severity-{timestep}.tif
 LogFile   		fire/dynamic-fire-test-log.csv
 SummaryLogFile 		fire/summary-log.csv
 

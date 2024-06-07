@@ -182,7 +182,7 @@ namespace Landis.Extension.DynamicFire
                     ModelCore.UI.WriteLine("   Reading in new Fire FireRegions Map {0}.", dyneco.MapName);
                      foreach (IFireRegion fire_region in FireRegions.Dataset)
                      {
-                         fire_region.FireRegionSites.Clear(); // = new List<Location>();
+                         fire_region.FireRegionSites.Clear(); 
                      }
                     FireRegions.ReadMap(dyneco.MapName); //Sites added to their respective fire_region lists
                  }
@@ -207,10 +207,6 @@ namespace Landis.Extension.DynamicFire
 
                 if(fire_region == null)
                     throw new System.ApplicationException("Error: SiteVars.FireRegion is empty.");
-
-                //if(SiteVars.CFSFuelType[site] == 0)
-                //    throw new System.ApplicationException("Error: SiteVars.CFSFuelType is empty.");
-
 
                 if(Event.FuelTypeParms[SiteVars.CFSFuelType[site]] == null)
                 {
@@ -316,7 +312,6 @@ namespace Landis.Extension.DynamicFire
                             {
                                 LogEvent(ModelCore.CurrentTime, FireEvent);
                                 summaryEventCount++;
-                            //fireCount++;  //RMS test
                             }
                         }
                     }
@@ -355,7 +350,7 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            path = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.img", ModelCore.CurrentTime);
+            path = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.tif", ModelCore.CurrentTime);
             ModelCore.UI.WriteLine("   Writing Travel Time output map to {0} ...", path);
             using (IOutputRaster<ShortPixel> outputRaster = ModelCore.CreateRaster<ShortPixel>(path, ModelCore.Landscape.Dimensions))
             {
@@ -455,7 +450,6 @@ namespace Landis.Extension.DynamicFire
             int randomIndex = 0;
             while (list.Count > 0)
             {
-                //randomIndex = modelCore.GenerateUniform(list.Count); //Choose a random object in the list
                 randomIndex = (int) (list.Count * PlugIn.ModelCore.GenerateUniform());
                 shuffledList.Add(list[randomIndex]); //add it to the new, random list
                 list.RemoveAt(randomIndex); //remove to avoid duplicates

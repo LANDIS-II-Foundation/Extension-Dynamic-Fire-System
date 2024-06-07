@@ -21,7 +21,6 @@ Timestep  10
    querrubr       1.00
    thujocci       1.00
    tiliamer       1.00
-   tsugcana       1.00
 
 HardwoodMaximum 15
 
@@ -35,7 +34,7 @@ FuelTypes
 >> Fuel Type  BaseFuel  		Age Range	Species
 >> ---------  --------     		---------	----------
       1		Conifer			0 to 900	thujocci
-      2		Conifer			0 to 500	piceglau abiebals tsugcana
+      2		Conifer			0 to 500	piceglau abiebals 
       3 	Conifer			41 to 100	pinubank
       4		Conifer			0 to 40		pinubank
       16	Open			0 to 20 	pinustro pinuresi
@@ -52,7 +51,7 @@ DisturbanceConversionTable
 >>	6	40		ClearcutSprucePlant	<< If a harvest prescription includes planting, 
 							<< this entry could be an alternative method for assigning fuel type 6
 
-MapFileNames		fire/FuelType-{timestep}.img
-PctConiferFileName	fire/PctConifer-{timestep}.img
-PctDeadFirFileName	fire/PctDeadFir-{timestep}.img
+MapFileNames		fire/FuelType-{timestep}.tif
+PctConiferFileName	fire/PctConifer-{timestep}.tif
+PctDeadFirFileName	fire/PctDeadFir-{timestep}.tif
 
