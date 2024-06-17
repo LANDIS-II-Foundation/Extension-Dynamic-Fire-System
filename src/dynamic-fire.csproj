@@ -22,7 +22,7 @@
     <PackageTags>LANDIS-II;Landis;Extension;fire</PackageTags>
     <Description>Dynamic Fire System for LANDIS-II</Description>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <FileVersion>4.0.0.0</FileVersion>
+    <FileVersion>4.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

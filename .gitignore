@@ -258,3 +258,5 @@ testings/Core8-DynamicFire4.0/Metadata/Dynamic Fire System/SummaryLog_Metadata.x
 testings/Core8-DynamicFire4.0/Metadata/Dynamic Fuel System/Dynamic Fuel System.xml
 testings/Core8-DynamicFire4.0/Metadata/LANDIS-II v8.0/LANDIS-II v8.0.xml
 src/lib/Landis.Library.UniversalCohorts-v1.dll
+src/lib/Landis.Library.Metadata-v2.dll
+src/lib/Landis.Library.Parameters-v2.dll
