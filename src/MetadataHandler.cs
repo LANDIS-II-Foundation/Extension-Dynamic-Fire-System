@@ -83,7 +83,7 @@ namespace Landis.Extension.DynamicFire
             {
                 Type = OutputType.Map,
                 Name = "Time_Of_Last_Fire",
-                FilePath = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.img", PlugIn.ModelCore.CurrentTime),
+                FilePath = MapNames.ReplaceTemplateVars("./DFFS-output/TimeOfLastFire-{timestep}.tif", PlugIn.ModelCore.CurrentTime),
                 Map_DataType = MapDataType.Continuous,
                 Visualize = true,
                 //Map_Unit = "categorical",

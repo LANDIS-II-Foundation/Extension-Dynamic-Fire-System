@@ -1,6 +1,6 @@
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 
 namespace Landis.Extension.DynamicFire
@@ -38,7 +38,7 @@ namespace Landis.Extension.DynamicFire
         public static void Initialize()
         {
 
-            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts");
+            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.UniversalCohorts");
             
             eventVar            = PlugIn.ModelCore.Landscape.NewSiteVar<Event>(InactiveSiteMode.DistinctValues);
             timeOfLastFire      = PlugIn.ModelCore.Landscape.NewSiteVar<int>();
@@ -292,8 +292,8 @@ namespace Landis.Extension.DynamicFire
             {
                 foreach (ICohort cohort in speciesCohorts)
                 {
-                    if (cohort.Age > max)
-                        max = cohort.Age;
+                    if (cohort.Data.Age > max)
+                        max = cohort.Data.Age;
                 }
             }
             return max;

@@ -3,9 +3,7 @@
 using Landis.Utilities;
 using Landis.Core;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections;
-using System;
+using System.Data;
 
 namespace Landis.Extension.DynamicFire
 {
@@ -15,6 +13,10 @@ namespace Landis.Extension.DynamicFire
     public class InputParameterParser
         : TextParser<IInputParameters>
     {
+        private ISpeciesDataset speciesDataset;
+        private Dictionary<string, int> speciesLineNums;
+        private InputVar<string> speciesName;
+
 
         //---------------------------------------------------------------------
 
@@ -25,10 +27,15 @@ namespace Landis.Extension.DynamicFire
                 return "Dynamic Fire System";
             }
         }
-        static InputParameterParser()
+        public InputParameterParser()
         {
             Landis.Utilities.Percentage p = new Landis.Utilities.Percentage();
             RegisterForInputValues();
+            this.speciesDataset = PlugIn.ModelCore.Species;
+            this.speciesLineNums = new Dictionary<string, int>();
+            this.speciesName = new InputVar<string>("Species");
+
+
         }
 
         //---------------------------------------------------------------------
@@ -37,11 +44,27 @@ namespace Landis.Extension.DynamicFire
         {
             ReadLandisDataVar();
 
-            InputParameters parameters = new InputParameters();
+            InputParameters parameters = new InputParameters(PlugIn.ModelCore.Species);
 
             InputVar<int> timestep = new InputVar<int>("Timestep");
             ReadVar(timestep);
             parameters.Timestep = timestep.Value;
+
+            //-------------------------
+            //  Read Species Parameters table
+            PlugIn.ModelCore.UI.WriteLine("   Begin parsing SPECIES table.");
+
+            InputVar<string> csv = new InputVar<string>("Species_CSV_File");
+            ReadVar(csv);
+
+            CSVParser speciesParser = new CSVParser();
+            DataTable speciesTable = speciesParser.ParseToDataTable(csv.Value);
+            foreach (DataRow row in speciesTable.Rows)
+            {
+                ISpecies species = ReadSpecies(System.Convert.ToString(row["SpeciesCode"]));
+                parameters.FireTolerance[species] = System.Convert.ToInt32(row["FireTolerance"]);
+            }
+
 
             InputVar<SizeType> st = new InputVar<SizeType>("EventSizeType");
             ReadVar(st);
@@ -655,6 +678,22 @@ namespace Landis.Extension.DynamicFire
 
             return ecoregion;
         }
-        
+        //---------------------------------------------------------------------
+        private ISpecies ReadSpecies(string speciesName)
+        {
+            ISpecies species = speciesDataset[speciesName];
+            if (species == null)
+                throw new InputValueException(speciesName,
+                                              "{0} is not a species name.",
+                                              speciesName);
+            int lineNumber;
+            if (speciesLineNums.TryGetValue(species.Name, out lineNumber))
+                throw new InputValueException(speciesName,
+                                              "The species {0} was previously used on line {1}",
+                                              speciesName, lineNumber);
+            else
+                speciesLineNums[species.Name] = LineNumber;
+            return species;
+        }
     }
 }

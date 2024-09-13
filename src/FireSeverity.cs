@@ -1,8 +1,6 @@
 //  Authors:  Robert M. Scheller, Brian R. Miranda 
 
 using Landis.SpatialModeling;
-using Landis.Core;
-using System.Collections.Generic;
 using System;
 
 namespace Landis.Extension.DynamicFire

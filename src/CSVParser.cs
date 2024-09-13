@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Data;
 using System.Text.RegularExpressions;
@@ -57,6 +56,7 @@ namespace Landis.Extension.DynamicFire
             //String=1
             //Int32=2
             //Double=3
+            //Bool=4
 
             //need to read the first DeduceRowCount lines and deduce types of each column
             while (!reader.EndOfStream && read_row_count<DeduceRowCount)
@@ -68,9 +68,13 @@ namespace Landis.Extension.DynamicFire
                 int col_type = 0;
                 int test_int=0;
                 double test_double=0.0;
+                bool test_bool = false;
                 for (int i = 0; i < data.Length;i++)
                 {
                     string entry = data[i];
+                    if (entry.Trim().Length < 1)  // If there are blank fields (no column heading, no data), skip them.
+                        continue;
+
                     col_type = 1;
                     try
                     {
@@ -85,7 +89,15 @@ namespace Landis.Extension.DynamicFire
                             col_type = 3;
                         }
                         catch
-                        {//Conversion to Double failed, can only be a string at this point
+                        {//Conversion to Double failed, could be boolean or string at this point
+                            try
+                            {
+                                test_bool = Convert.ToBoolean(entry);
+                                col_type = 4;
+                            }
+                            catch
+                            {//Conversion to Boolean failed, can only be a string at this point
+                            }
                         }
                     }
                     ColTypes[i] = Math.Max(col_type, ColTypes[i]);//If we currently have int, but previously had Double, then make sure we remember that
@@ -103,6 +115,9 @@ namespace Landis.Extension.DynamicFire
                         break;
                     case 3:
                         column = new DataColumn(column_names[i], typeof(Double));
+                        break;
+                    case 4:
+                        column = new DataColumn(column_names[i], typeof(Boolean));
                         break;
                     default:
                         column = new DataColumn(column_names[i], typeof(String));
