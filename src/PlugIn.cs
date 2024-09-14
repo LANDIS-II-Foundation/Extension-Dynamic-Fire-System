@@ -381,13 +381,14 @@ namespace Landis.Extension.DynamicFire
         {
 
         //HEADER:  Time,Initiation Site,Sites Checked,Cohorts Killed,Mean Severity,
-            int totalSitesInEvent = 0;
+            //int totalSitesInEvent = 0;
             if (fireEvent.EventSeverity > 0)
             {
                 eventLog.Clear();
                 EventsLog el = new EventsLog();
                 el.Time = currentTime;
-                el.InitSite = fireEvent.StartLocation;
+                el.InitSiteRow = fireEvent.StartLocation.Row;
+                el.InitSiteColumn = fireEvent.StartLocation.Column;
                 el.InitFireRegion = fireEvent.InitiationFireRegion.Name;
                 el.InitFuel = fireEvent.InitiationFuel;
                 el.InitPercentConifer = fireEvent.InitiationPercentConifer;
@@ -404,18 +405,18 @@ namespace Landis.Extension.DynamicFire
                 el.SitesChecked = fireEvent.NumSitesChecked;
                 el.CohortsKilled = fireEvent.CohortsKilled;
                 el.MeanSeverity = fireEvent.EventSeverity;
-                el.EcoMaps_ = new double[FireRegions.Dataset.Count];
-                int i = 0;
-                //----------
-                foreach (IFireRegion fire_region in FireRegions.Dataset)
-                {
-                    el.EcoMaps_[i] = fireEvent.SitesInEvent[fire_region.Index];
-                    totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
-                    summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
-                    i = i + 1;
-                }
-                summaryTotalSites += totalSitesInEvent;
-                el.TotalSitesInEvent = totalSitesInEvent;
+                //el.EcoMaps_ = new double[FireRegions.Dataset.Count];
+                //int i = 0;
+                ////----------
+                //foreach (IFireRegion fire_region in FireRegions.Dataset)
+                //{
+                //    el.EcoMaps_[i] = fireEvent.SitesInEvent[fire_region.Index];
+                //    totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
+                //    summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
+                //    i = i + 1;
+                //}
+                //summaryTotalSites += totalSitesInEvent;
+                el.DamagedSites = fireEvent.NumberDamagedSites;
                 eventLog.AddObject(el);
                 eventLog.WriteToFile();
 

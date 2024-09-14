@@ -260,3 +260,13 @@ testings/Core8-DynamicFire4.0/Metadata/LANDIS-II v8.0/LANDIS-II v8.0.xml
 src/lib/Landis.Library.UniversalCohorts-v1.dll
 src/lib/Landis.Library.Metadata-v2.dll
 src/lib/Landis.Library.Parameters-v2.dll
+testings/Core8-DynamicFire4.0/Climate-future-annual-log.csv
+testings/Core8-DynamicFire4.0/Climate-spinup-annual-log.csv
+testings/Core8-DynamicFire4.0/DFFS-output/TimeOfLastFire-10.tif
+testings/Core8-DynamicFire4.0/DFFS-output/TimeOfLastFire-20.tif
+testings/Core8-DynamicFire4.0/DFFS-output/TimeOfLastFire-30.tif
+testings/Core8-DynamicFire4.0/DFFS-output/TimeOfLastFire-40.tif
+testings/Core8-DynamicFire4.0/DFFS-output/TimeOfLastFire-50.tif
+testings/Core8-DynamicFire4.0/fire/dynamic-fire-event-log.csv
+testings/Core8-DynamicFire4.0/Metadata/Climate-Library/Future-Annual-Log_Metadata.xml
+testings/Core8-DynamicFire4.0/Metadata/Climate-Library/Spinup-Annual-Log_Metadata.xml

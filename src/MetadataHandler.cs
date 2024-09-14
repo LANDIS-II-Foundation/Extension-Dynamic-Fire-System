@@ -39,8 +39,6 @@ namespace Landis.Extension.DynamicFire
             CreateDirectory(summaryLogName);
             PlugIn.eventLog = new MetadataTable<EventsLog>(eventLogName);
             PlugIn.summaryLog = new MetadataTable<SummaryLog>(summaryLogName);
-            //PlugIn.eventLog = new MetadataTable<EventsLog>("Harvest-event-log.csv");
-            //PlugIn.summaryLog = new MetadataTable<SummaryLog>("Harvest-summary-log.csv");
 
             PlugIn.ModelCore.UI.WriteLine("   Generating event table...");
             OutputMetadata tblOut_events = new OutputMetadata()

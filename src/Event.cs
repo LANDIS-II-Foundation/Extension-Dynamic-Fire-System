@@ -65,16 +65,14 @@ namespace Landis.Extension.DynamicFire
         //---------------------------------------------------------------------
 
         public int InitiationFuel { get; private set; }
-        ////---------------------------------------------------------------------
-
-        public int TotalSitesDamaged { get; private set; }
         //---------------------------------------------------------------------
 
-        public int[] SitesInEvent { get; }
+        //public int[] SitesInEvent { get; }
 
         ////---------------------------------------------------------------------
 
         public int NumSitesChecked { get; private set; }
+        public int NumberDamagedSites { get; private set; }
         //---------------------------------------------------------------------
 
         public int CohortsKilled { get; private set; }
@@ -106,50 +104,6 @@ namespace Landis.Extension.DynamicFire
         //---------------------------------------------------------------------
 
         public ISeasonParameters FireSeason { get; }
-        ////---------------------------------------------------------------------
-
-        //public double LengthB
-        //{
-        //    get {
-        //        return lengthB;
-        //    }
-        //    set {
-        //        lengthB = value;
-        //    }
-        //}
-        //---------------------------------------------------------------------
-
-        //public double LengthA
-        //{
-        //    get {
-        //        return lengthA;
-        //    }
-        //    set {
-        //        lengthA = value;
-        //    }
-        //}
-        ////---------------------------------------------------------------------
-
-        //public double LengthD
-        //{
-        //    get {
-        //        return lengthD;
-        //    }
-        //    set {
-        //        lengthD = value;
-        //    }
-        //}
-        //---------------------------------------------------------------------
-
-        //public double LB
-        //{
-        //    get {
-        //        return lbr;
-        //    }
-        //    set {
-        //        lbr = value;
-        //    }
-        //}
         //---------------------------------------------------------------------
 
         ExtensionType IDisturbance.Type
@@ -173,14 +127,14 @@ namespace Landis.Extension.DynamicFire
         private Event(ActiveSite initiationSite, ISeasonParameters fireSeason, SizeType fireSizeType)
         {
             this.initiationSite = initiationSite;
-            this.SitesInEvent = new int[FireRegions.Dataset.Count];
+            //this.SitesInEvent = new int[FireRegions.Dataset.Count];
             //PlugIn.ModelCore.UI.WriteLine("   initialzing siteInEvent ...");
 
-            foreach(IFireRegion fire_region in FireRegions.Dataset)
-                this.SitesInEvent[fire_region.Index] = 0;
+            //foreach(IFireRegion fire_region in FireRegions.Dataset)
+            //    this.SitesInEvent[fire_region.Index] = 0;
             this.CohortsKilled = 0;
             this.EventSeverity = 0;
-            this.TotalSitesDamaged = 0;
+            this.NumberDamagedSites = 0;
             //this.lengthB = 0.0;
             //this.lengthA = 0.0;
             //this.lengthD = 0.0;
@@ -197,18 +151,6 @@ namespace Landis.Extension.DynamicFire
             this.WindDirection        = Weather.GenerateWindDirection(weatherRow);
             this.FMC = Weather.GenerateFMC(this.FireSeason, eco);
 
-
-            //PlugIn.ModelCore.UI.WriteLine();
-            /*PlugIn.ModelCore.UI.WriteLine("   New Fire Event Data:  WSV={0}, FFMC={1}, BUI={2}, foliarMC={3}, windDirection={4}, Season={5}, FireRegion={6}, SizeBin = {7}.",
-                            this.windSpeed,
-                            this.fineFuelMoistureCode,
-                            this.buildUpIndex,
-                            this.foliarMC,
-                            this.windDirection,
-                            this.fireSeason.NameOfSeason,
-                            this.initiationFireRegion.Name,
-                            this.sizeBin
-                            );*/
         }
 
         //---------------------------------------------------------------------
@@ -367,7 +309,7 @@ namespace Landis.Extension.DynamicFire
             int totalSiteSeverities = 0;
             int siteCohortsKilled    = 0;
             int totalISI = 0;
-            TotalSitesDamaged = 1;
+            NumberDamagedSites = 1;
 
             this.InitiationFuel   = SiteVars.CFSFuelType[initiationSite];
             this.InitiationPercentConifer = SiteVars.PercentConifer[initiationSite];
@@ -493,12 +435,12 @@ namespace Landis.Extension.DynamicFire
                     SiteVars.Severity[currentSite] = (byte)siteSeverity;
                     siteCohortsKilled = Damage(currentSite);
 
-                    this.TotalSitesDamaged++;
+                    this.NumberDamagedSites++;
                     totalSiteSeverities += this.siteSeverity;
                     totalISI += (int) SiteVars.ISI[site];
 
                     IFireRegion siteFireRegion = SiteVars.FireRegion[site];
-                    SitesInEvent[siteFireRegion.Index]++;
+                    //SitesInEvent[siteFireRegion.Index]++;
 
                     SiteVars.Disturbed[currentSite] = true;
                     
@@ -508,12 +450,12 @@ namespace Landis.Extension.DynamicFire
                 }
             }
 
-            if (this.TotalSitesDamaged == 0)
+            if (this.NumberDamagedSites == 0)
                 this.EventSeverity = 0;
             else
-                this.EventSeverity = ((double) totalSiteSeverities) / (double)this.TotalSitesDamaged;
+                this.EventSeverity = ((double) totalSiteSeverities) / (double)this.NumberDamagedSites;
 
-            this.ISI = (int) ((double) totalISI / (double) this.TotalSitesDamaged);
+            this.ISI = (int) ((double) totalISI / (double) this.NumberDamagedSites);
 
             if (isDebugEnabled)
                 PlugIn.ModelCore.UI.WriteLine("  Done spreading");

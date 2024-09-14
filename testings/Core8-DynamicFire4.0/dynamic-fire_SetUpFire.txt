@@ -85,6 +85,6 @@ FireDamageTable
 
 
 MapNames  		fire/severity-{timestep}.tif
-LogFile   		fire/dynamic-fire-test-log.csv
+LogFile   		fire/dynamic-fire-event-log.csv
 SummaryLogFile 		fire/summary-log.csv
 

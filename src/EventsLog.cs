@@ -15,8 +15,11 @@ namespace Landis.Extension.DynamicFire
         [DataFieldAttribute(Desc = "Time")]
         public int Time { set; get; }
 
-        [DataFieldAttribute(Desc = "Initial Site")]
-        public Location InitSite { set; get; }
+        [DataFieldAttribute(Desc = "Initial Site Row")]
+        public int InitSiteRow { set; get; }
+
+        [DataFieldAttribute(Desc = "Initial Site Column")]
+        public int InitSiteColumn { set; get; }
 
         [DataFieldAttribute(Desc = "Initial Fire Region")]
         public string InitFireRegion { set; get; }
@@ -66,10 +69,10 @@ namespace Landis.Extension.DynamicFire
         [DataFieldAttribute(Desc = "Mean Severity")]
         public double MeanSeverity { set; get; }
 
-        [DataFieldAttribute(Desc = "Ecoregion Sites by MapCode", ColumnList = true)]
-        public double[] EcoMaps_ { set; get; }
+        //[DataFieldAttribute(Desc = "Ecoregion Sites by MapCode", ColumnList = true)]
+        //public double[] EcoMaps_ { set; get; }
 
-        [DataFieldAttribute(Desc = "Total Sites In Event")]
-        public int TotalSitesInEvent { set; get; }
+        [DataFieldAttribute(Desc = "Damaged Sites")]
+        public int DamagedSites { set; get; }
     }
 }
