@@ -31,10 +31,12 @@
 
   <ItemGroup>
     <Reference Include="Landis.Library.UniversalCohorts-v1">
+      <HintPath>lib\Landis.Library.UniversalCohorts-v1.dll</HintPath>
     </Reference>
-		<Reference Include="Landis.Library.Parameters-v2">
-		</Reference>
-		<Reference Include="Landis.Library.Metadata-v2">
+    <Reference Include="Landis.Library.Parameters-v2">
+      <HintPath>lib\Landis.Library.Parameters-v2.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Metadata-v2">
       <HintPath>lib\Landis.Library.Metadata-v2.dll</HintPath>
     </Reference>
   </ItemGroup>
