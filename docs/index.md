@@ -8,11 +8,10 @@ The Dynamic Fire System extension is used in conjunction with the Biomass Fuels 
 
 - Dynamic Fire latest release: Version 4.0, September 2024
 - [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Fire-System/blob/master/docs/LANDIS-II%20Dynamic%20Fire%20System%20v4%20User%20Guide.pdf).
-
 - Dynamic Biomass Fuels latest release: Version 4.0, September 2024
 - [View User Guide and Installer](https://github.com/LANDIS-II-Foundation/Extension-Dynamic-Biomass-Fuels/blob/master/docs/index.md).
-
 - Full release details found in the User Guide and on GitHub.
+- Copyright The LANDIS-II Foundation
 
 # Requirements
 
