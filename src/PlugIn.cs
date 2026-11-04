@@ -311,6 +311,11 @@ namespace Landis.Extension.DynamicFire
                             {
                                 LogEvent(ModelCore.CurrentTime, FireEvent);
                                 summaryEventCount++;
+                                foreach (IFireRegion burned_region in FireRegions.Dataset)
+                                {
+                                    summaryFireRegionEventCount[burned_region.Index] += FireEvent.SitesInEvent[burned_region.Index];
+                                    summaryTotalSites += FireEvent.SitesInEvent[burned_region.Index];
+                                }
                             }
                         }
                     }
@@ -411,10 +416,8 @@ namespace Landis.Extension.DynamicFire
                 //{
                 //    el.EcoMaps_[i] = fireEvent.SitesInEvent[fire_region.Index];
                 //    totalSitesInEvent += fireEvent.SitesInEvent[fire_region.Index];
-                //    summaryFireRegionEventCount[fire_region.Index] += fireEvent.SitesInEvent[fire_region.Index];
                 //    i = i + 1;
                 //}
-                //summaryTotalSites += totalSitesInEvent;
                 el.DamagedSites = fireEvent.NumberDamagedSites;
                 eventLog.AddObject(el);
                 eventLog.WriteToFile();
