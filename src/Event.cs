@@ -488,8 +488,7 @@ namespace Landis.Extension.DynamicFire
                         if (damage.MaxAge >= ageAsPercent)
                         {
                             killCohort = true;
-
-                            return 1.0; // Total mortality; no need to search further in the table
+                            break;  // no need to search further in the table
                         }
                     }
                 }
@@ -497,6 +496,7 @@ namespace Landis.Extension.DynamicFire
 
             if (killCohort) {
                 this.CohortsKilled++;
+                return 1.0;  // total mortality
             }
             return 0.0;  // no mortality
         }
