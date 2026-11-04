@@ -1,0 +1,147 @@
+# Build the Windows installer for Dynamic Fire System with Inno Setup.
+#
+# On a pull request that changes the extension's source or installer files, it builds that
+# pull request (merged onto its base) and uploads the installer as an artifact of the run,
+# so a reviewer can install and test the change.
+#
+# It can also be run by hand from the Actions tab ("Run workflow") with a list of pull request
+# numbers, e.g. "18, 19, 20": they are merged onto the base branch in that order and built as
+# one installer. Leave the list empty to build the base branch alone.
+#
+# The extension is built in the configuration that BuildDir in deploy/installer/*.iss names
+# (bin\Debug or bin\Release), so the installer packages what the .iss expects. The artifact
+# holds the installer, the DLLs it bundles, their checksums, and BUILD-INFO.txt with the
+# commits it was built from. Committing an installer to deploy/installer/ stays a
+# maintainer's step.
+name: Build Windows installer
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "deploy/installer/**"
+      - ".github/workflows/build-installer.yml"
+  workflow_dispatch:
+    inputs:
+      prs:
+        description: "Pull request numbers to merge onto the base, in order (e.g. 18, 19, 20). Empty: the base alone."
+        required: false
+        default: ""
+      base:
+        description: "Branch to build, or to merge the pull requests onto"
+        required: false
+        default: master
+
+permissions:
+  contents: read
+
+env:
+  # The repository a run by hand builds from. A fork can run this file unchanged.
+  SOURCE_REPO: LANDIS-II-Foundation/Extension-Dynamic-Fire-System
+
+jobs:
+  installer:
+    # The Windows Server 2022 image includes Inno Setup 6 and the .NET 8 SDK.
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ github.event_name == 'workflow_dispatch' && env.SOURCE_REPO || github.repository }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.base || '' }}
+          fetch-depth: 0
+
+      - name: Merge the requested pull requests
+        env:
+          PRS: ${{ inputs.prs }}
+          BASE: ${{ inputs.base }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP "installer"
+          New-Item -ItemType Directory -Force $out | Out-Null
+          $info = Join-Path $out "BUILD-INFO.txt"
+          "event:      $env:GITHUB_EVENT_NAME" | Set-Content $info
+          "repository: $(git remote get-url origin)" | Add-Content $info
+          if ($env:GITHUB_EVENT_NAME -eq "pull_request") {
+            "pull request #$env:PR_NUMBER head $env:PR_HEAD, merged onto $env:PR_BASE" | Add-Content $info
+            $label = "pr$env:PR_NUMBER"
+          } else {
+            "base:       $env:BASE $(git rev-parse HEAD)" | Add-Content $info
+            git config user.name "build-installer"
+            git config user.email "build-installer@users.noreply.github.com"
+            $nums = @($env:PRS -split "[,\s]+" | Where-Object { $_ })
+            foreach ($n in $nums) {
+              if ($n -notmatch "^\d+$") { throw "not a pull request number: '$n'" }
+              git fetch --no-tags origin "pull/$n/head"
+              if ($LASTEXITCODE -ne 0) { throw "cannot fetch pull request #$n" }
+              "merged:     #$n head $(git rev-parse FETCH_HEAD)" | Add-Content $info
+              git merge --no-ff --no-edit -m "Merge pull request #$n" FETCH_HEAD
+              if ($LASTEXITCODE -ne 0) { throw "pull request #$n does not merge cleanly onto $env:BASE and the pull requests before it" }
+            }
+            $label = if ($nums.Count -gt 0) { "pr" + ($nums -join "-") } else { $env:BASE -replace "[^A-Za-z0-9._-]", "-" }
+          }
+          "built:      $(git rev-parse HEAD)" | Add-Content $info
+          "LABEL=$label-$(git rev-parse --short HEAD)" | Add-Content $env:GITHUB_ENV
+
+      - name: Read the installer script
+        run: |
+          $iss = @(Get-ChildItem deploy/installer/*.iss)
+          if ($iss.Count -ne 1) { throw "expected one .iss in deploy/installer, found $($iss.Count)" }
+          $text = Get-Content -Raw $iss[0].FullName
+          if ($text -notmatch '#define\s+BuildDir\s+"[^"]*\\bin\\(\w+)\\') { throw "no BuildDir ...\bin\<configuration>\... in $($iss[0].Name)" }
+          "CONFIGURATION=$($Matches[1])" | Add-Content $env:GITHUB_ENV
+          "ISS=$($iss[0].FullName)" | Add-Content $env:GITHUB_ENV
+
+      - name: Download the support libraries
+        working-directory: src/lib
+        run: |
+          ./support_libs_download.ps1
+          # the script reports a failed download but does not fail, so check every file
+          $dlls = "Landis.Library.UniversalCohorts-v2.dll", "Landis.Library.Parameters-v2.dll", "Landis.Library.Metadata-v2.dll"
+          foreach ($d in $dlls) {
+            if (-not (Test-Path $d)) { throw "missing $d" }
+          }
+
+      - name: Build the extension
+        working-directory: src
+        run: |
+          Remove-Item -Recurse -Force obj, bin -ErrorAction SilentlyContinue
+          dotnet build dynamic-fire.csproj -c $env:CONFIGURATION
+          if ($LASTEXITCODE -ne 0) { throw "dotnet build failed" }
+
+      - name: Build the installer
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { $iscc = (Get-Command iscc -ErrorAction Stop).Source }
+          # write to a fresh folder: deploy/installer/ also holds earlier, committed installers
+          $out = Join-Path $env:RUNNER_TEMP "installer"
+          & $iscc "/O$out" $env:ISS
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
+          # name the installer after what it was built from, so test builds can be told apart
+          Get-ChildItem $out -Filter *.exe | Rename-Item -NewName { "{0}-{1}{2}" -f $_.BaseName, $env:LABEL, $_.Extension }
+          Copy-Item "src/bin/$env:CONFIGURATION/netstandard2.0/*.dll" $out
+
+      - name: List versions and checksums
+        run: |
+          $out = Join-Path $env:RUNNER_TEMP "installer"
+          $sums = Get-ChildItem $out -File | Where-Object Name -ne "BUILD-INFO.txt" | ForEach-Object {
+            $v = $_.VersionInfo
+            "{0}  {1}  file {2}  product {3}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(),
+              $_.Name, $v.FileVersion, $v.ProductVersion
+          }
+          $sums | Set-Content (Join-Path $out "SHA256SUMS.txt")
+          "configuration: $env:CONFIGURATION" | Add-Content (Join-Path $out "BUILD-INFO.txt")
+          $summary = @("## Installer dynamic-fire-installer-$env:LABEL", "", "Download it from the run's Artifacts.", "", '```') +
+            (Get-Content (Join-Path $out "BUILD-INFO.txt")) + "" + $sums + '```'
+          $summary | Add-Content $env:GITHUB_STEP_SUMMARY
+          $summary
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dynamic-fire-installer-${{ env.LABEL }}
+          path: ${{ runner.temp }}/installer
+          if-no-files-found: error
