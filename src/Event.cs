@@ -264,7 +264,7 @@ namespace Landis.Extension.DynamicFire
             int totalSiteSeverities = 0;
             int siteCohortsKilled    = 0;
             int totalISI = 0;
-            NumberDamagedSites = 1;
+            NumberDamagedSites = 0;
 
             this.InitiationFuel   = SiteVars.CFSFuelType[initiationSite];
             this.InitiationPercentConifer = SiteVars.PercentConifer[initiationSite];
@@ -406,11 +406,15 @@ namespace Landis.Extension.DynamicFire
             }
 
             if (this.NumberDamagedSites == 0)
+            {
                 this.EventSeverity = 0;
+                this.ISI = 0;
+            }
             else
+            {
                 this.EventSeverity = ((double) totalSiteSeverities) / (double)this.NumberDamagedSites;
-
-            this.ISI = (int) ((double) totalISI / (double) this.NumberDamagedSites);
+                this.ISI = (int) ((double) totalISI / (double) this.NumberDamagedSites);
+            }
 
             if (isDebugEnabled)
                 PlugIn.ModelCore.UI.WriteLine("  Done spreading");
